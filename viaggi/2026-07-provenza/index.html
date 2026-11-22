@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Provenza, luglio 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+/* Layout: travel album. Full-bleed photo hero, sticky day nav, map of the route with clickable stops, then one chapter per day: short story on the left, photo wall on the right, lightbox on click. Shares the salber.it field-journal palette. */
+:root{
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --hill:#C6D3BA;
+  --display:"Bricolage Grotesque","Arial Narrow",Impact,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --hill:#27402D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --hill:#27402D; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{transition:none!important; animation:none!important}}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:18px; line-height:1.55}
+h1,h2,h3{font-family:var(--display); font-weight:800; margin:0; line-height:.95; text-wrap:balance}
+h2{font-size:clamp(36px,5.5vw,60px); letter-spacing:-.02em}
+p{margin:0; max-width:62ch}
+a{color:var(--river)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+button{font:inherit; color:inherit}
+.eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.wrap{max-width:1200px; margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+
+/* hero: a real photo */
+.hero{position:relative; min-height:min(86vh,780px); display:grid; align-items:end; color:#F4EFE4; overflow:hidden; isolation:isolate; background:#1a1a1a}
+.hero img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2}
+.hero::after{content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,rgba(10,14,12,.15) 0%,rgba(10,14,12,.05) 35%,rgba(10,14,12,.75) 82%,var(--bg) 100%)}
+.hero .inner{display:grid; gap:18px; padding-block:48px 34px}
+.hero .eyebrow{color:#F4EFE4; opacity:.85}
+.hero h1{font-size:clamp(84px,17vw,230px); letter-spacing:-.045em; line-height:.84}
+.hero .sub{font-size:clamp(19px,2.3vw,25px); max-width:34ch; line-height:1.3; font-weight:500}
+.facts{display:flex; flex-wrap:wrap; gap:14px 36px; border-top:1px solid rgba(244,239,228,.35); padding-top:16px}
+.facts div{display:grid; gap:2px}
+.facts span{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; opacity:.8}
+.facts b{font-family:var(--display); font-weight:800; font-size:22px}
+
+nav.days{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:color-mix(in oklab,var(--bg) 88%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+nav.days ul{list-style:none; margin:0; padding:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none}
+nav.days a{display:block; padding:14px 12px; font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px}
+nav.days a:hover,nav.days a.on{color:var(--ink); border-color:var(--accent)}
+
+section{padding-block:clamp(56px,8vw,104px)}
+.sechead{display:grid; gap:12px; margin-bottom:32px}
+.sechead p{color:var(--muted); font-size:20px}
+
+/* map */
+.mapgrid{display:grid; grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr); gap:28px; align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px; min-width:0}
+svg.map{width:100%; height:auto; display:block}
+.map .sea{fill:var(--water)} .map .land{fill:var(--land)} .map .lake{fill:var(--water)} .map .hill{fill:var(--hill); opacity:.9}
+.map .river{fill:none; stroke:var(--water); stroke-width:5; stroke-linecap:round; stroke-linejoin:round}
+.map .town circle{fill:var(--muted)} .map .town text{font-family:var(--mono); font-size:12px; fill:var(--muted)}
+.map .lbl{font-family:var(--mono); font-size:11.5px; fill:var(--muted); letter-spacing:.14em}
+.map .route{fill:none; stroke:var(--accent); stroke-width:3.2; stroke-linecap:round; stroke-dasharray:1400; stroke-dashoffset:1400; animation:draw 2.4s ease-out .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map .stop{cursor:pointer}
+.map .stop .halo{fill:var(--accent); opacity:0; transition:opacity .2s}
+.map .stop .dot{fill:var(--surface); stroke:var(--ink); stroke-width:2.5}
+.map .stop .n{font-family:var(--display); font-weight:800; font-size:13px; fill:var(--ink); text-anchor:middle; dominant-baseline:central; pointer-events:none}
+.map .stop .nm{font-family:var(--mono); font-size:13px; font-weight:500; fill:var(--ink); paint-order:stroke; stroke:var(--surface); stroke-width:4px; pointer-events:none}
+.map .stop.on .dot{fill:var(--accent); stroke:var(--accent)} .map .stop.on .n{fill:var(--bg)} .map .stop.on .halo{opacity:.25}
+.map .stop:focus{outline:none} .map .stop:focus-visible .dot{stroke:var(--accent); stroke-width:4}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; padding:8px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+.panel{display:grid; gap:14px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px)}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden; display:grid}
+.card img{width:100%; aspect-ratio:4/3; object-fit:cover; display:block; cursor:zoom-in}
+.card .body{padding:18px 20px 20px; display:grid; gap:8px}
+.card .when{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.card h3{font-size:28px}
+.card .go{justify-self:start; font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--accent)}
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+.stats div{display:grid; gap:2px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px}
+.stats b{font-family:var(--display); font-weight:800; font-size:26px; font-variant-numeric:tabular-nums}
+.stats span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+@media (max-width:480px){.stats{grid-template-columns:1fr 1fr}}
+
+/* days */
+.day{display:grid; grid-template-columns:minmax(260px,.75fr) minmax(0,1.6fr); gap:clamp(24px,4vw,56px); padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line); align-items:start}
+@media (max-width:900px){.day{grid-template-columns:1fr}}
+.day .story{display:grid; gap:16px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (max-width:900px){.day .story{position:static}}
+.day .num{font-family:var(--display); font-weight:800; font-size:clamp(64px,9vw,120px); line-height:.8; color:var(--accent); letter-spacing:-.04em}
+.day .date{font-family:var(--mono); font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.day h3{font-size:clamp(30px,3.6vw,44px); letter-spacing:-.015em}
+.day .story p{font-size:18px}
+.day .where{display:flex; flex-wrap:wrap; gap:6px}
+.day .where span{font-family:var(--mono); font-size:12.5px; padding:5px 10px; border:1px solid var(--line); border-radius:4px; color:var(--muted)}
+.wall{display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:120px; grid-auto-flow:dense; gap:8px; min-width:0}
+.wall figure{margin:0; position:relative; overflow:hidden; border-radius:4px; background:var(--surface2); cursor:zoom-in}
+.wall figure.p{grid-column:span 2; grid-row:span 3}
+.wall figure.l{grid-column:span 3; grid-row:span 2}
+.wall figure.big.l{grid-column:span 4; grid-row:span 3}
+.wall figure.big.p{grid-column:span 3; grid-row:span 4}
+.wall img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease}
+.wall figure:hover img{transform:scale(1.04)}
+.wall figcaption{position:absolute; left:0; right:0; bottom:0; padding:22px 10px 8px; font-size:14px; color:#F4EFE4; background:linear-gradient(180deg,transparent,rgba(0,0,0,.65)); opacity:0; transition:opacity .2s}
+.wall figure:hover figcaption,.wall figure:focus-visible figcaption{opacity:1}
+@media (max-width:600px){.wall{grid-template-columns:repeat(4,1fr); grid-auto-rows:90px} .wall figure.l,.wall figure.big.l{grid-column:span 4; grid-row:span 2} .wall figure.p,.wall figure.big.p{grid-column:span 2; grid-row:span 3}}
+@media (hover:none){.wall figcaption{opacity:1}}
+
+/* lightbox */
+.lb{position:fixed; inset:0; z-index:20; background:rgba(8,10,9,.94); display:grid; grid-template-rows:1fr auto; padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px)}
+.lb[hidden]{display:none}
+.lb .stage{display:grid; place-items:center; min-height:0}
+.lb img{max-width:100%; max-height:100%; object-fit:contain; border-radius:3px}
+.lb .bar{display:flex; align-items:center; justify-content:space-between; gap:16px; color:#EEE7D8; padding-top:12px}
+.lb .cap{font-size:17px} .lb .cap small{display:block; font-family:var(--mono); font-size:12px; opacity:.7}
+.lb .ctl{display:flex; gap:8px}
+.lb button{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); color:#EEE7D8; border-radius:6px; padding:8px 14px; font-family:var(--mono); font-size:14px; cursor:pointer}
+.lb button:hover{background:rgba(255,255,255,.16)}
+
+
+#lmap{height:min(72vh,620px); width:100%; border-radius:6px; background:var(--surface2)}
+.mapbox{position:relative}
+.mapmode{position:absolute; top:16px; right:16px; z-index:500; display:flex; border-radius:6px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.mapmode button{border:0; background:#fff; color:#182019; font-family:var(--mono); font-size:12.5px; padding:7px 11px; cursor:pointer}
+.mapmode button[aria-pressed="true"]{background:#182019; color:#fff}
+.leaflet-container{font-family:var(--mono)}
+.pin{width:30px; height:30px; border-radius:50%; background:var(--accent); color:#fff; border:3px solid #fff; display:grid; place-items:center; font-family:var(--display); font-weight:800; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.pin.on{transform:scale(1.2)}
+.leaflet-tooltip.plabel{font-family:var(--mono); font-size:12px; font-weight:500; background:rgba(255,255,255,.92); border:0; box-shadow:0 1px 3px rgba(0,0,0,.2); color:#182019}
+footer{border-top:1px solid var(--line); padding-block:32px 56px; color:var(--muted); font-size:15px; display:grid; gap:8px}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <img src="foto/f068.webp" alt="Filari di lavanda in fiore sotto il cielo di Valensole">
+  <div class="wrap inner">
+    <p class="eyebrow">Viaggi · 1 – 6 luglio 2026 · Francia</p>
+    <h1>Provenza</h1>
+    <p class="sub">Sei giorni in camper dal canyon del Verdon al Vecchio Porto di Marsiglia: pedalò sull'acqua smeraldo, lavanda a perdita d'occhio, le ocre di Roussillon e la Sorgue in kayak.</p>
+    <div class="facts" id="facts"></div>
+  </div>
+</header>
+
+<nav class="days" aria-label="Giorni"><div class="wrap"><ul id="daynav">
+  <li><a href="#percorso">Percorso</a></li>
+</ul></div></nav>
+
+<main>
+<section class="wrap" id="percorso">
+  <div class="sechead">
+    <p class="eyebrow">Il percorso</p>
+    <h2>Dal Verdon a Marsiglia</h2>
+    <p>Ricostruito dalle foto: ogni scatto porta con sé ora e posizione. I numeri sono le tappe, i puntini blu le singole foto; la mappa si ingrandisce e passa al satellite.</p>
+  </div>
+  <div class="mapgrid">
+    <div class="mapbox">
+      <div id="lmap" hidden></div>
+      <div class="mapmode" id="mapmode" hidden><button type="button" data-l="map" aria-pressed="true">Mappa</button><button type="button" data-l="sat" aria-pressed="false">Satellite</button></div>
+      <svg class="map" id="svgmap" viewBox="0 0 760 640" role="img" aria-label="Mappa schematica del percorso">
+        <rect class="land" width="760" height="640"/>
+        <path class="sea" id="sea"/>
+        <path class="route" id="route"/>
+        <g id="stops"></g>
+      </svg>
+      <div class="legend" id="legend"><span>— percorso</span><span>Mappa schematica: costa approssimata</span></div>
+    </div>
+    <div class="panel">
+      <article class="card" id="card" aria-live="polite"></article>
+      <div class="stats" id="stats"></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" id="giorni"></div>
+</main>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Foto">
+  <div class="stage"><img id="lbimg" alt=""></div>
+  <div class="bar">
+    <div class="cap" id="lbcap"></div>
+    <div class="ctl"><button type="button" id="lbprev" aria-label="Foto precedente">←</button><button type="button" id="lbnext" aria-label="Foto successiva">→</button><button type="button" id="lbclose" aria-label="Chiudi">Chiudi</button></div>
+  </div>
+</div>
+
+<footer class="wrap">
+  <p>Foto di famiglia, 1–6 luglio 2026. Percorso ricostruito dai dati delle foto.</p>
+  <p><a href="../">← Tutti i viaggi</a></p>
+</footer>
+
+<script>
+const TRIP = {"facts": [["Giorni", "6"], ["Tappe", "8"], ["Km di strada", "≈ 450"], ["Foto scattate", "139"]], "stats": [["≈ 450", "km di strada"], ["700", "m, le pareti del Verdon"], ["42", "foto scelte"], ["8", "tappe"]], "frame": [4.9, 44.25, 6.5, 43.2], "sea": [[4.9, 43.42], [5.05, 43.33], [5.2, 43.33], [5.3, 43.36], [5.37, 43.29], [5.45, 43.21], [5.55, 43.21], [5.7, 43.17], [6.0, 43.1], [6.5, 43.15], [6.5, 43.0], [4.9, 43.0]], "route": [[6.26, 43.7918], [6.152, 43.8464], [5.6281, 44.0379], [5.4002, 44.114], [5.2963, 43.9009], [5.0525, 43.9182], [5.0946, 43.9056], [5.3707, 43.2963]], "startStop": "verdon", "stops": [{"id": "verdon", "n": 1, "name": "Gole del Verdon", "lat": 43.7918, "lon": 6.26, "lx": -150, "ly": -14, "when": "Mer 1 – Gio 2", "photo": "f004", "go": "g1", "text": "Il canyon più profondo d'Europa, con l'acqua color smeraldo. Al Pont du Galetas, dove le gole si aprono sul lago di Sainte-Croix, si noleggia il pedalò e si risale tra le pareti di calcare."}, {"id": "valensole", "n": 2, "name": "Valensole", "lat": 43.8464, "lon": 6.152, "lx": 14, "ly": -12, "when": "Gio 2 · pomeriggio", "photo": "f061", "text": "L'altopiano della lavanda, al picco della fioritura a inizio luglio. Filari viola fino all'orizzonte, il grano già dorato ai margini."}, {"id": "reillanne", "n": 3, "name": "Reillanne", "lat": 44.0379, "lon": 5.6281, "lx": 14, "ly": 6, "when": "Ven 3 · pomeriggio", "photo": "f091", "text": "Sosta in un borgo del Luberon, con un'installazione d'arte di fili e telai dentro una cappella bianca."}, {"id": "sault", "n": 4, "name": "Sault", "lat": 44.114, "lon": 5.4002, "lx": 14, "ly": -10, "when": "Ven 3 · sera", "photo": "f095", "text": "Ai piedi del Mont Ventoux, il paese della lavanda d'altura. Notte in camper sotto i pini, e il drone in volo al tramonto."}, {"id": "roussillon", "n": 5, "name": "Roussillon", "lat": 43.9009, "lon": 5.2963, "lx": -116, "ly": -12, "when": "Sab 4", "photo": "f097", "text": "Il villaggio rosso costruito sulle cave di ocra. Il sentiero delle ocre passa tra pinnacoli arancioni e pini marittimi."}, {"id": "isle", "n": 6, "name": "L'Isle-sur-la-Sorgue", "lat": 43.9182, "lon": 5.0525, "lx": -170, "ly": -12, "when": "Sab 4 – Dom 5", "photo": "f119", "text": "La piccola Venezia della Provenza, tra i canali della Sorgue. La domenica, il grande mercato dell'antiquariato."}, {"id": "sorgue", "n": 7, "name": "Sorgue in kayak", "lat": 43.9056, "lon": 5.0946, "lx": 14, "ly": 20, "when": "Dom 5 · pomeriggio", "photo": "f126", "text": "Discesa in kayak sulla Sorgue, l'acqua più limpida e fredda della regione, tra Fontaine-de-Vaucluse e Lagnes."}, {"id": "marseille", "n": 8, "name": "Marsiglia", "lat": 43.2963, "lon": 5.3707, "lx": 14, "ly": 5, "when": "Lun 6", "photo": "f133", "text": "Ultima tappa: pranzo di cozze vicino al Vecchio Porto, poi il volo verso casa."}], "days": [{"id": "g1", "nav": "Mer 1 · Verdon", "date": "Mercoledì 1 luglio", "title": "Il Verdon", "where": ["Aiguines", "Gole del Verdon"], "text": ["Primo giorno in camper, e la prima vista è quella giusta: dal belvedere sopra le gole, il fiume è un nastro verde smeraldo cento metri più in basso.", "Campeggio vicino al lago di Sainte-Croix, a pochi minuti dall'imbocco del canyon."]}, {"id": "g2", "nav": "Gio 2 · Pedalò e lavanda", "date": "Giovedì 2 luglio", "title": "Pedalò e lavanda", "where": ["Pont du Galetas", "Valensole"], "text": ["Mattina in pedalò dentro il canyon: si parte dal Pont du Galetas e si risale tra pareti di calcare alte centinaia di metri, con tuffi nell'acqua fredda e turchese.", "Nel pomeriggio, l'altopiano di Valensole in piena fioritura. Ore tra i filari viola, foto di coppia, foto tra fratelli, e il profumo che resta addosso fino a sera."]}, {"id": "g3", "nav": "Ven 3 · Verso Sault", "date": "Venerdì 3 luglio", "title": "Verso Sault", "where": ["Reillanne", "Sault"], "text": ["Si lascia il Verdon e si attraversa il Luberon. Una sosta a Reillanne, con un'installazione di fili e telai in una cappella, e mazzi di lavanda essiccata in vendita.", "Sera a Sault, ai piedi del Mont Ventoux: campi di grano maturo, il camper sotto i pini e il drone in volo sulla valle."]}, {"id": "g4", "nav": "Sab 4 · Roussillon", "date": "Sabato 4 luglio", "title": "Le ocre di Roussillon", "where": ["Roussillon", "L'Isle-sur-la-Sorgue"], "text": ["Il drone parte all'alba sopra il villaggio rosso. Poi il sentiero delle ocre, tra pinnacoli arancioni, pini e un cervo volante sul muretto.", "In piazza a Roussillon, case color ruggine e caffè all'ombra. La sera si scende verso L'Isle-sur-la-Sorgue."]}, {"id": "g5", "nav": "Dom 5 · La Sorgue", "date": "Domenica 5 luglio", "title": "La Sorgue", "where": ["L'Isle-sur-la-Sorgue", "Lagnes"], "text": ["Domenica di mercato dell'antiquariato lungo i canali: rame, coltelli Laguiole, mobili di campagna.", "Pomeriggio in kayak sulla Sorgue, l'acqua verde e trasparente sotto i platani. Bagni sulle rive di sassi e il gruppo al completo sui kayak gialli."]}, {"id": "g6", "nav": "Lun 6 · Marsiglia", "date": "Lunedì 6 luglio", "title": "Marsiglia", "where": ["Marsiglia"], "text": ["Ultima tappa sul mare: cozze a Marsiglia, a due passi dal Vecchio Porto, prima del volo di rientro."]}]};
+const PHOTOS = [{"id": "f000", "day": 1, "cap": "Il belvedere sul Verdon", "t": "17:18", "w": 1800, "h": 1350, "lat": 43.80147, "lon": 6.24923}, {"id": "f002", "day": 1, "cap": "Le gole, color smeraldo", "t": "17:19", "w": 1350, "h": 1800, "lat": 43.80161, "lon": 6.24937}, {"id": "f003", "day": 1, "cap": "", "t": "17:19", "w": 1350, "h": 1800, "lat": 43.80162, "lon": 6.24936}, {"id": "f135", "day": 1, "cap": "Il camper e la macchina, pronti a partire", "t": "", "w": 1350, "h": 1800, "lat": null, "lon": null}, {"id": "f004", "day": 2, "cap": "Pont du Galetas: si entra nel canyon in pedalò", "t": "11:31", "w": 1350, "h": 1800, "lat": 43.80123, "lon": 6.25033}, {"id": "f007", "day": 2, "cap": "", "t": "12:00", "w": 1350, "h": 1800, "lat": 43.79183, "lon": 6.25999}, {"id": "f011", "day": 2, "cap": "", "t": "12:17", "w": 1800, "h": 1350, "lat": 43.78782, "lon": 6.26043}, {"id": "f012", "day": 2, "cap": "", "t": "12:17", "w": 1350, "h": 1800, "lat": 43.78815, "lon": 6.26064}, {"id": "f014", "day": 2, "cap": "", "t": "12:18", "w": 1350, "h": 1800, "lat": 43.78809, "lon": 6.26063}, {"id": "f020", "day": 2, "cap": "Pareti di calcare a picco sull'acqua", "t": "13:08", "w": 1350, "h": 1800, "lat": 43.7861, "lon": 6.23423}, {"id": "f021", "day": 2, "cap": "", "t": "13:09", "w": 1350, "h": 1800, "lat": 43.79929, "lon": 6.25512}, {"id": "f024", "day": 2, "cap": "Tuffi dal pedalò", "t": "13:20", "w": 1800, "h": 1350, "lat": 43.80059, "lon": 6.25435}, {"id": "f028", "day": 2, "cap": "", "t": "13:21", "w": 1350, "h": 1800, "lat": 43.80069, "lon": 6.25378}, {"id": "f031", "day": 2, "cap": "", "t": "13:23", "w": 1350, "h": 1800, "lat": 43.80047, "lon": 6.25265}, {"id": "f035", "day": 2, "cap": "I campi di lavanda di Valensole", "t": "14:59", "w": 1800, "h": 1350, "lat": 43.84642, "lon": 6.15204}, {"id": "f037", "day": 2, "cap": "", "t": "15:00", "w": 1800, "h": 1350, "lat": 43.84642, "lon": 6.15209}, {"id": "f047", "day": 2, "cap": "", "t": "15:01", "w": 1350, "h": 1800, "lat": 43.8464, "lon": 6.15199}, {"id": "f054", "day": 2, "cap": "", "t": "15:04", "w": 1800, "h": 1350, "lat": 43.84641, "lon": 6.15198}, {"id": "f057", "day": 2, "cap": "", "t": "15:04", "w": 1800, "h": 1350, "lat": 43.8464, "lon": 6.15198}, {"id": "f061", "day": 2, "cap": "Fratelli nella lavanda", "t": "15:05", "w": 1350, "h": 1800, "lat": 43.84638, "lon": 6.15198}, {"id": "f066", "day": 2, "cap": "", "t": "15:06", "w": 1800, "h": 1350, "lat": 43.84637, "lon": 6.15197}, {"id": "f068", "day": 2, "cap": "", "t": "15:08", "w": 1800, "h": 1350, "lat": 43.84647, "lon": 6.1519}, {"id": "f081", "day": 3, "cap": "Il camper sotto i pini", "t": "14:03", "w": 1800, "h": 1013, "lat": 44.11373, "lon": 5.39775}, {"id": "f086", "day": 3, "cap": "Tutti insieme sopra la valle", "t": "16:24", "w": 1800, "h": 1350, "lat": 44.03786, "lon": 5.62687}, {"id": "f089", "day": 3, "cap": "Mazzi di lavanda essiccata", "t": "16:31", "w": 1350, "h": 1800, "lat": 44.03837, "lon": 5.62643}, {"id": "f091", "day": 3, "cap": "Un'installazione di filo in una cappella", "t": "16:31", "w": 1350, "h": 1800, "lat": 44.03828, "lon": 5.62653}, {"id": "f095", "day": 3, "cap": "Grano maturo a Sault", "t": "20:20", "w": 1800, "h": 1350, "lat": 44.11402, "lon": 5.40019}, {"id": "f097", "day": 4, "cap": "Roussillon dall'alto, col drone", "t": "07:31", "w": 1800, "h": 1013, "lat": 43.90091, "lon": 5.29627}, {"id": "f101", "day": 4, "cap": "Sul sentiero delle ocre", "t": "12:18", "w": 1350, "h": 1800, "lat": 43.90067, "lon": 5.29694}, {"id": "f103", "day": 4, "cap": "", "t": "12:22", "w": 1800, "h": 1350, "lat": 43.90077, "lon": 5.29732}, {"id": "f106", "day": 4, "cap": "", "t": "12:22", "w": 1800, "h": 1350, "lat": 43.90062, "lon": 5.29732}, {"id": "f110", "day": 4, "cap": "I pinnacoli rossi", "t": "12:38", "w": 1800, "h": 1757, "lat": 43.89902, "lon": 5.29875}, {"id": "f112", "day": 4, "cap": "La piazza di Roussillon", "t": "13:22", "w": 1350, "h": 1800, "lat": 43.90261, "lon": 5.29277}, {"id": "f100", "day": 4, "cap": "Un cervo volante sul muretto", "t": "11:52", "w": 1350, "h": 1800, "lat": 43.90175, "lon": 5.294}, {"id": "f119", "day": 5, "cap": "Il mercato dell'antiquariato di L'Isle-sur-la-Sorgue", "t": "13:27", "w": 1350, "h": 1800, "lat": 43.91904, "lon": 5.0552}, {"id": "f120", "day": 5, "cap": "In kayak sulla Sorgue", "t": "16:50", "w": 1350, "h": 1800, "lat": 43.90746, "lon": 5.10261}, {"id": "f123", "day": 5, "cap": "", "t": "17:02", "w": 1350, "h": 1800, "lat": 43.90557, "lon": 5.09458}, {"id": "f124", "day": 5, "cap": "", "t": "17:19", "w": 1350, "h": 1800, "lat": 43.90855, "lon": 5.08812}, {"id": "f126", "day": 5, "cap": "", "t": "17:19", "w": 1800, "h": 1350, "lat": 43.9086, "lon": 5.08816}, {"id": "f129", "day": 5, "cap": "", "t": "17:20", "w": 1800, "h": 1350, "lat": 43.90858, "lon": 5.08822}, {"id": "f131", "day": 5, "cap": "", "t": "17:22", "w": 1350, "h": 1800, "lat": 43.90849, "lon": 5.08815}, {"id": "f133", "day": 6, "cap": "Cozze a Marsiglia, ultimo pranzo", "t": "14:01", "w": 1350, "h": 1800, "lat": 43.29627, "lon": 5.37067}];
+const STOPS = TRIP.stops, DAYS = TRIP.days;
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,ns){const e=ns?document.createElementNS(NS,tag):document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+const byId=Object.fromEntries(PHOTOS.map(p=>[p.id,p]));
+
+/* facts, stats, day nav */
+(function(){
+  const f=document.getElementById("facts");TRIP.facts.forEach(([k,v])=>{const d=el("div",{},f);el("span",{},d).textContent=k;el("b",{},d).textContent=v;});
+  const s=document.getElementById("stats");TRIP.stats.forEach(([v,k],i)=>{const d=el("div",{},s);const b=el("b",{},d);b.textContent=v;if(i===0)b.id="km";el("span",{},d).textContent=k;});
+  const n=document.getElementById("daynav");DAYS.forEach(d=>{const li=el("li",{},n);el("a",{href:"#"+d.id},li).textContent=d.nav;});
+})();
+
+/* drawn fallback map */
+const F=TRIP.frame; // [lon0,lat0(top),lon1,lat1(bottom)]
+const P=(lon,lat)=>[((lon-F[0])/(F[2]-F[0])*760).toFixed(1),((F[1]-lat)/(F[1]-F[3])*640).toFixed(1)];
+(function(){
+  if(TRIP.sea)document.getElementById("sea").setAttribute("d","M"+TRIP.sea.map(([a,b])=>P(a,b).join(" ")).join(" L")+" Z");
+  const pts=TRIP.route.map(([a,b])=>P(a,b).map(Number));
+  let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i];d+=` Q${x0} ${y0} ${(x0+x1)/2} ${(y0+y1)/2}`;}d+=` L${pts.at(-1)[0]} ${pts.at(-1)[1]}`;
+  document.getElementById("route").setAttribute("d",d);
+  const sg=document.getElementById("stops");
+  STOPS.forEach(s=>{const [x,y]=P(s.lon,s.lat);const g=el("g",{class:"stop",tabindex:"0",role:"button","aria-label":s.name,"data-id":s.id},sg,true);
+    el("circle",{class:"halo",cx:x,cy:y,r:20},g,true);el("circle",{class:"dot",cx:x,cy:y,r:11},g,true);
+    el("text",{class:"n",x:x,y:+y+.5},g,true).textContent=s.n;el("text",{class:"nm",x:+x+(s.lx??14),y:+y+(s.ly??5)},g,true).textContent=s.name;
+    g.addEventListener("click",()=>select(s.id));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(s.id);}});});
+})();
+function select(id){
+  const s=STOPS.find(x=>x.id===id),card=document.getElementById("card");
+  document.querySelectorAll(".map .stop").forEach(g=>g.classList.toggle("on",g.dataset.id===id));
+  document.querySelectorAll(".pin").forEach(p=>p.classList.toggle("on",p.dataset.id===id));
+  card.innerHTML="";
+  const img=el("img",{src:"foto/"+s.photo+"-t.webp",alt:byId[s.photo]?.cap||s.name,loading:"lazy"},card);
+  img.addEventListener("click",()=>openLB(PHOTOS.indexOf(byId[s.photo])));
+  const b=el("div",{class:"body"},card);
+  el("span",{class:"when"},b).textContent=s.when;el("h3",{},b).textContent=s.name;el("p",{},b).textContent=s.text;
+  el("a",{class:"go",href:"#"+s.go},b).textContent="Vai al giorno →";
+}
+select(TRIP.startStop);
+
+/* days */
+(function(){
+  const root=document.getElementById("giorni");
+  DAYS.forEach((d,di)=>{
+    const sec=el("section",{class:"day",id:d.id},root);
+    const st=el("div",{class:"story"},sec);
+    el("div",{class:"num"},st).textContent=di+1;
+    el("span",{class:"date"},st).textContent=d.date;
+    el("h3",{},st).textContent=d.title;
+    d.text.forEach(t=>{el("p",{},st).textContent=t;});
+    const wh=el("div",{class:"where"},st);d.where.forEach(w=>{el("span",{},wh).textContent=w;});
+    const wall=el("div",{class:"wall"},sec);
+    PHOTOS.filter(p=>p.day===di+1).forEach((p,k)=>{
+      const big=k===0||(p.cap&&k%5===0);
+      const f=el("figure",{class:(p.w>=p.h?"l":"p")+(big?" big":""),tabindex:"0"},wall);
+      el("img",{src:"foto/"+p.id+"-t.webp",alt:p.cap||d.title,loading:"lazy",width:p.w,height:p.h},f);
+      if(p.cap)el("figcaption",{},f).textContent=p.cap;
+      const open=()=>openLB(PHOTOS.indexOf(p));
+      f.addEventListener("click",open);f.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});
+    });
+  });
+})();
+
+/* lightbox */
+const lb=document.getElementById("lb"),lbimg=document.getElementById("lbimg"),lbcap=document.getElementById("lbcap");
+let cur=0,lastFocus=null;
+function show(i){cur=(i+PHOTOS.length)%PHOTOS.length;const p=PHOTOS[cur];lbimg.src="foto/"+p.id+".webp";lbimg.alt=p.cap||"Foto";lbcap.innerHTML="";lbcap.append(document.createTextNode(p.cap||" "));const s=document.createElement("small");s.textContent=DAYS[p.day-1].date+(p.t?" · "+p.t:"")+" · "+(cur+1)+" di "+PHOTOS.length;lbcap.append(s);}
+function openLB(i){lastFocus=document.activeElement;show(i);lb.hidden=false;document.getElementById("lbclose").focus();document.body.style.overflow="hidden";}
+function closeLB(){lb.hidden=true;document.body.style.overflow="";lastFocus&&lastFocus.focus();}
+document.getElementById("lbprev").onclick=()=>show(cur-1);
+document.getElementById("lbnext").onclick=()=>show(cur+1);
+document.getElementById("lbclose").onclick=closeLB;
+lb.addEventListener("click",e=>{if(e.target===lb||e.target.classList.contains("stage"))closeLB();});
+document.addEventListener("keydown",e=>{if(lb.hidden)return;if(e.key==="Escape")closeLB();if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1);});
+let tx=null;lb.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;},{passive:true});
+lb.addEventListener("touchend",e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));tx=null;});
+
+/* real map (on salber.it); stays on the drawn map if tiles can't load */
+(function(){
+  if(!window.L)return;
+  const box=document.getElementById("lmap"),svg=document.getElementById("svgmap"),legend=document.getElementById("legend"),mode=document.getElementById("mapmode");
+  box.hidden=false;
+  const map=L.map(box,{scrollWheelZoom:false});
+  const layers={map:L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}),
+                sat:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:18,attribution:"Esri, Maxar"})};
+  let fails=0,loaded=0;
+  layers.map.on("tileload",()=>{loaded++;});layers.map.on("tileerror",()=>{fails++;if(fails>3&&loaded===0)fallback();});
+  layers.map.addTo(map);setTimeout(()=>{if(loaded===0)fallback();},6000);
+  function fallback(){try{map.remove();}catch(e){}box.hidden=true;mode.hidden=true;svg.style.display="";legend.style.display="";}
+  svg.style.display="none";legend.style.display="none";mode.hidden=false;
+  mode.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{Object.values(layers).forEach(l=>map.removeLayer(l));layers[b.dataset.l].addTo(map);mode.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));}));
+  const line=L.polyline(TRIP.route.map(([a,b])=>[b,a]),{color:"#E0A43C",weight:5,opacity:.9}).addTo(map);
+  const wp=TRIP.routeWaypoints||STOPS.map(s=>[s.lon,s.lat]);
+  fetch("https://router.project-osrm.org/route/v1/driving/"+wp.map(([a,b])=>a+","+b).join(";")+"?overview=full&geometries=geojson")
+    .then(r=>r.json()).then(j=>{const c=j.routes&&j.routes[0]&&j.routes[0].geometry.coordinates;if(c){line.setLatLngs(c.map(([x,y])=>[y,x]));const k=document.getElementById("km");if(k)k.textContent=Math.round(j.routes[0].distance/1000);}}).catch(()=>{});
+  PHOTOS.forEach((p,i)=>{if(p.lat==null)return;const j=(i%5-2)*0.00012;
+    L.circleMarker([p.lat+j,p.lon-j],{radius:6,color:"#fff",weight:2,fillColor:"#2B7F96",fillOpacity:.95})
+     .bindTooltip('<img src="foto/'+p.id+'-t.webp" style="width:140px;display:block;border-radius:3px">'+(p.cap?'<div style="max-width:140px;white-space:normal;margin-top:4px">'+p.cap+'</div>':''),{direction:"top",offset:[0,-6]})
+     .on("click",()=>openLB(i)).addTo(map);});
+  STOPS.forEach(s=>{const m=L.marker([s.lat,s.lon],{icon:L.divIcon({className:"",html:'<div class="pin" data-id="'+s.id+'">'+s.n+'</div>',iconSize:[30,30],iconAnchor:[15,15]})}).addTo(map);
+    m.bindTooltip(s.name,{permanent:true,direction:"right",offset:[16,0],className:"plabel"});m.on("click",()=>select(s.id));});
+  map.fitBounds(L.latLngBounds(STOPS.map(s=>[s.lat,s.lon])).pad(0.12));
+  map.on("click",()=>map.scrollWheelZoom.enable());
+  select(TRIP.startStop);
+})();
+
+/* nav highlight */
+(function(){
+  const links=[...document.querySelectorAll("nav.days a")];if(!("IntersectionObserver" in window))return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));});},{rootMargin:"-40% 0px -55% 0px"});
+  links.forEach(l=>{const s=document.querySelector(l.getAttribute("href"));s&&io.observe(s);});
+})();
+</script>
+
+</body>
+</html>
