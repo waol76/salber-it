@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Estate 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: night-savanna field journal. Full-bleed dusk hero, sticky chapter nav, geographic map with a stop panel, long-form chapters, instrument-style cost calculator, countdown + booking timeline, checklist. Dark-first. */
+:root{
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --ember:#D5673F; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --park:#27402D;
+  --sky1:#0B1A24; --sky2:#B55A2E; --sky3:#F0B35A; --hill1:#1E2A22; --hill2:#15201A; --hill3:#0E1411;
+  --display:"Bricolage Grotesque","Arial Narrow",Impact,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important; transition:none!important}}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:18px; line-height:1.55; font-weight:400}
+h1,h2,h3,h4{font-family:var(--display); margin:0; line-height:.98; text-wrap:balance; font-weight:800}
+h2{font-size:clamp(38px,6vw,68px); letter-spacing:-.02em}
+h3{font-size:clamp(26px,3.4vw,38px); letter-spacing:-.015em}
+h4{font-size:19px; font-weight:500; letter-spacing:0}
+p{margin:0; max-width:66ch}
+a{color:var(--river)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+button{font:inherit; color:inherit}
+.eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.mono{font-family:var(--mono); font-size:14px}
+.num{font-variant-numeric:tabular-nums}
+.acc{color:var(--accent)}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+section.block{padding-block:clamp(56px,9vw,120px); display:grid; gap:clamp(24px,4vw,44px)}
+.sechead{display:grid; gap:12px; max-width:760px}
+.sechead p{font-size:20px; color:var(--muted)}
+
+/* hero */
+.hero{position:relative; min-height:min(88vh,760px); display:grid; align-items:end; overflow:hidden; isolation:isolate}
+.hero canvas{position:absolute; inset:0; width:100%; height:100%; z-index:-1}
+.hero .inner{display:grid; gap:22px; padding-block:48px 36px}
+.hero h1{font-size:clamp(76px,16vw,220px); letter-spacing:-.04em; line-height:.86; color:var(--ink); text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .sub{font-size:clamp(20px,2.4vw,26px); max-width:30ch; line-height:1.3; font-weight:500}
+.facts{display:flex; flex-wrap:wrap; gap:14px 36px; border-top:1px solid color-mix(in oklab,var(--ink) 35%,transparent); padding-top:18px}
+.facts div{display:grid; gap:2px}
+.facts b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+
+/* plan toggle */
+.plan{display:inline-flex; border:1px solid color-mix(in oklab,var(--ink) 45%,transparent); border-radius:8px; overflow:hidden; background:color-mix(in oklab,var(--bg) 55%,transparent); backdrop-filter:blur(6px)}
+.plan input{position:absolute; opacity:0; pointer-events:none}
+.plan label{display:grid; gap:1px; padding:10px 18px; cursor:pointer; min-width:150px}
+.plan label b{font-family:var(--display); font-weight:800; font-size:20px; letter-spacing:-.01em}
+.plan label span{font-family:var(--mono); font-size:11.5px; color:var(--muted); letter-spacing:.04em}
+.plan input:checked+label{background:var(--accent); color:var(--bg)} .plan input:checked+label span{color:var(--bg); opacity:.8}
+.plan input:focus-visible+label{outline:2px solid var(--ink); outline-offset:-3px}
+.plan.small label{padding:6px 12px; min-width:0} .plan.small label b{font-size:15px} .plan.small label span{display:none}
+nav.chap .wrap{display:flex; align-items:center; gap:12px; justify-content:space-between}
+nav.chap ul{min-width:0}
+.compare{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+@media (max-width:980px){.compare{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.compare{grid-template-columns:1fr}}
+.cmp{display:grid; gap:10px; padding:20px 22px; border:1px solid var(--line); border-radius:8px; background:var(--surface); cursor:pointer; transition:border-color .15s}
+.cmp.on{border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent)}
+.cmp h4{font-family:var(--display); font-weight:800; font-size:26px; letter-spacing:-.01em}
+.cmp .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.cmp .rt b{color:var(--ink); font-weight:500}
+.cmp ul{margin:0; padding-left:1.1em; font-size:16px; color:var(--muted); display:grid; gap:3px}
+.cmp .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.off{opacity:.32}
+.skip{display:grid; gap:8px; padding:18px 22px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:16px}
+.skip b{color:var(--ink); font-weight:500}
+
+/* nav */
+nav.chap{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:color-mix(in oklab,var(--bg) 86%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+nav.chap ul{list-style:none; margin:0; padding:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none}
+nav.chap ul::-webkit-scrollbar{display:none}
+nav.chap a{display:block; padding:14px 12px; font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px}
+nav.chap a:hover,nav.chap a.on{color:var(--ink); border-color:var(--accent)}
+
+/* map */
+.mapgrid{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); gap:28px; align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px; min-width:0}
+svg.map{width:100%; height:auto; display:block}
+.map .country{fill:var(--land); stroke:var(--line); stroke-width:1.2; stroke-linejoin:round}
+.map .country.main{fill:var(--land2)}
+.map .sea{fill:var(--water)}
+.map .lake{fill:var(--water)}
+.map .park{fill:var(--park); stroke:none; opacity:.95}
+.map .parklbl{font-family:var(--mono); font-size:11px; fill:var(--muted); letter-spacing:.1em}
+.map .cn{font-family:var(--display); font-weight:800; font-size:30px; fill:var(--muted); opacity:.42; letter-spacing:.22em}
+.map .lbl{font-family:var(--mono); font-size:11.5px; fill:var(--muted); letter-spacing:.12em}
+.map .eq{stroke:var(--muted); stroke-width:1; stroke-dasharray:2 7; fill:none; opacity:.8}
+.map .peak{fill:var(--muted)}
+.map .fly,.map .drive{fill:none; stroke-linecap:round; stroke-dasharray:1200; stroke-dashoffset:1200; animation:draw 2.4s ease-out forwards}
+.map .fly{stroke:var(--river); stroke-width:2; stroke-dasharray:4 7}
+.map .drive{stroke:var(--accent); stroke-width:3.2}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map .fly{animation:none; stroke-dashoffset:0}
+.map .stop{cursor:pointer}
+.map .stop .halo{fill:var(--accent); opacity:0; transition:opacity .2s}
+.map .stop .dot{fill:var(--surface); stroke:var(--ink); stroke-width:2.5}
+.map .stop .n{font-family:var(--display); font-weight:800; font-size:14px; fill:var(--ink); text-anchor:middle; dominant-baseline:central; pointer-events:none}
+.map .stop .nm{font-family:var(--mono); font-size:13px; font-weight:500; fill:var(--ink); paint-order:stroke; stroke:var(--surface); stroke-width:4px; pointer-events:none}
+.map .stop.on .dot{fill:var(--accent); stroke:var(--accent)} .map .stop.on .n{fill:var(--bg)} .map .stop.on .halo{opacity:.25}
+.map .stop:focus{outline:none} .map .stop:focus-visible .dot{stroke:var(--accent); stroke-width:4}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; padding:8px 8px 4px; font-family:var(--mono); font-size:12.5px; color:var(--muted)}
+.legend span{display:inline-flex; align-items:center; gap:8px}
+.legend i{display:inline-block; width:26px; border-top:3px solid var(--accent)} .legend i.f{border-top:2px dashed var(--river)}
+.panel{display:grid; gap:14px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px)}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chips button{font-family:var(--mono); font-size:12.5px; padding:7px 11px; border-radius:999px; border:1px solid var(--line); background:transparent; cursor:pointer; color:var(--ink)}
+.chips button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--bg); font-weight:500}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:24px; display:grid; gap:12px; min-width:0}
+.card .days{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.card ul{margin:0; padding-left:1.1em; display:grid; gap:6px}
+.card .go{justify-self:start; font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--accent); padding-bottom:2px}
+.coords{font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* chapters */
+.chapter{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(24px,4vw,56px); padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line); align-items:start}
+@media (max-width:860px){.chapter{grid-template-columns:1fr}}
+.chapter .lead{display:grid; gap:16px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (max-width:860px){.chapter .lead{position:static}}
+.chapter .n{font-family:var(--display); font-weight:800; font-size:clamp(60px,9vw,120px); line-height:.8; color:var(--accent); letter-spacing:-.04em}
+.chapter .meta{display:flex; flex-wrap:wrap; gap:8px 22px}
+.chapter .meta div{display:grid; gap:1px}
+.chapter .meta b{font-family:var(--mono); font-weight:500; font-size:14px}
+.chapter .body{display:grid; gap:26px; min-width:0}
+.chapter .body p.big{font-size:21px; line-height:1.45}
+.sub{display:grid; gap:10px}
+.sub h4{color:var(--accent); font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:500}
+.fauna{display:flex; flex-wrap:wrap; gap:6px}
+.fauna span{font-family:var(--mono); font-size:12.5px; padding:5px 10px; border:1px solid var(--line); border-radius:4px; color:var(--muted)}
+.camps{display:grid; gap:0; border-top:1px solid var(--line)}
+.camp{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 16px; padding:12px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.camp b{font-weight:500}
+.camp small{grid-column:1; color:var(--muted); font-size:15px}
+.camp .band{font-family:var(--mono); font-size:12.5px; color:var(--muted); white-space:nowrap; text-align:right}
+.camp .band em{font-style:normal; color:var(--ink); display:block; font-size:14px}
+.teen{display:grid; gap:8px; padding-left:0; margin:0; list-style:none}
+.teen li{display:grid; grid-template-columns:22px minmax(0,1fr); gap:10px; align-items:baseline}
+.teen li::before{content:"→"; color:var(--accent); font-family:var(--mono)}
+
+/* day log */
+.log{display:grid; border-top:1px solid var(--line)}
+.leg{display:grid; grid-template-columns:72px 150px minmax(0,1fr) auto; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.leg .d{font-family:var(--display); font-weight:800; font-size:22px; color:var(--accent); letter-spacing:-.02em}
+.leg .w{font-family:var(--mono); font-size:13.5px; font-weight:500}
+.leg .t{min-width:0; color:var(--muted); font-size:16.5px}
+.leg .m{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; text-align:right}
+.leg.move{background:color-mix(in oklab,var(--surface) 60%,transparent)}
+@media (max-width:700px){.leg{grid-template-columns:52px minmax(0,1fr)} .leg .t{grid-column:2} .leg .m{grid-column:2; text-align:left}}
+
+/* costs */
+.calc{display:grid; grid-template-columns:minmax(280px,.9fr) minmax(0,1.3fr); gap:28px; align-items:start}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+.controls{display:grid; gap:20px; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:22px}
+.ctl{display:grid; gap:8px}
+.ctl label,.ctl .lab{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.seg{display:flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; flex-wrap:wrap}
+.seg input{position:absolute; opacity:0; pointer-events:none}
+.seg label{flex:1; text-align:center; padding:10px 8px; font-family:var(--mono); font-size:13.5px; cursor:pointer; letter-spacing:0; text-transform:none; color:var(--ink)}
+.seg input:checked+label{background:var(--ink); color:var(--bg)}
+.seg input:focus-visible+label{outline:2px solid var(--accent); outline-offset:-3px}
+.stepper{display:grid; grid-template-columns:40px 1fr 40px; border:1px solid var(--line); border-radius:6px; overflow:hidden}
+.stepper button{background:transparent; border:0; cursor:pointer; font-family:var(--mono); font-size:18px}
+.stepper button:hover{background:var(--surface2)}
+.stepper output{text-align:center; padding:9px; font-family:var(--mono); font-size:16px; border-inline:1px solid var(--line)}
+.switch{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:6px}
+.switch span{font-size:16px}
+.switch input{width:38px; height:22px; accent-color:var(--accent); margin:0}
+.result{display:grid; gap:22px; min-width:0}
+.hero-num{display:grid; gap:4px; border-left:4px solid var(--accent); padding-left:18px}
+.hero-num .big{font-family:var(--display); font-weight:800; font-size:clamp(46px,7vw,84px); line-height:.95; letter-spacing:-.03em}
+.hero-num .pp{font-family:var(--mono); font-size:15px; color:var(--muted)}
+.bars{display:grid; gap:8px}
+.bar{display:grid; grid-template-columns:minmax(120px,190px) minmax(0,1fr) 92px; gap:12px; align-items:center; font-size:15.5px}
+.bar .tr{height:14px; background:var(--surface2); border-radius:3px; overflow:hidden}
+.bar .fl{height:100%; background:var(--accent); border-radius:0 3px 3px 0; transition:width .3s}
+.bar .v{font-family:var(--mono); font-size:13.5px; text-align:right}
+@media (max-width:480px){.bar{grid-template-columns:minmax(0,1fr) 80px} .bar .tr{grid-column:1/-1; order:3}}
+.tablewrap{overflow-x:auto}
+table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
+th,td{padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:baseline; font-size:16px}
+th{font-family:var(--mono); font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+td.r,th.r{text-align:right; font-family:var(--mono); font-size:14px; white-space:nowrap}
+td small{color:var(--muted); display:block; font-size:14px}
+tfoot td{border-bottom:0; border-top:2px solid var(--ink); font-weight:500}
+.note{font-size:15.5px; color:var(--muted); max-width:72ch}
+details{border-top:1px solid var(--line); padding:12px 0}
+summary{cursor:pointer; font-family:var(--mono); font-size:13.5px; letter-spacing:.04em}
+details p{padding-top:8px; color:var(--muted); font-size:16px}
+
+/* timing */
+.timegrid{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:32px; align-items:start}
+@media (max-width:860px){.timegrid{grid-template-columns:1fr}}
+.count{display:grid; grid-template-columns:repeat(3,auto); gap:18px; justify-content:start}
+.count div{display:grid; gap:2px}
+.count b{font-family:var(--display); font-weight:800; font-size:clamp(44px,6vw,72px); line-height:.95; letter-spacing:-.03em}
+.miles{display:grid; border-left:2px solid var(--line); margin-left:6px}
+.mile{display:grid; grid-template-columns:110px minmax(0,1fr); gap:12px; padding:0 0 22px 20px; position:relative}
+.mile::before{content:""; position:absolute; left:-7px; top:8px; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--muted)}
+.mile.now::before{background:var(--accent); border-color:var(--accent)}
+.mile .when{font-family:var(--mono); font-size:13px; color:var(--muted); padding-top:3px}
+.mile.now .when{color:var(--accent)}
+.mile b{font-weight:500; display:block}
+.mile span{color:var(--muted); font-size:16px}
+@media (max-width:480px){.mile{grid-template-columns:1fr; gap:2px}}
+.migr{display:grid; gap:10px}
+.migr .months{display:grid; grid-template-columns:repeat(12,1fr); gap:3px}
+.migr .m{display:grid; gap:4px; text-align:center}
+.migr .m i{display:block; height:38px; border-radius:3px; background:var(--surface2)}
+.migr .m.s1 i{background:color-mix(in oklab,var(--accent) 28%,var(--surface2))}
+.migr .m.s2 i{background:color-mix(in oklab,var(--accent) 55%,var(--surface2))}
+.migr .m.s3 i{background:var(--accent)}
+.migr .m.you i{outline:2px solid var(--ink); outline-offset:1px}
+.migr .m span{font-family:var(--mono); font-size:11px; color:var(--muted)}
+.migr .key{display:flex; flex-wrap:wrap; gap:4px 16px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* practical */
+.prac{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:26px}
+.prac article{display:grid; gap:8px; align-content:start; border-top:2px solid var(--ink); padding-top:14px}
+.prac h4{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.prac p,.prac li{font-size:16.5px; color:var(--muted)}
+.prac ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+.climate{display:grid; gap:0}
+.climate div{display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); font-size:15px}
+.climate div span:not(:first-child){font-family:var(--mono); font-size:13px}
+.sw{display:grid; gap:4px}
+.sw div{display:grid; grid-template-columns:120px 1fr; gap:10px; font-size:16px}
+.sw b{font-family:var(--mono); font-weight:500; font-size:14px; color:var(--accent)}
+
+/* checklist */
+.check{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px}
+.cg{display:grid; gap:6px; align-content:start}
+.cg h4{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:500; padding-bottom:6px; border-bottom:1px solid var(--line)}
+.cg label{display:grid; grid-template-columns:20px minmax(0,1fr); gap:10px; align-items:start; font-size:16.5px; padding:4px 0; cursor:pointer}
+.cg input{accent-color:var(--accent); width:18px; height:18px; margin-top:4px}
+.cg input:checked+span{color:var(--muted); text-decoration:line-through}
+.progress{display:grid; gap:6px; max-width:420px}
+.progress .tr{height:8px; background:var(--surface2); border-radius:4px; overflow:hidden}
+.progress .fl{height:100%; background:var(--grass); transition:width .3s}
+.progress .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+
+/* alternatives */
+.alts{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:20px}
+.alt{display:grid; gap:10px; padding:22px; border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+.alt h4{font-family:var(--display); font-weight:800; font-size:24px}
+.alt .row{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:13px; border-bottom:1px solid var(--line); padding:5px 0}
+.alt .row span:last-child{color:var(--muted); text-align:right}
+.alt p{font-size:16px; color:var(--muted)}
+
+footer{border-top:1px solid var(--line); padding-block:36px 56px; display:grid; gap:12px; font-size:15px; color:var(--muted)}
+footer ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+
+.map .train{fill:none; stroke:var(--grass); stroke-width:3.2; stroke-linecap:round; stroke-dasharray:10 6}
+.legend i.t{border-top:3px dashed var(--grass)}
+.budget{display:grid; gap:6px; max-width:560px}
+.budget .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.budget .tr{position:relative; height:10px; background:var(--surface2); border-radius:5px; overflow:visible}
+.budget .fl{height:100%; background:var(--grass); border-radius:5px; transition:width .3s}
+.budget .fl.over{background:var(--ember)}
+.budget .mark{position:absolute; top:-4px; width:2px; height:18px; background:var(--ink); transform:translateX(-1px)}
+.chapter[hidden]{display:none}
+.dest{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+@media (max-width:820px){.dest{grid-template-columns:1fr}}
+.dcard{display:grid; gap:14px; padding:28px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:inherit; text-decoration:none; align-content:start; transition:border-color .15s}
+.dcard:hover{border-color:var(--accent)}
+.dcard .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.dcard h3{font-size:clamp(28px,3.6vw,40px)}
+.dcard .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.dcard p{color:var(--muted); font-size:17px}
+.dcard .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; border-top:1px solid var(--line); padding-top:14px}
+.dcard .kpis div{display:grid; gap:2px}
+.dcard .kpis b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.dcard .kpis span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.dcard .go{font-family:var(--mono); font-size:13.5px; color:var(--ink); border-bottom:1px solid var(--accent); justify-self:start; padding-bottom:2px}
+@media (max-width:480px){.dcard .kpis{grid-template-columns:1fr}}
+table.cmpt td:first-child{font-family:var(--mono); font-size:13px; color:var(--muted); white-space:nowrap}
+table.cmpt td{vertical-align:top}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="wrap inner">
+    <p class="eyebrow" style="color:var(--ink);opacity:.8">Famiglia di sei · 22 luglio – 12 agosto 2027 · budget €25.000</p>
+    <h1>Estate <em>2027</em></h1>
+    <p class="sub">Due viaggi sul tavolo, stesse date, stesso budget. Ognuno ha la sua pagina con mappa, tappe, costi voce per voce e scadenze.</p>
+    <div class="facts">
+      <div><span class="eyebrow">Partenza</span><b>22 luglio 2027</b></div>
+      <div><span class="eyebrow">Durata</span><b>15 – 21 giorni</b></div>
+      <div><span class="eyebrow">Viaggiatori</span><b>6 · teenager e ventenni</b></div>
+      <div><span class="eyebrow">Mancano</span><b id="dleft" class="num">—</b></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="block wrap" id="scelta">
+  <div class="sechead">
+    <p class="eyebrow">Le due opzioni</p>
+    <h2>Africa o Ande</h2>
+  </div>
+  <div class="dest">
+    <a class="dcard" href="safari/">
+      <span class="tag">Opzione 1</span>
+      <h3>Safari in Kenya e mare</h3>
+      <p class="rt">Nairobi · Masai Mara · Naivasha · Amboseli · Diani o Zanzibar</p>
+      <p>La Grande Migrazione nelle settimane in cui accade, un Land Cruiser privato per dieci giorni, poi una villa sull'oceano. Tre varianti: 21 giorni con Diani, 21 con Zanzibar, 15 con Zanzibar.</p>
+      <div class="kpis"><div><b>€21–24k</b><span>sei persone, Essenziale</span></div><div><b>Luglio</b><span>il mese giusto per il Mara</span></div><div><b>Dicembre</b><span>scadenza campi e voli</span></div></div>
+      <span class="go">Apri il piano →</span>
+    </a>
+    <a class="dcard" href="peru/">
+      <span class="tag">Opzione 2</span>
+      <h3>Perù, dalle Ande all'Amazzonia</h3>
+      <p class="rt">Lima · Valle Sacra · Salkantay e Machu Picchu · Tambopata · Arequipa e Colca</p>
+      <p>Cinque giorni a piedi fino a Machu Picchu, tre notti nella foresta, i condor del Colca e la cucina di Lima. Stagione secca sulle Ande, il viaggio più attivo e più vario.</p>
+      <div class="kpis"><div><b>€20–21k</b><span>sei persone, Salkantay</span></div><div><b>Luglio</b><span>stagione secca, notti fredde</span></div><div><b>Novembre</b><span>scadenza permessi Inca Trail</span></div></div>
+      <span class="go">Apri il piano →</span>
+    </a>
+  </div>
+</section>
+
+<section class="block wrap" id="confronto">
+  <div class="sechead">
+    <p class="eyebrow">Confronto</p>
+    <h2>Stesse date, stesso budget</h2>
+    <p>Sei persone, 21 giorni, livello Essenziale. Le cifre complete, voce per voce, sono nelle due pagine.</p>
+  </div>
+  <div class="tablewrap"><table class="cmpt">
+    <thead><tr><th></th><th>Kenya + mare</th><th>Perù</th></tr></thead>
+    <tbody>
+      <tr><td>Totale, 21 giorni</td><td>€21.000 – 22.500</td><td>€19.500 – 21.000</td></tr>
+      <tr><td>Voli lunghi</td><td>€950–1.100 a testa, uno scalo</td><td>€950–1.050 a testa, diretto da Madrid</td></tr>
+      <tr><td>Costo a terra</td><td>Alto nei giorni di safari, basso al mare</td><td>Basso ovunque</td></tr>
+      <tr><td>Il momento che resta</td><td>Gli gnu che attraversano il fiume Mara</td><td>Machu Picchu alle sei del mattino, dopo cinque giorni a piedi</td></tr>
+      <tr><td>Fisico</td><td>Seduti in jeep, bici a Hell's Gate, kite al mare</td><td>Trekking, quota, canyon: il più attivo</td></tr>
+      <tr><td>Fauna</td><td>La migliore del pianeta per i grandi mammiferi</td><td>Pappagalli, scimmie, caimani, condor</td></tr>
+      <tr><td>Mare</td><td>Diani o Zanzibar, acqua a 26 °C</td><td>Nessuno: il Pacifico ad agosto è freddo</td></tr>
+      <tr><td>Cibo</td><td>Buono, non una ragione per andare</td><td>Una ragione per andare</td></tr>
+      <tr><td>Salute</td><td>Antimalarica; febbre gialla per la Tanzania</td><td>Quota: Cusco è a 3.400 m</td></tr>
+      <tr><td>Da prenotare subito</td><td>Campi del Mara entro dicembre</td><td>Permessi Inca Trail ora; Machu Picchu a marzo</td></tr>
+      <tr><td>Per i ragazzi</td><td>Il safari può stancare dal giorno 8; il mare lo risolve</td><td>Difficile annoiarsi</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">La sintesi onesta: il Perù è la vacanza più varia, più attiva e un po' più economica. Il Kenya è l'unica cosa che non si trova altrove, nell'unico mese in cui è al suo meglio.</p>
+</section>
+</main>
+
+<footer class="wrap">
+  <p>Cifre indicative in euro, da confermare con preventivi reali per il 2027.</p>
+</footer>
+
+<script>
+(function(){
+  const c=document.getElementById("sky"); const ctx=c.getContext("2d");
+  function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function rnd(seed){let s=seed;return()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+  function draw(){
+    const w=c.clientWidth,h=c.clientHeight,dpr=Math.min(window.devicePixelRatio||1,2);
+    c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,tok("--sky1"));g.addColorStop(.62,tok("--sky2"));g.addColorStop(.82,tok("--sky3"));
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    const sx=w*.5, sy=h*.7;
+    const sg=ctx.createRadialGradient(sx,sy,0,sx,sy,h*.3);
+    sg.addColorStop(0,"rgba(255,235,190,.9)");sg.addColorStop(.18,"rgba(255,225,170,.5)");sg.addColorStop(1,"rgba(255,200,120,0)");
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,h*.3,0,7);ctx.fill();
+    ctx.fillStyle=tok("--sky3");ctx.beginPath();ctx.arc(sx,sy,h*.05,0,7);ctx.fill();
+    // left half: andes ridge; right half: savanna hills — one horizon
+    const layers=[["--hill1",.72,3],["--hill2",.80,5],["--hill3",.87,7]];
+    layers.forEach(([t,base,seed],li)=>{
+      const r=rnd(seed*97+13);ctx.fillStyle=tok(t);ctx.beginPath();ctx.moveTo(0,h);
+      const n=24;for(let i=0;i<=n;i++){const x=w*i/n;const left=x<w*.5;const amp=left?.14-.1*(x/(w*.5)):.03;ctx.lineTo(x,h*(base-(li*0.02)+(r()-.5)*amp*2));}
+      ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+    });
+    const fg=ctx.createLinearGradient(0,h*.82,0,h);fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(1,tok("--bg"));
+    ctx.fillStyle=fg;ctx.fillRect(0,h*.82,w,h*.18);
+  }
+  let t;window.addEventListener("resize",()=>{clearTimeout(t);t=setTimeout(draw,120);});
+  if(window.matchMedia){window.matchMedia("(prefers-color-scheme: light)").addEventListener("change",draw);}
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);} draw();
+  const dep=new Date(2027,6,22,0,0,0); document.getElementById("dleft").textContent=Math.max(0,Math.floor((dep-new Date())/864e5))+" giorni";
+})();
+</script>
+
+</body>
+</html>

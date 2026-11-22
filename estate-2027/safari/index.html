@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Safari 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: night-savanna field journal. Full-bleed dusk hero, sticky chapter nav, geographic map with a stop panel, long-form chapters, instrument-style cost calculator, countdown + booking timeline, checklist. Dark-first. */
+:root{
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --ember:#D5673F; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --park:#27402D;
+  --sky1:#0B1A24; --sky2:#B55A2E; --sky3:#F0B35A; --hill1:#1E2A22; --hill2:#15201A; --hill3:#0E1411;
+  --display:"Bricolage Grotesque","Arial Narrow",Impact,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important; transition:none!important}}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:18px; line-height:1.55; font-weight:400}
+h1,h2,h3,h4{font-family:var(--display); margin:0; line-height:.98; text-wrap:balance; font-weight:800}
+h2{font-size:clamp(38px,6vw,68px); letter-spacing:-.02em}
+h3{font-size:clamp(26px,3.4vw,38px); letter-spacing:-.015em}
+h4{font-size:19px; font-weight:500; letter-spacing:0}
+p{margin:0; max-width:66ch}
+a{color:var(--river)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+button{font:inherit; color:inherit}
+.eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.mono{font-family:var(--mono); font-size:14px}
+.num{font-variant-numeric:tabular-nums}
+.acc{color:var(--accent)}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+section.block{padding-block:clamp(56px,9vw,120px); display:grid; gap:clamp(24px,4vw,44px)}
+.sechead{display:grid; gap:12px; max-width:760px}
+.sechead p{font-size:20px; color:var(--muted)}
+
+/* hero */
+.hero{position:relative; min-height:min(88vh,760px); display:grid; align-items:end; overflow:hidden; isolation:isolate}
+.hero canvas{position:absolute; inset:0; width:100%; height:100%; z-index:-1}
+.hero .inner{display:grid; gap:22px; padding-block:48px 36px}
+.hero h1{font-size:clamp(76px,16vw,220px); letter-spacing:-.04em; line-height:.86; color:var(--ink); text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .sub{font-size:clamp(20px,2.4vw,26px); max-width:30ch; line-height:1.3; font-weight:500}
+.facts{display:flex; flex-wrap:wrap; gap:14px 36px; border-top:1px solid color-mix(in oklab,var(--ink) 35%,transparent); padding-top:18px}
+.facts div{display:grid; gap:2px}
+.facts b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+
+/* plan toggle */
+.plan{display:inline-flex; border:1px solid color-mix(in oklab,var(--ink) 45%,transparent); border-radius:8px; overflow:hidden; background:color-mix(in oklab,var(--bg) 55%,transparent); backdrop-filter:blur(6px)}
+.plan input{position:absolute; opacity:0; pointer-events:none}
+.plan label{display:grid; gap:1px; padding:10px 18px; cursor:pointer; min-width:150px}
+.plan label b{font-family:var(--display); font-weight:800; font-size:20px; letter-spacing:-.01em}
+.plan label span{font-family:var(--mono); font-size:11.5px; color:var(--muted); letter-spacing:.04em}
+.plan input:checked+label{background:var(--accent); color:var(--bg)} .plan input:checked+label span{color:var(--bg); opacity:.8}
+.plan input:focus-visible+label{outline:2px solid var(--ink); outline-offset:-3px}
+.plan.small label{padding:6px 12px; min-width:0} .plan.small label b{font-size:15px} .plan.small label span{display:none}
+nav.chap .wrap{display:flex; align-items:center; gap:12px; justify-content:space-between}
+nav.chap ul{min-width:0}
+.compare{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+@media (max-width:980px){.compare{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.compare{grid-template-columns:1fr}}
+.cmp{display:grid; gap:10px; padding:20px 22px; border:1px solid var(--line); border-radius:8px; background:var(--surface); cursor:pointer; transition:border-color .15s}
+.cmp.on{border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent)}
+.cmp h4{font-family:var(--display); font-weight:800; font-size:26px; letter-spacing:-.01em}
+.cmp .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.cmp .rt b{color:var(--ink); font-weight:500}
+.cmp ul{margin:0; padding-left:1.1em; font-size:16px; color:var(--muted); display:grid; gap:3px}
+.cmp .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.off{opacity:.32}
+.skip{display:grid; gap:8px; padding:18px 22px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:16px}
+.skip b{color:var(--ink); font-weight:500}
+
+/* nav */
+nav.chap{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:color-mix(in oklab,var(--bg) 86%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+nav.chap ul{list-style:none; margin:0; padding:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none}
+nav.chap ul::-webkit-scrollbar{display:none}
+nav.chap a{display:block; padding:14px 12px; font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px}
+nav.chap a:hover,nav.chap a.on{color:var(--ink); border-color:var(--accent)}
+
+/* map */
+.mapgrid{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); gap:28px; align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px; min-width:0}
+svg.map{width:100%; height:auto; display:block}
+.map .country{fill:var(--land); stroke:var(--line); stroke-width:1.2; stroke-linejoin:round}
+.map .country.main{fill:var(--land2)}
+.map .sea{fill:var(--water)}
+.map .lake{fill:var(--water)}
+.map .park{fill:var(--park); stroke:none; opacity:.95}
+.map .parklbl{font-family:var(--mono); font-size:11px; fill:var(--muted); letter-spacing:.1em}
+.map .cn{font-family:var(--display); font-weight:800; font-size:30px; fill:var(--muted); opacity:.42; letter-spacing:.22em}
+.map .lbl{font-family:var(--mono); font-size:11.5px; fill:var(--muted); letter-spacing:.12em}
+.map .eq{stroke:var(--muted); stroke-width:1; stroke-dasharray:2 7; fill:none; opacity:.8}
+.map .peak{fill:var(--muted)}
+.map .fly,.map .drive{fill:none; stroke-linecap:round; stroke-dasharray:1200; stroke-dashoffset:1200; animation:draw 2.4s ease-out forwards}
+.map .fly{stroke:var(--river); stroke-width:2; stroke-dasharray:4 7}
+.map .drive{stroke:var(--accent); stroke-width:3.2}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map .fly{animation:none; stroke-dashoffset:0}
+.map .stop{cursor:pointer}
+.map .stop .halo{fill:var(--accent); opacity:0; transition:opacity .2s}
+.map .stop .dot{fill:var(--surface); stroke:var(--ink); stroke-width:2.5}
+.map .stop .n{font-family:var(--display); font-weight:800; font-size:14px; fill:var(--ink); text-anchor:middle; dominant-baseline:central; pointer-events:none}
+.map .stop .nm{font-family:var(--mono); font-size:13px; font-weight:500; fill:var(--ink); paint-order:stroke; stroke:var(--surface); stroke-width:4px; pointer-events:none}
+.map .stop.on .dot{fill:var(--accent); stroke:var(--accent)} .map .stop.on .n{fill:var(--bg)} .map .stop.on .halo{opacity:.25}
+.map .stop:focus{outline:none} .map .stop:focus-visible .dot{stroke:var(--accent); stroke-width:4}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; padding:8px 8px 4px; font-family:var(--mono); font-size:12.5px; color:var(--muted)}
+.legend span{display:inline-flex; align-items:center; gap:8px}
+.legend i{display:inline-block; width:26px; border-top:3px solid var(--accent)} .legend i.f{border-top:2px dashed var(--river)}
+.panel{display:grid; gap:14px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px)}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chips button{font-family:var(--mono); font-size:12.5px; padding:7px 11px; border-radius:999px; border:1px solid var(--line); background:transparent; cursor:pointer; color:var(--ink)}
+.chips button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--bg); font-weight:500}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:24px; display:grid; gap:12px; min-width:0}
+.card .days{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.card ul{margin:0; padding-left:1.1em; display:grid; gap:6px}
+.card .go{justify-self:start; font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--accent); padding-bottom:2px}
+.coords{font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* chapters */
+.chapter{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(24px,4vw,56px); padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line); align-items:start}
+@media (max-width:860px){.chapter{grid-template-columns:1fr}}
+.chapter .lead{display:grid; gap:16px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (max-width:860px){.chapter .lead{position:static}}
+.chapter .n{font-family:var(--display); font-weight:800; font-size:clamp(60px,9vw,120px); line-height:.8; color:var(--accent); letter-spacing:-.04em}
+.chapter .meta{display:flex; flex-wrap:wrap; gap:8px 22px}
+.chapter .meta div{display:grid; gap:1px}
+.chapter .meta b{font-family:var(--mono); font-weight:500; font-size:14px}
+.chapter .body{display:grid; gap:26px; min-width:0}
+.chapter .body p.big{font-size:21px; line-height:1.45}
+.sub{display:grid; gap:10px}
+.sub h4{color:var(--accent); font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:500}
+.fauna{display:flex; flex-wrap:wrap; gap:6px}
+.fauna span{font-family:var(--mono); font-size:12.5px; padding:5px 10px; border:1px solid var(--line); border-radius:4px; color:var(--muted)}
+.camps{display:grid; gap:0; border-top:1px solid var(--line)}
+.camp{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 16px; padding:12px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.camp b{font-weight:500}
+.camp small{grid-column:1; color:var(--muted); font-size:15px}
+.camp .band{font-family:var(--mono); font-size:12.5px; color:var(--muted); white-space:nowrap; text-align:right}
+.camp .band em{font-style:normal; color:var(--ink); display:block; font-size:14px}
+.teen{display:grid; gap:8px; padding-left:0; margin:0; list-style:none}
+.teen li{display:grid; grid-template-columns:22px minmax(0,1fr); gap:10px; align-items:baseline}
+.teen li::before{content:"→"; color:var(--accent); font-family:var(--mono)}
+
+/* day log */
+.log{display:grid; border-top:1px solid var(--line)}
+.leg{display:grid; grid-template-columns:72px 150px minmax(0,1fr) auto; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.leg .d{font-family:var(--display); font-weight:800; font-size:22px; color:var(--accent); letter-spacing:-.02em}
+.leg .w{font-family:var(--mono); font-size:13.5px; font-weight:500}
+.leg .t{min-width:0; color:var(--muted); font-size:16.5px}
+.leg .m{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; text-align:right}
+.leg.move{background:color-mix(in oklab,var(--surface) 60%,transparent)}
+@media (max-width:700px){.leg{grid-template-columns:52px minmax(0,1fr)} .leg .t{grid-column:2} .leg .m{grid-column:2; text-align:left}}
+
+/* costs */
+.calc{display:grid; grid-template-columns:minmax(280px,.9fr) minmax(0,1.3fr); gap:28px; align-items:start}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+.controls{display:grid; gap:20px; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:22px}
+.ctl{display:grid; gap:8px}
+.ctl label,.ctl .lab{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.seg{display:flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; flex-wrap:wrap}
+.seg input{position:absolute; opacity:0; pointer-events:none}
+.seg label{flex:1; text-align:center; padding:10px 8px; font-family:var(--mono); font-size:13.5px; cursor:pointer; letter-spacing:0; text-transform:none; color:var(--ink)}
+.seg input:checked+label{background:var(--ink); color:var(--bg)}
+.seg input:focus-visible+label{outline:2px solid var(--accent); outline-offset:-3px}
+.stepper{display:grid; grid-template-columns:40px 1fr 40px; border:1px solid var(--line); border-radius:6px; overflow:hidden}
+.stepper button{background:transparent; border:0; cursor:pointer; font-family:var(--mono); font-size:18px}
+.stepper button:hover{background:var(--surface2)}
+.stepper output{text-align:center; padding:9px; font-family:var(--mono); font-size:16px; border-inline:1px solid var(--line)}
+.switch{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:6px}
+.switch span{font-size:16px}
+.switch input{width:38px; height:22px; accent-color:var(--accent); margin:0}
+.result{display:grid; gap:22px; min-width:0}
+.hero-num{display:grid; gap:4px; border-left:4px solid var(--accent); padding-left:18px}
+.hero-num .big{font-family:var(--display); font-weight:800; font-size:clamp(46px,7vw,84px); line-height:.95; letter-spacing:-.03em}
+.hero-num .pp{font-family:var(--mono); font-size:15px; color:var(--muted)}
+.bars{display:grid; gap:8px}
+.bar{display:grid; grid-template-columns:minmax(120px,190px) minmax(0,1fr) 92px; gap:12px; align-items:center; font-size:15.5px}
+.bar .tr{height:14px; background:var(--surface2); border-radius:3px; overflow:hidden}
+.bar .fl{height:100%; background:var(--accent); border-radius:0 3px 3px 0; transition:width .3s}
+.bar .v{font-family:var(--mono); font-size:13.5px; text-align:right}
+@media (max-width:480px){.bar{grid-template-columns:minmax(0,1fr) 80px} .bar .tr{grid-column:1/-1; order:3}}
+.tablewrap{overflow-x:auto}
+table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
+th,td{padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:baseline; font-size:16px}
+th{font-family:var(--mono); font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+td.r,th.r{text-align:right; font-family:var(--mono); font-size:14px; white-space:nowrap}
+td small{color:var(--muted); display:block; font-size:14px}
+tfoot td{border-bottom:0; border-top:2px solid var(--ink); font-weight:500}
+.note{font-size:15.5px; color:var(--muted); max-width:72ch}
+details{border-top:1px solid var(--line); padding:12px 0}
+summary{cursor:pointer; font-family:var(--mono); font-size:13.5px; letter-spacing:.04em}
+details p{padding-top:8px; color:var(--muted); font-size:16px}
+
+/* timing */
+.timegrid{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:32px; align-items:start}
+@media (max-width:860px){.timegrid{grid-template-columns:1fr}}
+.count{display:grid; grid-template-columns:repeat(3,auto); gap:18px; justify-content:start}
+.count div{display:grid; gap:2px}
+.count b{font-family:var(--display); font-weight:800; font-size:clamp(44px,6vw,72px); line-height:.95; letter-spacing:-.03em}
+.miles{display:grid; border-left:2px solid var(--line); margin-left:6px}
+.mile{display:grid; grid-template-columns:110px minmax(0,1fr); gap:12px; padding:0 0 22px 20px; position:relative}
+.mile::before{content:""; position:absolute; left:-7px; top:8px; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--muted)}
+.mile.now::before{background:var(--accent); border-color:var(--accent)}
+.mile .when{font-family:var(--mono); font-size:13px; color:var(--muted); padding-top:3px}
+.mile.now .when{color:var(--accent)}
+.mile b{font-weight:500; display:block}
+.mile span{color:var(--muted); font-size:16px}
+@media (max-width:480px){.mile{grid-template-columns:1fr; gap:2px}}
+.migr{display:grid; gap:10px}
+.migr .months{display:grid; grid-template-columns:repeat(12,1fr); gap:3px}
+.migr .m{display:grid; gap:4px; text-align:center}
+.migr .m i{display:block; height:38px; border-radius:3px; background:var(--surface2)}
+.migr .m.s1 i{background:color-mix(in oklab,var(--accent) 28%,var(--surface2))}
+.migr .m.s2 i{background:color-mix(in oklab,var(--accent) 55%,var(--surface2))}
+.migr .m.s3 i{background:var(--accent)}
+.migr .m.you i{outline:2px solid var(--ink); outline-offset:1px}
+.migr .m span{font-family:var(--mono); font-size:11px; color:var(--muted)}
+.migr .key{display:flex; flex-wrap:wrap; gap:4px 16px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* practical */
+.prac{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:26px}
+.prac article{display:grid; gap:8px; align-content:start; border-top:2px solid var(--ink); padding-top:14px}
+.prac h4{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.prac p,.prac li{font-size:16.5px; color:var(--muted)}
+.prac ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+.climate{display:grid; gap:0}
+.climate div{display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); font-size:15px}
+.climate div span:not(:first-child){font-family:var(--mono); font-size:13px}
+.sw{display:grid; gap:4px}
+.sw div{display:grid; grid-template-columns:120px 1fr; gap:10px; font-size:16px}
+.sw b{font-family:var(--mono); font-weight:500; font-size:14px; color:var(--accent)}
+
+/* checklist */
+.check{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px}
+.cg{display:grid; gap:6px; align-content:start}
+.cg h4{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:500; padding-bottom:6px; border-bottom:1px solid var(--line)}
+.cg label{display:grid; grid-template-columns:20px minmax(0,1fr); gap:10px; align-items:start; font-size:16.5px; padding:4px 0; cursor:pointer}
+.cg input{accent-color:var(--accent); width:18px; height:18px; margin-top:4px}
+.cg input:checked+span{color:var(--muted); text-decoration:line-through}
+.progress{display:grid; gap:6px; max-width:420px}
+.progress .tr{height:8px; background:var(--surface2); border-radius:4px; overflow:hidden}
+.progress .fl{height:100%; background:var(--grass); transition:width .3s}
+.progress .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+
+/* alternatives */
+.alts{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:20px}
+.alt{display:grid; gap:10px; padding:22px; border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+.alt h4{font-family:var(--display); font-weight:800; font-size:24px}
+.alt .row{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:13px; border-bottom:1px solid var(--line); padding:5px 0}
+.alt .row span:last-child{color:var(--muted); text-align:right}
+.alt p{font-size:16px; color:var(--muted)}
+
+footer{border-top:1px solid var(--line); padding-block:36px 56px; display:grid; gap:12px; font-size:15px; color:var(--muted)}
+footer ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+
+.map .train{fill:none; stroke:var(--grass); stroke-width:3.2; stroke-linecap:round; stroke-dasharray:10 6}
+.legend i.t{border-top:3px dashed var(--grass)}
+.budget{display:grid; gap:6px; max-width:560px}
+.budget .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.budget .tr{position:relative; height:10px; background:var(--surface2); border-radius:5px; overflow:visible}
+.budget .fl{height:100%; background:var(--grass); border-radius:5px; transition:width .3s}
+.budget .fl.over{background:var(--ember)}
+.budget .mark{position:absolute; top:-4px; width:2px; height:18px; background:var(--ink); transform:translateX(-1px)}
+.chapter[hidden]{display:none}
+.dest{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+@media (max-width:820px){.dest{grid-template-columns:1fr}}
+.dcard{display:grid; gap:14px; padding:28px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:inherit; text-decoration:none; align-content:start; transition:border-color .15s}
+.dcard:hover{border-color:var(--accent)}
+.dcard .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.dcard h3{font-size:clamp(28px,3.6vw,40px)}
+.dcard .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.dcard p{color:var(--muted); font-size:17px}
+.dcard .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; border-top:1px solid var(--line); padding-top:14px}
+.dcard .kpis div{display:grid; gap:2px}
+.dcard .kpis b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.dcard .kpis span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.dcard .go{font-family:var(--mono); font-size:13.5px; color:var(--ink); border-bottom:1px solid var(--accent); justify-self:start; padding-bottom:2px}
+@media (max-width:480px){.dcard .kpis{grid-template-columns:1fr}}
+table.cmpt td:first-child{font-family:var(--mono); font-size:13px; color:var(--muted); white-space:nowrap}
+table.cmpt td{vertical-align:top}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="wrap inner">
+    <p class="eyebrow" style="color:var(--ink);opacity:.8"><a href="../" style="color:inherit;text-decoration:none">← Estate 2027</a> · famiglia di sei · luglio – agosto 2027</p>
+    <h1>Safari <em>2027</em></h1>
+    <p class="sub" id="f-sub">Ventuno giorni in Kenya sotto i 25.000 dollari, dal 22 luglio al 12 agosto: la migrazione nel Mara, le bici di Hell's Gate, gli elefanti di Amboseli e dieci notti di oceano a Diani.</p>
+    <div class="plan" role="radiogroup" aria-label="Durata">
+      <input type="radio" name="plan" id="p21" value="21" checked><label for="p21"><b>21 giorni</b><span>Kenya + Diani Beach</span></label>
+      <input type="radio" name="plan" id="p21z" value="21z"><label for="p21z"><b>21 giorni</b><span>Kenya + Zanzibar</span></label>
+      <input type="radio" name="plan" id="p15" value="15"><label for="p15"><b>15 giorni</b><span>Kenya + Zanzibar</span></label>
+    </div>
+    <div class="facts">
+      <div><span class="eyebrow">Partenza</span><b>22 luglio 2027</b></div>
+      <div><span class="eyebrow">Rientro</span><b id="f-back">12 agosto 2027</b></div>
+      <div><span class="eyebrow">Notti</span><b id="f-nights">20</b></div>
+      <div><span class="eyebrow">Budget</span><b>≤ €25.000 in sei</b></div>
+      <div><span class="eyebrow">Mancano</span><b id="dleft" class="num">—</b></div>
+    </div>
+  </div>
+</header>
+
+<nav class="chap" aria-label="Capitoli"><div class="wrap"><ul>
+  <li><a href="#percorso">Percorso</a></li>
+  <li><a href="#tappe">Tappe</a></li>
+  <li><a href="#giorni">Giorno per giorno</a></li>
+  <li><a href="#costi">Costi</a></li>
+  <li><a href="#tempi">Quando prenotare</a></li>
+  <li><a href="#pratico">Pratico</a></li>
+  <li><a href="#checklist">Checklist</a></li>
+  <li><a href="#alternative">Alternative</a></li>
+  <li><a href="../peru/">↔ Perù</a></li>
+</ul>
+<div class="plan small" role="radiogroup" aria-label="Durata">
+  <input type="radio" name="plan" id="n21" value="21" checked><label for="n21"><b>21 Diani</b></label>
+  <input type="radio" name="plan" id="n21z" value="21z"><label for="n21z"><b>21 Zanzibar</b></label>
+  <input type="radio" name="plan" id="n15" value="15"><label for="n15"><b>15 g</b></label>
+</div></div></nav>
+
+<main>
+<section class="block wrap" id="percorso">
+  <div class="sechead">
+    <p class="eyebrow">01 · Percorso</p>
+    <h2>Un solo paese, una sola jeep</h2>
+    <p id="map-sub">Tutto il safari su strada con un Land Cruiser privato da sette posti, poi il treno per la costa. Niente voli leggeri, niente secondo visto. Tocca una tappa per i dettagli.</p>
+  </div>
+  <div class="compare">
+    <div class="cmp" data-plan="21" role="button" tabindex="0">
+      <span class="tag">Opzione A</span><h4>21 giorni · 20 notti</h4>
+      <p class="rt">Nairobi 1 · <b>Mara 3</b> · <b>Naivasha 2</b> · Nairobi 1 · <b>Amboseli 2</b> · Nairobi 1 · <b>Diani 10</b></p>
+      <ul><li>Sta sotto i €25.000 con margine</li><li>Treno SGR Nairobi–Mombasa invece dell'aereo</li><li>Villa con piscina a Diani: dieci notti costano meno di tre in un lodge</li><li>Richiede 3 settimane di ferie</li></ul>
+    </div>
+    <div class="cmp" data-plan="21z" role="button" tabindex="0">
+      <span class="tag">Opzione B</span><h4>21 giorni · Zanzibar</h4>
+      <p class="rt">Nairobi 1 · <b>Mara 3</b> · <b>Naivasha 2</b> · Nairobi 1 · <b>Amboseli 2</b> · Nairobi 1 · <b>Zanzibar 10</b></p>
+      <ul><li>Stesso safari, poi volo Nairobi → Zanzibar e rientro dall'isola</li><li>Circa $1.400 in più di Diani: volo, visto, biglietto open-jaw</li><li>Serve il certificato di febbre gialla per entrare in Tanzania dal Kenya</li><li>Sta sotto i €25.000 con margine</li></ul>
+    </div>
+    <div class="cmp" data-plan="15" role="button" tabindex="0">
+      <span class="tag">Opzione C</span><h4>15 giorni · 14 notti</h4>
+      <p class="rt">Nairobi 1 · <b>Mara 3</b> · <b>Naivasha 2</b> · Nairobi 1 · <b>Amboseli 2</b> · <b>Zanzibar 5</b></p>
+      <ul><li>Stesso safari, mare a Zanzibar</li><li>Volo Nairobi → Zanzibar e rientro da lì</li><li>Costa quasi quanto i 21 giorni: i voli e il safari pesano, la spiaggia no</li><li>Sta in due settimane di ferie</li></ul>
+    </div>
+  </div>
+  <div class="mapgrid">
+    <div class="mapbox">
+      <svg class="map" viewBox="0 0 950 760" role="img" aria-labelledby="mt">
+        <title id="mt">Mappa del Kenya con le tappe del viaggio</title>
+        <rect class="sea" x="0" y="0" width="950" height="760"/>
+        <g id="countries"></g>
+        <path class="lake" id="victoria"></path>
+        <g id="parks"></g>
+        <line class="eq" x1="0" y1="160" x2="950" y2="160"/>
+        <text class="lbl" x="700" y="152">EQUATORE</text>
+        <text class="cn" x="560" y="262">KENYA</text>
+        <text class="cn" x="220" y="620">TANZANIA</text>
+        <text class="cn" x="160" y="60" style="font-size:22px">UGANDA</text>
+        <text class="lbl" x="810" y="470">OCEANO</text>
+        <text class="lbl" x="810" y="488">INDIANO</text>
+        <text class="lbl" x="60" y="300">LAGO VITTORIA</text>
+        <g id="peaks"></g>
+        <g id="routes"></g>
+        <g id="stops"></g>
+      </svg>
+      <div class="legend"><span><i></i>su strada con guida</span><span><i class="t"></i>treno SGR</span><span><i class="f"></i>volo</span><span>Confini Natural Earth · parchi schematici</span></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="chips" role="group" aria-label="Tappe"></div>
+      <article class="card" id="card" aria-live="polite"></article>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap" id="tappe" style="padding-bottom:0">
+  <div class="sechead">
+    <p class="eyebrow">02 · Tappe</p>
+    <h2 id="chap-h">Quattro capitoli, un filo</h2>
+    <p>Ogni tappa ha un compito: la migrazione, il movimento, gli elefanti, il mare. Le fasce di prezzo sono a persona per notte in agosto, pasti inclusi; la fascia Essenziale è quella che sta nel budget.</p>
+  </div>
+  <div id="chapters"></div>
+</section>
+
+<section class="block wrap" id="giorni">
+  <div class="sechead">
+    <p class="eyebrow">03 · Giorno per giorno</p>
+    <h2 id="log-h">Ventuno giorni</h2>
+    <p>Le righe evidenziate sono giorni di spostamento. In Kenya le strade verso i parchi sono lunghe: si parte presto e si arriva per il game drive del pomeriggio.</p>
+  </div>
+  <div class="log" id="log"></div>
+</section>
+
+<section class="block wrap" id="costi">
+  <div class="sechead">
+    <p class="eyebrow">04 · Costi</p>
+    <h2>Come si sta nei 25.000 euro</h2>
+    <p>Regola i parametri e il totale si aggiorna. Le voci sono calcolate una per una: notti, tasse parco per giorno e per persona, veicolo per giorno. Agosto è il mese più caro dell'anno.</p>
+  </div>
+  <div class="calc">
+    <form class="controls" id="form" onsubmit="return false">
+      <div class="ctl"><span class="lab">Livello</span>
+        <div class="seg" role="radiogroup" aria-label="Livello">
+          <input type="radio" name="tier" id="t0" value="essenziale" checked><label for="t0">Essenziale</label>
+          <input type="radio" name="tier" id="t1" value="comfort"><label for="t1">Comfort</label>
+          <input type="radio" name="tier" id="t2" value="premium"><label for="t2">Premium</label>
+        </div></div>
+      <div class="ctl"><label for="adults">Adulti (18+)</label>
+        <div class="stepper"><button type="button" data-step="adults" data-d="-1" aria-label="Meno adulti">−</button><output id="adults">4</output><button type="button" data-step="adults" data-d="1" aria-label="Più adulti">+</button></div></div>
+      <div class="ctl"><label for="kids">Under 18</label>
+        <div class="stepper"><button type="button" data-step="kids" data-d="-1" aria-label="Meno ragazzi">−</button><output id="kids">2</output><button type="button" data-step="kids" data-d="1" aria-label="Più ragazzi">+</button></div></div>
+      <div class="ctl"><label for="balloon">Mongolfiera nel Mara (persone, $450)</label>
+        <div class="stepper"><button type="button" data-step="balloon" data-d="-1" aria-label="Meno">−</button><output id="balloon">0</output><button type="button" data-step="balloon" data-d="1" aria-label="Più">+</button></div></div>
+      <label class="switch"><span>Mostra in euro (1 USD ≈ 0,92 EUR)</span><input type="checkbox" id="eur" checked></label>
+    </form>
+    <div class="result">
+      <div class="hero-num">
+        <span class="eyebrow">Totale stimato per il gruppo</span>
+        <span class="big num" id="total">—</span>
+        <span class="pp num" id="pp">—</span>
+      </div>
+      <div class="budget">
+        <div class="lab"><span id="b-lab">Budget €25.000</span><span id="b-left"></span></div>
+        <div class="tr"><div class="fl" id="b-fl"></div><i class="mark" style="left:100%"></i></div>
+      </div>
+      <div class="bars" id="bars" role="img" aria-label="Ripartizione dei costi per voce"></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Voce</th><th class="r">Adulto</th><th class="r">Under 18</th><th class="r">Gruppo</th></tr></thead>
+        <tbody id="rows"></tbody>
+        <tfoot><tr><td>Totale</td><td class="r" id="ta"></td><td class="r" id="tk"></td><td class="r" id="tg"></td></tr></tfoot>
+      </table></div>
+      <details><summary>Come sono calcolate le stime</summary>
+        <p>Voli: andata e ritorno da Málaga con uno scalo, prenotati con 8–10 mesi di anticipo (Turkish, Qatar, Ethiopian). Safari: Land Cruiser privato da 7 posti con autista-guida e carburante, $280 al giorno nella fascia Essenziale. Campi in pensione completa: Essenziale $95 a notte nel Mara e ad Amboseli, $65 a Naivasha; Comfort circa il doppio; Premium campi nelle conservancy. Tasse parco per persona al giorno, non residenti, alta stagione: Masai Mara $200 adulto e $50 ragazzo; Amboseli $60 e $35; Hell's Gate $26 e $17. Diani: villa con piscina per sei in affitto, $220 a notte, più spesa e ristoranti a $35 a persona al giorno. Zanzibar: villa o guesthouse a Nungwi, $200 a notte, visto Tanzania $50. Mance: $20 al giorno per la guida e $5 a persona per notte nei campi. Assicurazione con evacuazione medica $80 a persona. Under 18: sconto del 25% nei campi e tariffa ridotta nei parchi.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap" id="tempi">
+  <div class="sechead">
+    <p class="eyebrow">05 · Quando prenotare</p>
+    <h2>Le scadenze che contano</h2>
+    <p>Con un budget stretto la leva più grande è il tempo: i voli ad agosto raddoppiano negli ultimi tre mesi, e i campi economici del Mara con buone recensioni finiscono prima di quelli cari.</p>
+  </div>
+  <div class="timegrid">
+    <div style="display:grid;gap:28px">
+      <div class="count" id="count"></div>
+      <div class="migr">
+        <span class="eyebrow">Dove sono le mandrie, mese per mese</span>
+        <div class="months" id="months"></div>
+        <div class="key"><span>Serengeti sud · parto</span><span>Serengeti ovest · fiume Grumeti</span><span>Mara · attraversamenti</span><span>Riquadro: le vostre date</span></div>
+      </div>
+    </div>
+    <div class="miles" id="miles"></div>
+  </div>
+</section>
+
+<section class="block wrap" id="pratico">
+  <div class="sechead">
+    <p class="eyebrow">06 · Pratico</p>
+    <h2>Da sapere prima di partire</h2>
+  </div>
+  <div class="prac">
+    <article><h4>All'arrivo, 23 luglio 7:00</h4><ul><li>Immigrazione rapida a quell'ora: fuori entro le 8:00 con eTA stampate e passaporti</li><li>Pick-up dell'operatore con lo stesso Land Cruiser e la stessa guida del safari</li><li>SIM Safaricom al chiosco degli arrivi; cambio a Karen</li><li>Check-in anticipato in guesthouse per una doccia, poi Sheldrick alle 11</li></ul></article>
+    <article><h4>Documenti</h4><ul><li>Passaporto valido 6 mesi oltre il rientro, con 2 pagine libere</li><li>eTA Kenya online, $34, almeno 3 giorni prima; gratis sotto i 16 anni</li><li>Visto Tanzania $50 solo per l'opzione Zanzibar</li><li>Febbre gialla: non richiesta arrivando dall'Europa, ma Zanzibar può chiederla a chi arriva dal Kenya</li></ul></article>
+    <article><h4>Salute</h4><ul><li>Antimalarica per Mara, Amboseli e costa; Naivasha è a 1.900 metri</li><li>Vaccini di routine aggiornati, epatite A, tifo</li><li>Assicurazione con evacuazione medica: Flying Doctors (AMREF) costa $16 a persona per 2 settimane</li><li>Repellente con DEET, crema solare alta, un kit base</li></ul></article>
+    <article><h4>Clima a fine luglio</h4><div class="climate">
+      <div><span>Masai Mara</span><span>12–26 °C</span><span>secco</span></div>
+      <div><span>Naivasha</span><span>8–24 °C</span><span>fresco la sera</span></div>
+      <div><span>Nairobi</span><span>10–22 °C</span><span>grigio, fresco</span></div>
+      <div><span>Amboseli</span><span>12–27 °C</span><span>secco, polvere</span></div>
+      <div><span>Diani · Zanzibar</span><span>22–29 °C</span><span>brezza, mare 26 °C</span></div>
+    </div></article>
+    <article><h4>Bagagli</h4><ul><li>In jeep non c'è limite di peso, ma lo spazio per sei è poco: una borsa morbida a testa</li><li>Colori neutri; niente blu scuro o nero vicino alle mosche tse-tse</li><li>Pile e giacca per l'alba in jeep e per Naivasha</li><li>Binocolo per ciascuno: con sei persone in jeep uno solo non basta</li></ul></article>
+    <article><h4>Soldi e mance</h4><ul><li>Dollari in contanti stampati dopo il 2013; le tasse parco si pagano con carta ai cancelli</li><li>M-Pesa e carte funzionano quasi ovunque; a Diani i ristoranti accettano carte</li><li>Guida: $20 al giorno dal gruppo; campo: $5 a persona per notte</li><li>eSIM Safaricom per i dati: copre anche il Mara</li></ul></article>
+    <article><h4>Sei parole di swahili</h4><div class="sw">
+      <div><b>Jambo</b><span>ciao</span></div>
+      <div><b>Asante sana</b><span>grazie mille</span></div>
+      <div><b>Pole pole</b><span>piano piano</span></div>
+      <div><b>Simba · Twiga</b><span>leone · giraffa</span></div>
+      <div><b>Tembo · Chui</b><span>elefante · leopardo</span></div>
+      <div><b>Karibu</b><span>benvenuto</span></div>
+    </div></article>
+  </div>
+</section>
+
+<section class="block wrap" id="checklist">
+  <div class="sechead">
+    <p class="eyebrow">07 · Checklist</p>
+    <h2>Cosa mettere in valigia</h2>
+    <p>Le spunte restano salvate su questo dispositivo.</p>
+  </div>
+  <div class="progress"><div class="lab"><span id="plab">0 di 0</span><span id="ppct">0%</span></div><div class="tr"><div class="fl" id="pfl" style="width:0"></div></div></div>
+  <div class="check" id="check"></div>
+</section>
+
+<section class="block wrap" id="alternative">
+  <div class="sechead">
+    <p class="eyebrow">08 · Alternative</p>
+    <h2>Cosa compra più budget</h2>
+    <p>Gli stessi 21 giorni con più soldi, per capire dove va ogni dollaro in più.</p>
+  </div>
+  <div class="alts">
+    <div class="alt"><h4>Questo piano</h4><span class="eyebrow">≈ €21.000 in sei</span>
+      <div class="row"><span>Safari</span><span>Mara, Naivasha, Amboseli</span></div>
+      <div class="row"><span>Campi</span><span>Semplici, pensione completa</span></div>
+      <div class="row"><span>Spostamenti</span><span>Jeep privata, treno</span></div>
+      <div class="row"><span>Mare</span><span>Villa a Diani, 10 notti</span></div>
+      <p>La migrazione c'è, gli elefanti sotto il Kilimanjaro ci sono, il mare è lungo. Si rinuncia al lusso, non ai posti.</p></div>
+    <div class="alt"><h4>+ Serengeti e Ngorongoro</h4><span class="eyebrow">≈ €30.000 in sei</span>
+      <div class="row"><span>Aggiunge</span><span>5 notti in Tanzania</span></div>
+      <div class="row"><span>Costa in più</span><span>Tasse parco, visti, voli</span></div>
+      <div class="row"><span>Toglie</span><span>Naivasha e 5 notti di mare</span></div>
+      <div class="row"><span>Mare</span><span>Zanzibar, 5 notti</span></div>
+      <p>Il cratere e il Serengeti centrale valgono il viaggio, ma la Tanzania costa circa il doppio del Kenya a parità di campo.</p></div>
+    <div class="alt"><h4>Conservancy private</h4><span class="eyebrow">≈ €41.000 in sei</span>
+      <div class="row"><span>Aggiunge</span><span>Campi piccoli, game drive notturni</span></div>
+      <div class="row"><span>Costa in più</span><span>$350–450 a persona per notte</span></div>
+      <div class="row"><span>Toglie</span><span>Nulla</span></div>
+      <div class="row"><span>Mare</span><span>Lodge sulla spiaggia</span></div>
+      <p>È il piano Premium del calcolatore: stesso percorso, un decimo delle jeep attorno a ogni leone, voli leggeri al posto della strada.</p></div>
+  </div>
+</section>
+</main>
+
+<footer class="wrap">
+  <p>Cifre indicative in dollari, da confermare con preventivi reali per il 2027. Fonti per tariffe e tasse:</p>
+  <ul>
+    <li><a href="https://premylance-adventures-tour.lovable.app/blog/kenya-safari-cost-guide">Guida ai costi safari Kenya 2026: fasce di prezzo e tasse del Mara</a></li>
+    <li><a href="https://www.theafricaspecialists.com/kenya/the-masai-mara/offbeat-mara-camp/">The Africa Specialists, tariffe dei campi del Masai Mara 2026–27</a></li>
+    <li><a href="https://www.elewanacollection.com/elephant-pepper-camp/rates-and-seasons">Elewana, tariffe e conservancy fee a Mara North</a></li>
+    <li><a href="https://www.roadtripafrica.com/tanzania/practical-info/national-parks/">Road Trip Africa, tasse dei parchi in Tanzania (per il confronto)</a></li>
+  </ul>
+  <p>Confini da Natural Earth 1:110m. Laghi, parchi e coste minori sono schematici.</p>
+</footer>
+
+<script>
+/* ---------- data ---------- */
+const COUNTRIES = {"Tanzania":"M190.4 255.0 L207.3 266.0 L569.9 469.7 L576.7 527.7 L720.2 627.7 L674.1 750.9 L680.0 807.6 L744.0 844.0 L747.0 870.0 L719.5 930.4 L725.2 960.8 L718.7 1008.6 L753.6 1071.2 L795.0 1169.8 L831.7 1191.7 L831.7 1191.7 L752.1 1249.7 L642.8 1288.5 L582.8 1286.9 L547.1 1316.9 L477.5 1319.5 L451.4 1332.1 L331.2 1303.9 L256.0 1312.0 L228.0 1176.0 L194.1 1129.4 L174.0 1101.7 L75.9 1083.1 L19.2 1053.0 L-44.4 1036.2 L-84.2 1019.5 L-126.0 994.0 L-126.0 994.0 L-180.0 868.0 L-238.0 812.0 L-258.0 754.0 L-248.0 702.0 L-266.0 610.0 L-224.6 605.2 L-188.4 569.0 L-149.4 516.9 L-124.8 495.9 L-125.7 463.4 L-147.2 440.8 L-153.0 401.4 L-153.0 401.4 L-124.2 388.7 L-118.4 329.9 L-158.1 273.5 L-123.0 261.5 L-13.4 262.7 L190.4 255.0 Z","Dem. Rep. Congo":"M-266.0 610.0 L-248.0 702.0 L-258.0 754.0 L-238.0 812.0 L-180.0 868.0 L-126.0 994.0 L-126.0 994.0 L-165.4 983.8 L-299.7 1000.7 L-326.5 1012.7 L-355.0 1076.5 L-332.6 1120.6 L-350.4 1239.0 L-362.8 1339.4 L-335.8 1357.2 L-265.8 1396.1 L-238.4 1377.9 L-230.0 1485.7 L-306.6 1484.9 L-347.6 1429.9 L-384.5 1387.2 L-461.1 1373.3 L-483.6 1320.9 L-544.7 1352.4 L-624.8 1338.5 L-658.2 1293.1 L-721.7 1283.9 L-768.5 1286.3 L-774.3 1255.2 L-808.8 1252.7 L-854.3 1246.8 L-916.3 1261.8 L-959.7 1259.3 L-984.5 1268.5 L-979.1 1149.5 L-1012.5 1112.4 L-1019.8 1050.9 L-1005.1 990.6 L-1025.4 952.0 L-1027.2 889.1 L-1148.5 890.0 L-1139.8 853.9 L-1190.8 854.3 L-1196.2 871.6 L-1258.2 875.5 L-1283.3 933.8 L-1298.3 958.8 L-1353.6 944.7 L-1386.6 958.8 L-1452.7 966.9 L-1491.0 914.6 L-1514.0 882.2 L-1542.7 822.3 L-1567.3 747.7 L-1862.4 746.4 L-1897.5 758.4 L-1926.5 756.6 L-1967.8 770.0 L-1981.8 739.0 L-1956.3 728.4 L-1953.2 684.8 L-1936.8 659.1 L-1900.4 638.1 L-1874.2 648.3 L-1840.0 610.0 L-1785.5 611.0 L-1779.1 639.3 L-1741.7 657.0 L-1682.9 594.4 L-1624.6 545.5 L-1599.4 513.5 L-1602.7 431.2 L-1559.3 334.1 L-1513.5 282.6 L-1447.6 234.4 L-1436.1 202.5 L-1433.6 165.8 L-1417.3 131.1 L-1422.6 74.4 L-1410.1 -14.2 L-1390.6 -76.6 L-1360.6 -130.0 L-1354.7 -190.4 L-1345.7 -260.2 L-1306.8 -311.0 L-1253.2 -343.2 L-1170.9 -309.2 L-1107.2 -272.3 L-1034.1 -262.4 L-959.5 -242.9 L-929.6 -303.3 L-915.9 -311.0 L-870.3 -301.0 L-758.9 -350.9 L-719.5 -329.7 L-687.1 -332.7 L-672.1 -357.0 L-635.0 -365.6 L-559.7 -355.1 L-495.6 -352.8 L-462.6 -363.4 L-402.0 -280.8 L-357.1 -268.7 L-330.3 -285.5 L-284.1 -278.9 L-228.4 -300.1 L-204.6 -257.4 L-116.6 -190.9 L-116.6 -190.9 L-122.7 -74.0 L-82.6 -60.4 L-114.7 -24.9 L-153.1 1.6 L-191.4 53.8 L-212.4 100.3 L-218.0 180.5 L-241.2 218.7 L-242.1 294.1 L-270.8 322.0 L-274.5 381.5 L-288.3 389.2 L-297.5 443.9 L-272.4 489.4 L-266.0 610.0 Z","Somalia":"M958.5 328.3 L899.3 245.8 L898.1 -118.5 L985.5 -231.9 L1012.9 -263.4 L1077.0 -265.3 L1166.1 -335.8 L1296.4 -340.2 L1578.9 -640.3 L1648.7 -723.8 L1693.8 -785.2 L1693.8 -837.4 L1693.8 -938.2 L1694.2 -979.4 L1694.8 -981.1 L1694.8 -981.1 L1726.8 -983.0 L1772.9 -997.9 L1825.9 -1008.0 L1873.2 -1042.2 L1911.1 -1042.5 L1913.4 -1014.8 L1904.2 -956.7 L1904.5 -904.1 L1883.4 -868.0 L1855.2 -759.9 L1807.1 -648.2 L1745.3 -520.5 L1659.5 -373.9 L1574.1 -261.9 L1456.5 -125.5 L1356.4 -44.6 L1206.8 54.7 L1113.6 130.8 L1004.2 251.9 L981.1 304.6 L958.5 328.3 Z","Kenya":"M720.2 627.7 L576.7 527.7 L569.9 469.7 L207.3 266.0 L190.4 255.0 L189.4 149.0 L218.0 108.5 L267.2 42.3 L303.6 -30.6 L259.6 -145.4 L247.9 -195.6 L200.5 -265.0 L262.0 -324.7 L329.8 -390.6 L381.7 -373.8 L381.7 -317.7 L415.9 -284.8 L485.5 -284.8 L612.1 -199.9 L643.7 -198.9 L667.1 -201.6 L689.3 -190.1 L755.9 -182.2 L785.5 -223.9 L876.8 -265.7 L917.2 -231.9 L985.5 -231.9 L898.1 -118.5 L899.3 245.8 L958.5 328.3 L888.5 368.3 L863.8 410.0 L826.3 417.3 L812.1 487.8 L780.0 528.1 L760.5 594.7 L720.2 627.7 Z","Zambia":"M-126.0 994.0 L-84.2 1019.5 L-44.4 1036.2 L19.2 1053.0 L75.9 1083.1 L123.1 1127.7 L148.6 1212.6 L131.5 1239.7 L111.4 1320.7 L130.6 1403.6 L99.2 1438.4 L68.8 1531.3 L121.4 1557.2 L-182.1 1639.6 L-172.6 1710.8 L-248.3 1724.5 L-305.3 1764.3 L-317.4 1799.0 L-353.2 1806.8 L-440.2 1889.1 L-495.6 1953.8 L-529.3 1956.1 L-561.8 1944.6 L-673.6 1933.7 L-691.6 1926.2 L-692.3 1917.9 L-731.8 1895.3 L-796.6 1889.6 L-878.5 1912.3 L-943.8 1849.8 L-1011.2 1768.0 L-1006.6 1449.8 L-798.4 1451.1 L-806.9 1416.6 L-792.0 1379.1 L-809.6 1332.2 L-798.2 1283.7 L-808.8 1252.7 L-774.3 1255.2 L-768.5 1286.3 L-721.7 1283.9 L-658.2 1293.1 L-624.8 1338.5 L-544.7 1352.4 L-483.6 1320.9 L-461.1 1373.3 L-384.5 1387.2 L-347.6 1429.9 L-306.6 1484.9 L-230.0 1485.7 L-238.4 1377.9 L-265.8 1396.1 L-335.8 1357.2 L-362.8 1339.4 L-350.4 1239.0 L-332.6 1120.6 L-355.0 1076.5 L-326.5 1012.7 L-299.7 1000.7 L-165.4 983.8 L-126.0 994.0 Z","Malawi":"M75.9 1083.1 L174.0 1101.7 L194.1 1129.4 L228.0 1176.0 L256.0 1312.0 L228.0 1388.0 L256.0 1518.0 L290.7 1516.5 L326.8 1548.8 L368.7 1621.1 L377.2 1749.7 L333.9 1770.7 L303.4 1840.1 L238.1 1778.4 L230.7 1707.9 L251.8 1661.4 L246.0 1621.3 L206.5 1596.0 L179.0 1605.2 L121.4 1557.2 L68.8 1531.3 L99.2 1438.4 L130.6 1403.6 L111.4 1320.7 L131.5 1239.7 L148.6 1212.6 L123.1 1127.7 L75.9 1083.1 Z","Mozambique":"M256.0 1312.0 L331.2 1303.9 L451.4 1332.1 L477.5 1319.5 L547.1 1316.9 L582.8 1286.9 L642.8 1288.5 L752.1 1249.7 L831.7 1191.7 L831.7 1191.7 L831.7 1191.7 L847.8 1236.5 L843.7 1336.2 L856.1 1423.9 L860.0 1580.2 L877.5 1629.2 L847.7 1700.6 L808.9 1770.1 L745.3 1832.1 L653.8 1870.1 L541.1 1918.6 L428.1 2026.0 L389.6 2044.2 L319.8 2115.3 L278.6 2138.4 L270.2 2209.7 L317.6 2285.4 L337.3 2344.1 L338.6 2374.0 L356.3 2369.0 L353.4 2467.1 L337.2 2513.5 L360.7 2530.7 L345.9 2572.3 L304.1 2607.8 L221.6 2641.6 L101.3 2695.8 L57.5 2732.7 L66.0 2774.9 L91.6 2781.6 L83.0 2834.2 L7.2 2833.4 L-1.4 2789.2 L-16.2 2744.3 L-24.8 2708.4 L-6.9 2596.9 L-33.0 2525.9 L-80.9 2385.2 L24.5 2271.6 L50.9 2199.5 L66.0 2190.4 L77.3 2131.6 L61.2 2101.9 L65.5 2027.2 L85.0 1957.9 L84.8 1831.3 L32.8 1799.2 L-14.8 1791.9 L-36.4 1767.2 L-82.7 1746.1 L-166.1 1748.1 L-172.6 1710.8 L-182.1 1639.6 L121.4 1557.2 L179.0 1605.2 L206.5 1596.0 L246.0 1621.3 L251.8 1661.4 L230.7 1707.9 L238.1 1778.4 L303.4 1840.1 L333.9 1770.7 L377.2 1749.7 L368.7 1621.1 L326.8 1548.8 L290.7 1516.5 L256.0 1518.0 L228.0 1388.0 L256.0 1312.0 Z","Burundi":"M-153.0 401.4 L-147.2 440.8 L-125.7 463.4 L-124.8 495.9 L-149.4 516.9 L-188.4 569.0 L-224.6 605.2 L-266.0 610.0 L-272.4 489.4 L-297.5 443.9 L-236.8 451.8 L-206.2 394.8 L-153.0 401.4 Z","Ethiopia":"M1578.9 -640.3 L1296.4 -340.2 L1166.1 -335.8 L1077.0 -265.3 L1012.9 -263.4 L985.5 -231.9 L917.2 -231.9 L876.8 -265.7 L785.5 -223.9 L755.9 -182.2 L689.3 -190.1 L667.1 -201.6 L643.7 -198.9 L612.1 -199.9 L485.5 -284.8 L415.9 -284.8 L381.7 -317.7 L381.7 -373.8 L329.8 -390.6 L270.7 -499.4 L225.0 -522.6 L207.5 -562.6 L156.8 -611.3 L95.4 -618.5 L129.5 -675.5 L182.6 -677.9 L197.5 -708.5 L196.2 -798.4 L225.7 -903.0 L273.1 -931.0 L283.2 -971.9 L326.0 -1048.3 L386.4 -1097.8 L427.0 -1196.3 L443.0 -1282.2 L559.4 -1261.3 L590.6 -1335.9 L651.3 -1290.5 L709.9 -1314.1 L734.1 -1293.2 L802.6 -1292.0 L889.7 -1251.9 L915.5 -1217.3 L959.9 -1185.2 L1001.0 -1126.6 L1035.2 -1094.2 L1000.0 -1050.0 L966.2 -1003.1 L974.0 -975.5 L975.6 -945.1 L1031.4 -943.4 L1055.5 -950.5 L1077.7 -932.7 L1055.9 -897.3 L1092.8 -842.2 L1129.7 -794.0 L1167.9 -758.4 L1494.8 -639.7 L1578.9 -640.3 Z","Uganda":"M190.4 255.0 L-13.4 262.7 L-123.0 261.5 L-158.1 273.5 L-217.8 304.3 L-242.1 294.1 L-241.2 218.7 L-218.0 180.5 L-212.4 100.3 L-191.4 53.8 L-153.1 1.6 L-114.7 -24.9 L-82.6 -60.4 L-122.7 -74.0 L-116.6 -190.9 L-116.6 -190.9 L-75.4 -218.2 L-11.9 -195.8 L68.6 -219.2 L139.0 -219.0 L200.5 -265.0 L247.9 -195.6 L259.6 -145.4 L303.6 -30.6 L267.2 42.3 L218.0 108.5 L189.4 149.0 L190.4 255.0 Z","Rwanda":"M-158.1 273.5 L-118.4 329.9 L-124.2 388.7 L-153.0 401.4 L-153.0 401.4 L-206.2 394.8 L-236.8 451.8 L-297.5 443.9 L-288.3 389.2 L-274.5 381.5 L-270.8 322.0 L-242.1 294.1 L-217.8 304.3 L-158.1 273.5 Z","S. Sudan":"M-116.6 -190.9 L-204.6 -257.4 L-228.4 -300.1 L-284.1 -278.9 L-330.3 -285.5 L-357.1 -268.7 L-402.0 -280.8 L-462.6 -363.4 L-478.7 -395.1 L-553.4 -434.7 L-578.7 -494.7 L-620.3 -537.9 L-687.6 -590.0 L-688.5 -622.5 L-743.3 -662.9 L-811.3 -702.0 L-780.6 -712.9 L-746.3 -731.8 L-720.5 -821.0 L-693.0 -867.4 L-620.9 -881.1 L-603.8 -853.6 L-552.3 -795.3 L-524.8 -786.7 L-488.7 -803.9 L-416.6 -800.4 L-402.9 -779.8 L-303.3 -779.8 L-299.9 -800.4 L-248.4 -819.3 L-238.1 -848.5 L-200.3 -869.1 L-116.2 -810.7 L-64.7 -821.0 L-14.9 -893.1 L40.0 -948.1 L31.4 -1008.1 L7.4 -1037.3 L67.5 -1042.5 L74.3 -1064.8 L120.7 -1057.9 L108.7 -984.1 L120.7 -912.0 L172.2 -872.5 L184.2 -838.2 L182.5 -788.4 L196.3 -786.4 L197.5 -708.5 L182.6 -677.9 L129.5 -675.5 L95.4 -618.5 L156.8 -611.3 L207.5 -562.6 L225.0 -522.6 L270.7 -499.4 L329.8 -390.6 L262.0 -324.7 L200.5 -265.0 L139.0 -219.0 L68.6 -219.2 L-11.9 -195.8 L-75.4 -218.2 L-116.6 -190.9 Z"};
+const LON0=32.0, LAT0=1.6, S=100;
+const P=(lon,lat)=>[(lon-LON0)*S,(LAT0-lat)*S];
+
+const PLANS={
+ 21:{back:"12 agosto 2027",nights:20,sub:"Ventuno giorni in Kenya sotto i 25.000 dollari, dal 22 luglio al 12 agosto: la migrazione nel Mara, le bici di Hell's Gate, gli elefanti di Amboseli e dieci notti di oceano a Diani.",mapsub:"Tutto il safari su strada con un Land Cruiser privato da sette posti, poi il treno per la costa. Niente voli leggeri, niente secondo visto. Tocca una tappa per i dettagli.",logh:"Ventuno giorni",chaph:"Quattro capitoli, un filo",sea:"dia"},
+ "21z":{back:"12 agosto 2027",nights:20,sub:"Ventuno giorni tra Kenya e Zanzibar, dal 22 luglio al 12 agosto: la migrazione nel Mara, le bici di Hell's Gate, gli elefanti di Amboseli e dieci notti sulla costa nord dell'isola.",mapsub:"Il safari su strada con un Land Cruiser privato da sette posti, poi un volo diretto da Nairobi a Zanzibar e rientro dall'isola. Tocca una tappa per i dettagli.",logh:"Ventuno giorni",chaph:"Quattro capitoli, un filo",sea:"zan"},
+ 15:{back:"6 agosto 2027",nights:14,sub:"Quindici giorni tra Kenya e Zanzibar: la migrazione nel Mara, le bici di Hell's Gate, gli elefanti di Amboseli e cinque notti sulla costa nord dell'isola.",mapsub:"Il safari su strada con un Land Cruiser privato da sette posti, poi un volo diretto da Nairobi a Zanzibar e rientro dall'isola. Tocca una tappa per i dettagli.",logh:"Quindici giorni",chaph:"Quattro capitoli, un filo",sea:"zan"}};
+let PLAN="21";try{const v=localStorage.getItem("safari27-plan");if(PLANS[v])PLAN=v;}catch(e){}
+const planListeners=[];
+
+const STOPS=[
+ {id:"nbo",n:1,name:"Nairobi",lat:-1.29,lon:36.82,lx:12,ly:-14,days:{21:"Giorni 1, 7, 10 · 3 notti","21z":"Giorni 1, 7, 10 · 3 notti",15:"Giorni 1, 7 · 2 notti"},chap:null,
+  text:"Si atterra alle 7:00 del 23 luglio: una giornata intera per azzerare il fuso prima del Mara. Guesthouse a Karen con check-in anticipato, poi base di passaggio tra una tappa e l'altra.",
+  items:["Giorno 1: Sheldrick alle 11:00 (prenotare), Giraffe Centre, pranzo al Talisman","Cambio e contanti a Karen, non in aeroporto","Stazione SGR di Syokimau per il treno della costa"]},
+ {id:"mara",n:2,name:"Masai Mara",lat:-1.5,lon:35.25,lx:-120,ly:-16,days:{21:"Giorni 2–4 · 3 notti","21z":"Giorni 2–4 · 3 notti",15:"Giorni 2–4 · 3 notti"},chap:"c-mara",
+  text:"La migrazione al picco. Campo semplice alle porte di Talek o Sekenani, dentro la riserva all'alba con la jeep privata.",
+  items:["Attraversamenti del fiume Mara","Tre giornate intere di game drive","Villaggio maasai la sera"]},
+ {id:"nai",n:3,name:"Naivasha",lat:-0.77,lon:36.43,lx:-104,ly:-12,days:{21:"Giorni 5–6 · 2 notti","21z":"Giorni 5–6 · 2 notti",15:"Giorni 5–6 · 2 notti"},chap:"c-nai",
+  text:"Il lago della Rift Valley a 1.900 metri. Hell's Gate è l'unico parco del Kenya che si gira in bici, tra zebre e giraffe.",
+  items:["Bici a Hell's Gate e gola di Ol Njorowa","Passeggiata a piedi a Crescent Island","Barca tra gli ippopotami"]},
+ {id:"amb",n:4,name:"Amboseli",lat:-2.65,lon:37.25,lx:14,ly:22,days:{21:"Giorni 8–9 · 2 notti","21z":"Giorni 8–9 · 2 notti",15:"Giorni 8–9 · 2 notti"},chap:"c-amb",
+  text:"Le mandrie di elefanti più grandi del Kenya sotto il Kilimanjaro, che a fine luglio si scopre all'alba.",
+  items:["Elefanti con le zanne più lunghe del paese","Kilimanjaro limpido dalle 6 alle 9","Lago Amboseli con fenicotteri"]},
+ {id:"mom",n:5,name:"Mombasa",lat:-4.03,lon:39.65,lx:14,ly:-14,days:{21:"Giorno 11 · transito"},chap:null,only:["21"],
+  text:"Arrivo con il treno Madaraka Express, 5 ore da Nairobi tra Tsavo e la pianura. Transfer di un'ora fino a Diani.",
+  items:["Treno delle 8:00, prima classe","Vista su Tsavo dal finestrino","Ponte di Dongo Kundu, niente traghetto"]},
+ {id:"dia",n:6,name:"Diani Beach",lat:-4.28,lon:39.59,lx:14,ly:28,days:{21:"Giorni 11–20 · 10 notti"},chap:"c-dia",only:["21"],
+  text:"Diciassette chilometri di sabbia bianca a sud di Mombasa. Una villa con piscina per sei costa meno di una camera in lodge.",
+  items:["Snorkeling a Kisite-Mpunguti con i delfini","Kitesurf a Galu da luglio a settembre","Foresta di Kaya Kinondo e colobi"]},
+ {id:"zan",n:6,name:"Zanzibar",lat:-5.73,lon:39.30,lx:14,ly:-12,days:{"21z":"Giorni 11–20 · 10 notti",15:"Giorni 10–14 · 5 notti"},chap:"c-zan",only:["21z","15"],
+  text:"Costa nord tra Nungwi e Kendwa: l'unica dove la marea non svuota la spiaggia. Volo diretto da Nairobi, un'ora e mezza.",
+  items:["Atollo di Mnemba, delfini e tartarughe","Stone Town l'ultimo pomeriggio","Dhow al tramonto"]}
+];
+const ROUTES={
+ 21:[["nbo","mara","drive"],["mara","nai","drive"],["nai","nbo","drive"],["nbo","amb","drive"],["amb","nbo","drive"],["nbo","mom","train"],["mom","dia","drive"],["dia","nbo","fly"]],
+ "21z":[["nbo","mara","drive"],["mara","nai","drive"],["nai","nbo","drive"],["nbo","amb","drive"],["amb","nbo","drive"],["nbo","zan","fly"]],
+ 15:[["nbo","mara","drive"],["mara","nai","drive"],["nai","nbo","drive"],["nbo","amb","drive"],["amb","nbo","drive"],["nbo","zan","fly"]]};
+
+const CHAPTERS=[
+ {id:"c-mara",n:"02",title:"Masai Mara",sub:"La migrazione, con la jeep tutta per voi",nights:{21:"3 notti","21z":"3 notti",15:"3 notti"},days:{21:"G 2–4","21z":"G 2–4",15:"G 2–4"},alt:"1.600 m",
+  lead:"A fine luglio un milione e mezzo di gnu sono appena arrivati dal Serengeti e si ammassano sulle rive del fiume Mara. Gli attraversamenti sono il momento più drammatico del safari africano. Nella riserva pubblica c'è folla, ma con una jeep privata e una guida che conosce i guadi si arriva prima dei pullman e si resta quando se ne vanno.",
+  why:"Il budget si spende qui: $200 al giorno a persona di tasse parco in agosto sono la voce singola più cara del viaggio. Per questo tre notti, non quattro, e un campo semplice alle porte di Talek: si dorme bene, si mangia bene, e si è dentro alla riserva alle 6:30. Le conservancy private costano il triplo e sono la prima cosa da aggiungere se il budget cresce.",
+  fauna:["Gnu e zebre in migrazione","Leoni, branchi residenti","Ghepardi","Leopardi","Coccodrilli del Mara","Elefanti","Iene"],
+  camps:[["Mara Explorers Camp","Talek · tende con bagno, famiglia-friendly, cucina onesta","Essenziale","$80–110"],["Enchoro Wildlife Camp","Sekenani · tende e cottage, piscina, grandi gruppi","Essenziale","$90–120"],["Basecamp Masai Mara","Talek · eco-camp storico, guide ottime","Comfort","$220–320"],["Kicheche Mara","Mara North · conservancy privata, il salto di qualità","Premium","da $995"]],
+  teen:["Alba sul fiume per gli attraversamenti, con la colazione al sacco","Tre game drive interi: con la jeep privata si decide quando tornare","Villaggio maasai la sera, con i ragazzi della loro età","Mongolfiera all'alba: $450 a persona, fuori budget ma prenotabile sul posto se avanza"]},
+ {id:"c-nai",n:"03",title:"Naivasha e Hell's Gate",sub:"Dove si scende dalla jeep",nights:{21:"2 notti","21z":"2 notti",15:"2 notti"},days:{21:"G 5–6","21z":"G 5–6",15:"G 5–6"},alt:"1.900 m",
+  lead:"Dopo tre giorni seduti in jeep serve movimento. Hell's Gate è l'unico parco del Kenya senza grandi predatori, e quindi l'unico che si gira in bicicletta: venti chilometri tra zebre, giraffe e facoceri, con le torri di basalto che hanno ispirato Il Re Leone.",
+  why:"È la tappa più economica del viaggio e una delle migliori per due ragazzi sportivi: tasse parco di $26, bici a noleggio a $10, e il lago a due passi per una barca tra gli ippopotami. Si dorme sulla riva, in bandas di legno o cottage su una fattoria, e la sera fa fresco: siamo a 1.900 metri.",
+  fauna:["Zebre e giraffe in bici","Ippopotami nel lago","Aquile pescatrici","Bufali a Crescent Island","Iraci sulle rocce"],
+  camps:[["Camp Carnelley's","Riva sud · bandas e tende, il miglior ristorante del lago","Essenziale","$50–90"],["Fisherman's Camp","Riva sud · cottage semplici, bici a noleggio","Essenziale","$45–80"],["Sanctuary Farm","Fattoria con cavalli e animali in libertà","Comfort","$150–220"],["Lake Naivasha Sopa","Lodge grande con piscina e giraffe nel giardino","Comfort","$180–260"]],
+  teen:["Bici a Hell's Gate: 20–25 km con la gola di Ol Njorowa a metà","Camminata a Crescent Island tra giraffe e gnu, senza recinti","Barca al tramonto per gli ippopotami e le aquile pescatrici","Un pomeriggio di riposo: è l'unico posto fresco del viaggio"]},
+ {id:"c-amb",n:"04",title:"Amboseli",sub:"Elefanti sotto il Kilimanjaro",nights:{21:"2 notti","21z":"2 notti",15:"2 notti"},days:{21:"G 8–9","21z":"G 8–9",15:"G 8–9"},alt:"1.150 m",
+  lead:"Un parco piccolo e asciutto ai piedi del Kilimanjaro, con le famiglie di elefanti più studiate d'Africa e alcuni dei maschi con le zanne più lunghe del continente. A fine luglio la montagna si scopre all'alba, poi si copre verso le nove: la foto è di prima mattina.",
+  why:"Due notti bastano. Il parco si gira in una giornata, le tasse sono un terzo di quelle del Mara e i campi fuori dal cancello costano come a Talek. È anche sulla strada giusta: da Amboseli a Nairobi sono quattro ore, e il giorno dopo si prende il treno.",
+  fauna:["Elefanti, mandrie di 50","Kilimanjaro all'alba","Fenicotteri","Iene","Giraffe maasai","Ghepardi nelle pianure"],
+  camps:[["Kibo Safari Camp","Fuori dal cancello Kimana · tende grandi, piscina","Essenziale","$90–130"],["Sentrim Amboseli","Fuori dal cancello · tende, vista sul Kilimanjaro","Essenziale","$100–140"],["Ol Tukai Lodge","Dentro il parco, elefanti davanti alla stanza","Comfort","$250–350"],["Tortilis Camp","Elewana · conservancy privata, il top","Premium","da $700"]],
+  teen:["Alba sul Kilimanjaro dall'Observation Hill","Game drive intero attorno alle paludi degli elefanti","Serata al campo: a Kimana il cielo è buio e si vede la Via Lattea"]},
+ {id:"c-dia",n:"05",title:"Diani Beach",sub:"Dieci notti di oceano, una villa per sei",nights:{21:"10 notti"},days:{21:"G 11–20"},alt:"0 m",only:["21"],
+  lead:"Dopo nove giorni di polvere, acqua. Diani è la spiaggia migliore del Kenya: sabbia bianca, barriera a riva, palme. Una villa con piscina e cuoco per sei costa $200–250 a notte, meno di una camera doppia in un resort. Dieci notti qui sono la ragione per cui i 21 giorni stanno nel budget.",
+  why:"Da Nairobi ci si arriva in treno: il Madaraka Express attraversa Tsavo in cinque ore, prima classe a $30. A Diani si vive come a casa: spesa al mercato, pesce la sera, il kite a Galu quando c'è vento. Il rientro è con un volo di un'ora da Ukunda a Nairobi per la coincidenza.",
+  fauna:["Delfini a Kisite","Tartarughe verdi","Colobi di Kaya Kinondo","Barriera corallina","Scimmie Sykes in giardino"],
+  camps:[["Villa con piscina, Airbnb","Galu o Diani sud · 3 camere, cuoco e guardiano inclusi","Essenziale","$200–250 / notte in sei"],["Diani Backpackers","Dormitori e family room, ragazzi felici","Essenziale","$25–40"],["Swahili Beach","Resort grande, piscine a cascata, tutto incluso","Comfort","$180–260"],["The Sands at Nomad","Boutique sulla spiaggia, ristorante sul mare","Premium","$300–450"]],
+  teen:["Kitesurf a Galu Beach: corso di 3 giorni, luglio e agosto hanno il vento giusto","Snorkeling a Kisite-Mpunguti con i delfini, in dhow da Shimoni","Brevetto open water in 4 giorni con Diving The Crab","Tramonto a Kaya Kinondo e sera a Forty Thieves"]},
+ {id:"c-zan",n:"05",title:"Zanzibar",sub:"Le notti sulla costa nord",nights:{"21z":"10 notti",15:"5 notti"},days:{"21z":"G 11–20",15:"G 10–14"},alt:"0 m",only:["21z","15"],
+  lead:"L'isola ha due coste diverse: a est la marea svuota la laguna per ore, a nord tra Nungwi e Kendwa si nuota tutto il giorno. Per un gruppo di sei la scelta è il nord, in una villa o in un guesthouse a conduzione familiare.",
+  why:"Si arriva da Nairobi con un volo diretto di un'ora e mezza e si riparte dall'isola, senza tornare in Kenya. Il visto tanzaniano costa $50 a testa, e arrivando dal Kenya serve il certificato di febbre gialla. L'atollo di Mnemba è il miglior snorkeling della regione; Stone Town merita l'ultimo pomeriggio, prima del volo serale.",
+  fauna:["Delfini a Mnemba","Tartarughe verdi","Colobi rossi a Jozani","Barriera corallina"],
+  camps:[["Villa a Nungwi, Airbnb","3 camere, cucina, spiaggia a 5 minuti","Essenziale","$180–240 / notte in sei"],["Flame Tree Cottages","Nungwi · cottage in giardino, gestione familiare","Essenziale","$70–110"],["Z Hotel","Nungwi · boutique sulla spiaggia","Comfort","$200–300"],["Zuri Zanzibar","Kendwa · bungalow nel giardino, spiaggia ampia","Premium","da $350"]],
+  teen:["Snorkeling a Mnemba con delfini e tartarughe","Dhow al tramonto da Kendwa","Stone Town: vicoli, mercato di Forodhani, volo serale"]}
+];
+
+const LOG={
+ 21:[
+ [1,"Málaga → Nairobi","Partenza la sera del 22, arrivo alle 7:00 del 23. Check-in anticipato a Karen, Sheldrick alle 11, Giraffe Centre, pranzo al Talisman. A letto presto.","volo",1],
+ [2,"Nairobi → Masai Mara","Partenza alle 7 con la jeep, 5–6 ore via Narok. Game drive dal cancello al campo.","strada",1],
+ [3,"Masai Mara","Alba sul fiume Mara per gli attraversamenti. Giornata intera con pranzo al sacco.","safari",0],
+ [4,"Masai Mara","Secondo giorno intero. Villaggio maasai la sera.","safari",0],
+ [5,"Mara → Naivasha","Game drive all'alba, poi 4–5 ore di strada. Pomeriggio in barca tra gli ippopotami.","strada",1],
+ [6,"Naivasha","Bici a Hell's Gate al mattino, Crescent Island a piedi nel pomeriggio.","attivo",0],
+ [7,"Naivasha → Nairobi","Due ore di strada. Giraffe Centre e Sheldrick. Sera libera.","strada",1],
+ [8,"Nairobi → Amboseli","4 ore via Emali. Game drive del pomeriggio alle paludi.","strada",1],
+ [9,"Amboseli","Alba sul Kilimanjaro, giornata intera con gli elefanti.","safari",0],
+ [10,"Amboseli → Nairobi","Game drive all'alba, poi 4 ore di strada. Ultima notte in città.","strada",1],
+ [11,"Nairobi → Diani","Treno delle 8:00, Mombasa alle 13:30. Transfer di un'ora alla villa.","treno",1],
+ [12,"Diani","Spiaggia. Niente sveglia.","mare",0],
+ [13,"Diani","Kisite-Mpunguti: dhow da Shimoni, delfini e snorkeling.","mare",0],
+ [14,"Diani","Kite a Galu, primo giorno di corso.","mare",0],
+ [15,"Diani","Kite, secondo giorno. Mercato di Ukunda per la spesa.","mare",0],
+ [16,"Diani","Kite, terzo giorno. Sera a Forty Thieves.","mare",0],
+ [17,"Diani","Foresta di Kaya Kinondo e colobi.","mare",0],
+ [18,"Diani","Spiaggia e piscina.","mare",0],
+ [19,"Diani","Snorkeling sulla barriera davanti alla villa, bassa marea.","mare",0],
+ [20,"Diani","Ultimo giorno di mare. Cena sulla spiaggia.","mare",0],
+ [21,"Diani → Málaga","Volo Ukunda → Nairobi di un'ora, poi il volo serale con scalo. Arrivo il giorno dopo.","volo",1]],
+ "21z":[
+ [1,"Málaga → Nairobi","Partenza la sera del 22, arrivo alle 7:00 del 23. Check-in anticipato a Karen, Sheldrick alle 11, Giraffe Centre, a letto presto.","volo",1],
+ [2,"Nairobi → Masai Mara","Partenza alle 7 con la jeep, 5–6 ore via Narok. Game drive dal cancello al campo.","strada",1],
+ [3,"Masai Mara","Alba sul fiume Mara per gli attraversamenti. Giornata intera con pranzo al sacco.","safari",0],
+ [4,"Masai Mara","Secondo giorno intero. Villaggio maasai la sera.","safari",0],
+ [5,"Mara → Naivasha","Game drive all'alba, poi 4–5 ore di strada. Barca tra gli ippopotami.","strada",1],
+ [6,"Naivasha","Bici a Hell's Gate al mattino, Crescent Island a piedi nel pomeriggio.","attivo",0],
+ [7,"Naivasha → Nairobi","Due ore di strada. Pomeriggio libero a Karen.","strada",1],
+ [8,"Nairobi → Amboseli","4 ore via Emali. Game drive del pomeriggio alle paludi.","strada",1],
+ [9,"Amboseli","Alba sul Kilimanjaro, giornata intera con gli elefanti.","safari",0],
+ [10,"Amboseli → Nairobi","Game drive all'alba, poi 4 ore di strada. Ultima notte in Kenya.","strada",1],
+ [11,"Nairobi → Zanzibar","Volo diretto di 1h30 a metà giornata. Transfer di un'ora a Nungwi.","volo",1],
+ [12,"Zanzibar","Spiaggia. Niente sveglia.","mare",0],
+ [13,"Zanzibar","Mnemba: snorkeling con delfini e tartarughe.","mare",0],
+ [14,"Zanzibar","Kite a Paje, primo giorno di corso.","mare",0],
+ [15,"Zanzibar","Kite, secondo giorno.","mare",0],
+ [16,"Zanzibar","Kite, terzo giorno. Sera a Kendwa.","mare",0],
+ [17,"Zanzibar","Foresta di Jozani e colobi rossi, spice farm.","mare",0],
+ [18,"Zanzibar","Spiaggia e piscina.","mare",0],
+ [19,"Zanzibar","Dhow al tramonto.","mare",0],
+ [20,"Zanzibar","Ultimo giorno di mare. Cena sulla spiaggia.","mare",0],
+ [21,"Zanzibar → Málaga","Pomeriggio a Stone Town, volo serale con scalo. Arrivo il giorno dopo.","volo",1]],
+ 15:[
+ [1,"Málaga → Nairobi","Partenza la sera del 22, arrivo alle 7:00 del 23. Check-in anticipato a Karen, Sheldrick alle 11, Giraffe Centre, a letto presto.","volo",1],
+ [2,"Nairobi → Masai Mara","Partenza alle 7 con la jeep, 5–6 ore via Narok. Game drive dal cancello al campo.","strada",1],
+ [3,"Masai Mara","Alba sul fiume Mara per gli attraversamenti. Giornata intera.","safari",0],
+ [4,"Masai Mara","Secondo giorno intero. Villaggio maasai la sera.","safari",0],
+ [5,"Mara → Naivasha","Game drive all'alba, poi 4–5 ore di strada. Barca tra gli ippopotami.","strada",1],
+ [6,"Naivasha","Bici a Hell's Gate, Crescent Island a piedi.","attivo",0],
+ [7,"Naivasha → Nairobi","Due ore di strada. Giraffe Centre e Sheldrick.","strada",1],
+ [8,"Nairobi → Amboseli","4 ore via Emali. Game drive del pomeriggio.","strada",1],
+ [9,"Amboseli","Alba sul Kilimanjaro, giornata intera con gli elefanti.","safari",0],
+ [10,"Amboseli → Zanzibar","Strada fino a Nairobi, volo delle 15 per Zanzibar. Transfer a Nungwi.","volo",1],
+ [11,"Zanzibar","Spiaggia. Niente sveglia.","mare",0],
+ [12,"Zanzibar","Mnemba: snorkeling con delfini e tartarughe.","mare",0],
+ [13,"Zanzibar","Kendwa, dhow al tramonto.","mare",0],
+ [14,"Zanzibar","Mattina al mare, pomeriggio a Stone Town. Cena a Forodhani.","mare",0],
+ [15,"Zanzibar → Málaga","Volo serale con scalo. Arrivo il giorno dopo.","volo",1]]};
+
+/* cost model: per-person-per-night rates by tier; fees per person per day */
+const TIERS={
+ essenziale:{lab:"Essenziale",intl:{21:1000,"21z":1100,15:1100},nbo:35,mara:95,nai:65,amb:95,veh:280,sea:{21:220,"21z":270,15:270},food:40,act:{21:160,"21z":270,15:230},zanFly:220},
+ comfort:{lab:"Comfort",intl:{21:1100,"21z":1200,15:1200},nbo:70,mara:180,nai:120,amb:180,veh:320,sea:{21:350,"21z":320,15:320},food:50,act:{21:150,"21z":180,15:180},zanFly:220},
+ premium:{lab:"Premium",intl:{21:1300,"21z":1400,15:1400},nbo:120,mara:450,nai:220,amb:400,veh:0,sea:{21:600,"21z":550,15:550},food:70,act:{21:200,"21z":250,15:250},zanFly:260}
+};
+const FEES={mara:[200,50,3],amb:[60,35,2],hg:[26,17,1],boat:[30,30,1],nbo:[15,15,1]};
+const KID=0.75, BALLOON=450, BUDGET_EUR=25000;
+
+const MILES=[
+ ["Ott 2026","Scegliere l'operatore","Un operatore keniota con Land Cruiser da 7 posti: chiedere tre preventivi con i campi nominati qui.",true],
+ ["Nov 2026","Villa a Diani o Nungwi","Le ville con piscina per sei in agosto sono poche: bloccarla ora con il 30%."],
+ ["Dic 2026","Voli intercontinentali","Turkish, Qatar o Ethiopian aprono le tariffe 11 mesi prima; sei posti insieme vanno presi presto."],
+ ["Gen 2027","Confermare campi e treno","Saldo dell'acconto all'operatore. I biglietti SGR si aprono 30 giorni prima: lo fa l'operatore."],
+ ["Apr 2027","Assicurazione e passaporti","Controllare le scadenze: 6 mesi di validità oltre il rientro."],
+ ["Mag 2027","Clinica dei viaggiatori","Antimalarica, richiami. Almeno 6 settimane prima."],
+ ["Lug 2027","eTA, contanti, binocoli","eTA Kenya entro il 19 luglio. Dollari nuovi, borse morbide."],
+];
+const MONTHS=[["Gen","s1"],["Feb","s1"],["Mar","s1"],["Apr",""],["Mag",""],["Giu","s2"],["Lug","s2 you"],["Ago","s3 you"],["Set","s3"],["Ott","s3"],["Nov",""],["Dic","s1"]];
+
+const CHECK={
+ "Documenti":["Passaporti, 6 mesi oltre il rientro","eTA Kenya stampata","Visto Tanzania (solo opzione Zanzibar)","Assicurazione con evacuazione","Fotocopie e scansioni sul telefono","Carta per le tasse parco ai cancelli"],
+ "Safari":["Binocolo 8×42, uno a testa","Fotocamera e zoom, batterie extra","Borsa morbida, una a testa","Pile e giacca antivento","Cappello e occhiali","Scarpe da trail per Hell's Gate"],
+ "Salute":["Antimalarica per tutti","Repellente DEET 30%","Crema solare 50","Kit: cerotti, antidiarroico, antistaminico","Farmaci personali con ricetta"],
+ "Mare":["Maschera e snorkel propri","Lycra anti-UV","Scarpette per la barriera","Sacca stagna","Libri: dieci giorni di villa sono lunghi"],
+ "Ragazzi":["Scarpe da corsa e pantaloncini da bici","Costume da kite o muta corta","Powerbank grande","Giochi di carte per le sere nei campi","Quaderno per il diario del viaggio"]
+};
+
+/* ---------- helpers ---------- */
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,ns){const e=ns?document.createElementNS(NS,tag):document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+const fmt=(n,eur)=>{const v=eur?n*0.92:n;return (eur?"€":"$")+Math.round(v).toLocaleString("it-IT");};
+const fmtK=(n,eur)=>{const v=eur?n*0.92:n;return (eur?"€":"$")+(Math.round(v/100)/10).toLocaleString("it-IT",{maximumFractionDigits:1})+"k";};
+
+/* ---------- plan switch ---------- */
+function setPlan(p,fromUI){
+  PLAN=p;try{localStorage.setItem("safari27-plan",String(p));}catch(e){}
+  document.querySelectorAll('input[name="plan"]').forEach(r=>{r.checked=(r.value===p);});
+  document.querySelectorAll(".cmp").forEach(c=>c.classList.toggle("on",c.dataset.plan===p));
+  const d=PLANS[p];
+  document.getElementById("f-back").textContent=d.back;document.getElementById("f-nights").textContent=d.nights;
+  document.getElementById("f-sub").textContent=d.sub;document.getElementById("map-sub").textContent=d.mapsub;
+  document.getElementById("log-h").textContent=d.logh;document.getElementById("chap-h").textContent=d.chaph;
+  planListeners.forEach(f=>f(p));
+}
+document.querySelectorAll('input[name="plan"]').forEach(r=>r.addEventListener("change",()=>{if(r.checked)setPlan(r.value,true);}));
+document.querySelectorAll(".cmp").forEach(c=>{c.addEventListener("click",()=>setPlan(c.dataset.plan,true));c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setPlan(c.dataset.plan,true);}});});
+
+/* ---------- hero sky ---------- */
+(function(){
+  const c=document.getElementById("sky"); const ctx=c.getContext("2d");
+  function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function rnd(seed){let s=seed;return()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+  function acacia(x,y,s,color){
+    ctx.fillStyle=color;ctx.strokeStyle=color;ctx.lineWidth=2.2*s;ctx.lineCap="round";
+    ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-2*s,y-26*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-2*s,y-18*s);ctx.lineTo(x-14*s,y-30*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-2*s,y-20*s);ctx.lineTo(x+12*s,y-31*s);ctx.stroke();
+    ctx.beginPath();ctx.ellipse(x-1*s,y-33*s,30*s,6*s,0,0,7);ctx.fill();
+    ctx.beginPath();ctx.ellipse(x-12*s,y-31*s,14*s,4*s,0,0,7);ctx.fill();
+    ctx.beginPath();ctx.ellipse(x+13*s,y-32*s,12*s,3.5*s,0,0,7);ctx.fill();
+  }
+  function draw(){
+    const w=c.clientWidth,h=c.clientHeight,dpr=Math.min(window.devicePixelRatio||1,2);
+    c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,tok("--sky1"));g.addColorStop(.62,tok("--sky2"));g.addColorStop(.8,tok("--sky3"));
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    const sx=w*.72, sy=h*.70;
+    const sg=ctx.createRadialGradient(sx,sy,0,sx,sy,h*.28);
+    sg.addColorStop(0,"rgba(255,235,190,.9)");sg.addColorStop(.18,"rgba(255,225,170,.55)");sg.addColorStop(1,"rgba(255,200,120,0)");
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,h*.28,0,7);ctx.fill();
+    ctx.fillStyle=tok("--sky3");ctx.beginPath();ctx.arc(sx,sy,h*.055,0,7);ctx.fill();
+    const layers=[["--hill1",.74,.05,3],["--hill2",.80,.04,5],["--hill3",.86,.03,7]];
+    layers.forEach(([t,base,amp,seed],li)=>{
+      const r=rnd(seed*97+13);
+      ctx.fillStyle=tok(t);ctx.beginPath();ctx.moveTo(0,h);
+      const n=9;const pts=[];
+      for(let i=0;i<=n;i++){pts.push([w*i/n,h*(base+(r()-.5)*amp*2)]);}
+      ctx.lineTo(pts[0][0],pts[0][1]);
+      for(let i=0;i<n;i++){const [x0,y0]=pts[i],[x1,y1]=pts[i+1];const cx=(x0+x1)/2;ctx.bezierCurveTo(cx,y0,cx,y1,x1,y1);}
+      ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+      const count=li===0?2:li===1?3:4; const rr=rnd(seed*31+7);
+      for(let k=0;k<count;k++){
+        const x=w*(0.06+rr()*0.88);
+        const idx=Math.min(n-1,Math.floor(x/w*n)); const [x0,y0]=pts[idx],[x1,y1]=pts[idx+1]; const y=y0+(y1-y0)*((x-x0)/(x1-x0));
+        const sc=(li+1)*0.55*(h/600)*(0.8+rr()*.5);
+        acacia(x,y,sc,tok(t));
+      }
+    });
+    ctx.fillStyle=tok("--hill3");ctx.beginPath();ctx.moveTo(0,h);
+    const r=rnd(5);for(let x=0;x<=w;x+=6){ctx.lineTo(x,h-(r()*22+4));}
+    ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+    const fg=ctx.createLinearGradient(0,h*.82,0,h);fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(1,tok("--bg"));
+    ctx.fillStyle=fg;ctx.fillRect(0,h*.82,w,h*.18);
+  }
+  let t;window.addEventListener("resize",()=>{clearTimeout(t);t=setTimeout(draw,120);});
+  if(window.matchMedia){window.matchMedia("(prefers-color-scheme: light)").addEventListener("change",draw);}
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);} draw();
+})();
+
+/* ---------- countdown ---------- */
+(function(){
+  const dep=new Date(2027,6,22,0,0,0); const now=new Date();
+  const days=Math.max(0,Math.floor((dep-now)/864e5));
+  document.getElementById("dleft").textContent=days+" giorni";
+  const months=Math.floor(days/30.44), weeks=Math.floor((days%30.44)/7), d=Math.floor(days-months*30.44-weeks*7);
+  const c=document.getElementById("count");
+  [[months,"mesi"],[weeks,"settimane"],[d,"giorni"]].forEach(([v,l])=>{const div=el("div",{},c);el("b",{class:"num"},div).textContent=v;el("span",{class:"eyebrow"},div).textContent=l;});
+})();
+
+/* ---------- map ---------- */
+(function(){
+  const g=document.getElementById("countries");
+  const main=new Set(["Kenya"]);
+  for(const name in COUNTRIES){el("path",{d:COUNTRIES[name],class:"country"+(main.has(name)?" main":"")},g,true);}
+  const isl=(pts,cls)=>el("path",{class:"country"+cls,d:"M"+pts.map(([a,b])=>P(a,b).map(v=>v.toFixed(1)).join(" ")).join(" L")+" Z"},g,true);
+  isl([[39.19,-5.72],[39.30,-5.70],[39.37,-5.85],[39.40,-6.00],[39.50,-6.20],[39.52,-6.40],[39.40,-6.47],[39.30,-6.40],[39.22,-6.25],[39.17,-6.10],[39.16,-5.95]],"");
+  isl([[39.65,-4.88],[39.80,-4.95],[39.86,-5.20],[39.78,-5.45],[39.68,-5.40],[39.63,-5.10]],"");
+  const vic=[[31.7,0.35],[32.5,0.5],[33.3,0.4],[33.9,0.15],[34.2,-0.1],[34.75,-0.1],[34.5,-0.35],[34.1,-0.5],[33.95,-1.0],[33.9,-1.6],[33.7,-2.2],[33.2,-2.5],[32.9,-2.75],[32.6,-2.55],[32.1,-2.5],[31.75,-2.2],[31.65,-1.5],[31.6,-0.8],[31.65,0.0]];
+  document.getElementById("victoria").setAttribute("d","M"+vic.map(([a,b])=>P(a,b).map(v=>v.toFixed(1)).join(" ")).join(" L")+" Z");
+  const parks=document.getElementById("parks");
+  const blob=(pts,label,lx,ly)=>{el("path",{class:"park",d:"M"+pts.map(([a,b])=>P(a,b).map(v=>v.toFixed(1)).join(" ")).join(" L")+" Z"},parks,true);if(label){const t=el("text",{class:"parklbl",x:P(lx,ly)[0],y:P(lx,ly)[1]},parks,true);t.textContent=label;}};
+  blob([[34.0,-1.5],[34.9,-1.1],[35.6,-1.2],[35.7,-1.8],[35.3,-2.3],[35.2,-3.2],[34.5,-3.4],[34.0,-2.9],[33.9,-2.1]],"SERENGETI",34.1,-3.05);
+  blob([[35.3,-2.8],[35.9,-2.9],[36.0,-3.4],[35.5,-3.6],[35.2,-3.3]],null);
+  blob([[36.3,-0.85],[36.45,-0.85],[36.5,-1.0],[36.35,-1.05]],null);
+  blob([[37.0,-2.55],[37.4,-2.55],[37.45,-2.8],[37.1,-2.85]],null);
+  blob([[37.6,-2.5],[39.0,-2.0],[39.2,-3.4],[38.0,-3.9],[37.5,-3.2]],"TSAVO",38.0,-3.3);
+  blob([[36.4,-0.1],[36.55,-0.1],[36.6,-0.35],[36.4,-0.4]],null);
+  const pk=document.getElementById("peaks");
+  [[37.35,-3.07,"KILIMANJARO 5.895"],[37.3,-0.15,"MONTE KENYA 5.199"]].forEach(([lo,la,n])=>{const [x,y]=P(lo,la);el("path",{class:"peak",d:`M${x} ${y-9} L${x+7} ${y+4} L${x-7} ${y+4} Z`},pk,true);const t=el("text",{class:"lbl",x:x+10,y:y+6},pk,true);t.textContent=n;});
+  const by=Object.fromEntries(STOPS.map(s=>[s.id,s]));
+  const rg=document.getElementById("routes"),sg=document.getElementById("stops"),chips=document.getElementById("chips"),card=document.getElementById("card");
+  let current=null;
+  function build(plan){
+    rg.innerHTML="";sg.innerHTML="";chips.innerHTML="";
+    ROUTES[plan].forEach(([a,b,k],i)=>{const [x0,y0]=P(by[a].lon,by[a].lat),[x1,y1]=P(by[b].lon,by[b].lat);const mx=(x0+x1)/2,my=(y0+y1)/2;const dx=x1-x0,dy=y1-y0;const bend=k==="fly"?0.18:0.07;const cx=mx-dy*bend,cy=my+dx*bend;const p=el("path",{class:k,d:`M${x0} ${y0} Q${cx} ${cy} ${x1} ${y1}`},rg,true);p.style.animationDelay=(i*.22)+"s";});
+    const active=STOPS.filter(s=>!s.only||s.only.includes(plan));
+    active.forEach((s,i)=>{
+      const [x,y]=P(s.lon,s.lat);const n=i+1;
+      const g=el("g",{class:"stop",tabindex:"0",role:"button","aria-label":s.name+", "+s.days[plan],"data-id":s.id},sg,true);
+      el("circle",{class:"halo",cx:x,cy:y,r:24},g,true);
+      el("circle",{class:"dot",cx:x,cy:y,r:13},g,true);
+      el("text",{class:"n",x:x,y:y+.5},g,true).textContent=n;
+      el("text",{class:"nm",x:x+s.lx,y:y+s.ly},g,true).textContent=s.name;
+      g.addEventListener("click",()=>select(s.id));
+      g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(s.id);}});
+      const b=el("button",{type:"button","aria-pressed":"false","data-id":s.id},chips);b.textContent=n+" · "+s.name;b.addEventListener("click",()=>select(s.id));
+    });
+    if(!current||!active.some(s=>s.id===current))current="mara";
+    select(current);
+  }
+  function select(id){
+    const s=by[id];current=id;
+    sg.querySelectorAll(".stop").forEach(g=>g.classList.toggle("on",g.dataset.id===id));
+    chips.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id?"true":"false"));
+    card.innerHTML="";
+    el("span",{class:"days"},card).textContent=s.days[PLAN];
+    el("h3",{},card).textContent=s.name;
+    el("p",{},card).textContent=s.text;
+    const ul=el("ul",{},card);s.items.forEach(t=>{el("li",{},ul).textContent=t;});
+    if(s.chap){el("a",{class:"go",href:"#"+s.chap},card).textContent="Leggi il capitolo →";}
+    el("span",{class:"coords"},card).textContent=Math.abs(s.lat).toFixed(2)+"°"+(s.lat<0?"S":"N")+"  "+s.lon.toFixed(2)+"°E";
+    try{localStorage.setItem("safari27-stop",id);}catch(e){}
+  }
+  try{const v=localStorage.getItem("safari27-stop");if(v&&by[v])current=v;}catch(e){}
+  planListeners.push(build);
+})();
+
+/* ---------- chapters ---------- */
+(function(){
+  const root=document.getElementById("chapters");
+  const refs=[];
+  CHAPTERS.forEach(c=>{
+    const a=el("article",{class:"chapter",id:c.id},root);
+    const lead=el("div",{class:"lead"},a);
+    el("div",{class:"n"},lead).textContent=c.n;
+    el("h3",{},lead).textContent=c.title;
+    el("p",{style:"font-size:21px;font-style:italic;color:var(--muted)"},lead).textContent=c.sub;
+    const meta=el("div",{class:"meta"},lead);
+    const mb={};
+    [["Giorni","days"],["Notti","nights"]].forEach(([k,key])=>{const d=el("div",{},meta);el("span",{class:"eyebrow"},d).textContent=k;mb[key]=el("b",{},d);});
+    const d=el("div",{},meta);el("span",{class:"eyebrow"},d).textContent="Quota";el("b",{},d).textContent=c.alt;
+    const fa=el("div",{class:"fauna"},lead);c.fauna.forEach(f=>{el("span",{},fa).textContent=f;});
+    const body=el("div",{class:"body"},a);
+    el("p",{class:"big"},body).textContent=c.lead;
+    el("p",{},body).textContent=c.why;
+    const s1=el("div",{class:"sub"},body);el("h4",{},s1).textContent="Dove dormire";
+    const camps=el("div",{class:"camps"},s1);
+    c.camps.forEach(([n,dd,band,pr])=>{const r=el("div",{class:"camp"},camps);el("b",{},r).textContent=n;const b=el("span",{class:"band"},r);b.textContent=band;el("em",{},b).textContent=pr.includes("/")?pr:pr+" / notte";el("small",{},r).textContent=dd;});
+    const s2=el("div",{class:"sub"},body);el("h4",{},s2).textContent="Per teenager e ventenni";
+    const ul=el("ul",{class:"teen"},s2);c.teen.forEach(t=>{el("li",{},ul).textContent=t;});
+    refs.push({c,a,mb});
+  });
+  planListeners.push(p=>{refs.forEach(({c,a,mb})=>{a.hidden=!!(c.only&&!c.only.includes(p));mb.days.textContent=c.days[p];mb.nights.textContent=c.nights[p];});});
+})();
+
+/* ---------- day log ---------- */
+(function(){
+  const log=document.getElementById("log");
+  planListeners.push(p=>{log.innerHTML="";LOG[p].forEach(([d,w,t,m,move])=>{const r=el("div",{class:"leg"+(move?" move":"")},log);el("span",{class:"d num"},r).textContent=d;el("span",{class:"w"},r).textContent=w;el("span",{class:"t"},r).textContent=t;el("span",{class:"m"},r).textContent=m;});});
+})();
+
+/* ---------- cost calculator ---------- */
+(function(){
+  const st={tier:"essenziale",adults:4,kids:2,balloon:0,eur:true};
+  const out={adults:document.getElementById("adults"),kids:document.getElementById("kids"),balloon:document.getElementById("balloon")};
+  document.querySelectorAll("[data-step]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.step,d=+b.dataset.d;const max=k==="balloon"?st.adults+st.kids:10;st[k]=Math.min(max,Math.max(0,st[k]+d));if(st.adults+st.kids<1)st.adults=1;if(st.balloon>st.adults+st.kids)st.balloon=st.adults+st.kids;render();}));
+  document.querySelectorAll('input[name="tier"]').forEach(r=>r.addEventListener("change",()=>{st.tier=r.value;render();}));
+  document.getElementById("eur").addEventListener("change",e=>{st.eur=e.target.checked;render();});
+  function render(){
+    for(const k in out)out[k].textContent=st[k];
+    const T=TIERS[st.tier],A=st.adults,K=st.kids,n=A+K,e=st.eur,p=PLAN,is21=p==="21";
+    const nboN=p==="15"?2:3, seaN=p==="15"?5:10, safariDays=9, campN=7;
+    const fee=(k)=>FEES[k][0]*FEES[k][2], feeK=(k)=>FEES[k][1]*FEES[k][2];
+    const feesA=fee("mara")+fee("amb")+fee("hg")+fee("boat")+fee("nbo"), feesK=feeK("mara")+feeK("amb")+feeK("hg")+feeK("boat")+feeK("nbo");
+    const rows=[
+      ["Voli Málaga ↔ Africa",is21?"Andata e ritorno da Nairobi, con scalo":"Nairobi all'andata, Zanzibar al ritorno",T.intl[p],T.intl[p]],
+      ["Campi del safari, 7 notti","Mara 3, Naivasha 2, Amboseli 2, pensione completa",T.mara*3+T.nai*2+T.amb*2,(T.mara*3+T.nai*2+T.amb*2)*KID],
+      ["Nairobi, "+nboN+" notti","Guesthouse a Karen, colazione inclusa",T.nbo*nboN,T.nbo*nboN*KID],
+      ["Jeep privata e guida, 9 giorni",T.veh?"Land Cruiser 7 posti, carburante, autista-guida":"Inclusa nei campi Premium (voli leggeri)",null,null,T.veh*safariDays],
+      ["Tasse parco","Mara 3 giorni, Amboseli 2, Hell's Gate, barca, Giraffe Centre",feesA,feesK],
+      is21?["Treno SGR e transfer","Prima classe Nairobi–Mombasa, poi minibus a Diani",30,30,120]:["Volo Nairobi → Zanzibar","Diretto, 1h30, bagaglio incluso",T.zanFly,T.zanFly],
+      [(is21?"Villa a Diani, ":"Villa a Nungwi, ")+seaN+" notti",(is21?"Piscina, cuoco e guardiano, per tutto il gruppo":"Tre camere e cucina, per tutto il gruppo"),null,null,T.sea[p]*seaN],
+      ["Spesa e ristoranti al mare",seaN+" giorni, $"+T.food+" a persona al giorno",T.food*seaN,T.food*seaN*KID],
+      ["Attività al mare",is21?"Kisite, kite per due, Kaya Kinondo":(p==="15"?"Mnemba, dhow, Stone Town":"Mnemba, kite per due, Jozani, dhow"),T.act[p],T.act[p]],
+      is21?["Volo Ukunda → Nairobi","Per la coincidenza del rientro",90,90]:["Visto Tanzania","All'arrivo o online, anche per i ragazzi",50,50],
+      ["eTA Kenya","Online, 3 giorni prima",34,34],
+      ["Mance","Guida $20 al giorno, campi $5 a persona per notte",5*campN,5*campN,20*safariDays],
+      ["Assicurazione","Con evacuazione medica",80,80]
+    ];
+    if(st.balloon>0)rows.splice(5,0,["Mongolfiera nel Mara","$450 a persona, "+st.balloon+" persone",null,null,BALLOON*st.balloon]);
+    const tb=document.getElementById("rows");tb.innerHTML="";let ta=0,tk=0,tg=0;const cats=[];
+    rows.forEach(([lab,sub,a,k,grp])=>{
+      const ga=(a||0)*A+(k||0)*K+(grp||0);
+      if(ga===0)return;
+      ta+=a||0;tk+=k||0;tg+=ga;cats.push([lab,ga]);
+      const tr=el("tr",{},tb);const td=el("td",{},tr);td.textContent=lab;el("small",{},td).textContent=sub;
+      el("td",{class:"r"},tr).textContent=a?fmt(a,e):"—";el("td",{class:"r"},tr).textContent=k?fmt(k,e):"—";el("td",{class:"r"},tr).textContent=fmt(ga,e);
+    });
+    document.getElementById("ta").textContent=fmt(ta,e);document.getElementById("tk").textContent=fmt(tk,e);document.getElementById("tg").textContent=fmt(tg,e);
+    document.getElementById("total").textContent=fmt(tg,e);
+    document.getElementById("pp").textContent=fmtK(tg/n,e)+" a persona · "+n+" viaggiatori · "+T.lab+" · "+(p==="15"?"15 giorni":p==="21"?"21 giorni, Diani":"21 giorni, Zanzibar");
+    const BUDGET=BUDGET_EUR/0.92;const pct=Math.min(100,tg/BUDGET*100);const fl=document.getElementById("b-fl");fl.style.width=pct+"%";fl.classList.toggle("over",tg>BUDGET);
+    document.getElementById("b-lab").textContent="Budget "+fmt(BUDGET,e);
+    document.getElementById("b-left").textContent=tg<=BUDGET?"Margine "+fmt(BUDGET-tg,e):"Oltre di "+fmt(tg-BUDGET,e);
+    const bars=document.getElementById("bars");bars.innerHTML="";const mx=Math.max(...cats.map(c=>c[1]));
+    cats.sort((a,b)=>b[1]-a[1]).forEach(([lab,v])=>{const r=el("div",{class:"bar"},bars);el("span",{},r).textContent=lab;const tr=el("div",{class:"tr"},r);el("div",{class:"fl",style:"width:"+(v/mx*100).toFixed(1)+"%"},tr);el("span",{class:"v num"},r).textContent=fmt(v,e);});
+  }
+  planListeners.push(render);
+})();
+
+/* ---------- timeline + migration ---------- */
+(function(){
+  const m=document.getElementById("miles");
+  MILES.forEach(([w,t,d,now])=>{const r=el("div",{class:"mile"+(now?" now":"")},m);el("span",{class:"when"},r).textContent=w;const b=el("div",{},r);el("b",{},b).textContent=t;el("span",{},b).textContent=d;});
+  const mo=document.getElementById("months");
+  MONTHS.forEach(([n,cls])=>{const d=el("div",{class:"m "+cls},mo);el("i",{},d);el("span",{},d).textContent=n;});
+})();
+
+/* ---------- checklist ---------- */
+(function(){
+  const root=document.getElementById("check");let saved={};try{saved=JSON.parse(localStorage.getItem("safari27-check")||"{}");}catch(e){}
+  const boxes=[];
+  Object.entries(CHECK).forEach(([cat,items])=>{
+    const g=el("div",{class:"cg"},root);el("h4",{},g).textContent=cat;
+    items.forEach((it,i)=>{const id="ck-"+cat.replace(/\W/g,"")+"-"+i;const l=el("label",{for:id},g);const inp=el("input",{type:"checkbox",id:id},l);inp.checked=!!saved[id];el("span",{},l).textContent=it;boxes.push(inp);inp.addEventListener("change",()=>{saved[id]=inp.checked;try{localStorage.setItem("safari27-check",JSON.stringify(saved));}catch(e){}prog();});});
+  });
+  function prog(){const n=boxes.length,k=boxes.filter(b=>b.checked).length;document.getElementById("plab").textContent=k+" di "+n;document.getElementById("ppct").textContent=Math.round(k/n*100)+"%";document.getElementById("pfl").style.width=(k/n*100)+"%";}
+  prog();
+})();
+
+/* ---------- nav highlight ---------- */
+(function(){
+  const links=[...document.querySelectorAll("nav.chap a")];const secs=links.map(a=>document.querySelector(a.getAttribute("href")));
+  if(!("IntersectionObserver" in window))return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));}});},{rootMargin:"-40% 0px -55% 0px"});
+  secs.forEach(s=>s&&io.observe(s));
+})();
+
+setPlan(PLAN);
+</script>
+
+
+</body>
+</html>

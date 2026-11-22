@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Perù 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: night-savanna field journal. Full-bleed dusk hero, sticky chapter nav, geographic map with a stop panel, long-form chapters, instrument-style cost calculator, countdown + booking timeline, checklist. Dark-first. */
+:root{
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --ember:#D5673F; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --park:#27402D;
+  --sky1:#0B1A24; --sky2:#B55A2E; --sky3:#F0B35A; --hill1:#1E2A22; --hill2:#15201A; --hill3:#0E1411;
+  --display:"Bricolage Grotesque","Arial Narrow",Impact,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important; transition:none!important}}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:18px; line-height:1.55; font-weight:400}
+h1,h2,h3,h4{font-family:var(--display); margin:0; line-height:.98; text-wrap:balance; font-weight:800}
+h2{font-size:clamp(38px,6vw,68px); letter-spacing:-.02em}
+h3{font-size:clamp(26px,3.4vw,38px); letter-spacing:-.015em}
+h4{font-size:19px; font-weight:500; letter-spacing:0}
+p{margin:0; max-width:66ch}
+a{color:var(--river)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+button{font:inherit; color:inherit}
+.eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.mono{font-family:var(--mono); font-size:14px}
+.num{font-variant-numeric:tabular-nums}
+.acc{color:var(--accent)}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+section.block{padding-block:clamp(56px,9vw,120px); display:grid; gap:clamp(24px,4vw,44px)}
+.sechead{display:grid; gap:12px; max-width:760px}
+.sechead p{font-size:20px; color:var(--muted)}
+
+/* hero */
+.hero{position:relative; min-height:min(88vh,760px); display:grid; align-items:end; overflow:hidden; isolation:isolate}
+.hero canvas{position:absolute; inset:0; width:100%; height:100%; z-index:-1}
+.hero .inner{display:grid; gap:22px; padding-block:48px 36px}
+.hero h1{font-size:clamp(76px,16vw,220px); letter-spacing:-.04em; line-height:.86; color:var(--ink); text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .sub{font-size:clamp(20px,2.4vw,26px); max-width:30ch; line-height:1.3; font-weight:500}
+.facts{display:flex; flex-wrap:wrap; gap:14px 36px; border-top:1px solid color-mix(in oklab,var(--ink) 35%,transparent); padding-top:18px}
+.facts div{display:grid; gap:2px}
+.facts b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+
+/* plan toggle */
+.plan{display:inline-flex; border:1px solid color-mix(in oklab,var(--ink) 45%,transparent); border-radius:8px; overflow:hidden; background:color-mix(in oklab,var(--bg) 55%,transparent); backdrop-filter:blur(6px)}
+.plan input{position:absolute; opacity:0; pointer-events:none}
+.plan label{display:grid; gap:1px; padding:10px 18px; cursor:pointer; min-width:150px}
+.plan label b{font-family:var(--display); font-weight:800; font-size:20px; letter-spacing:-.01em}
+.plan label span{font-family:var(--mono); font-size:11.5px; color:var(--muted); letter-spacing:.04em}
+.plan input:checked+label{background:var(--accent); color:var(--bg)} .plan input:checked+label span{color:var(--bg); opacity:.8}
+.plan input:focus-visible+label{outline:2px solid var(--ink); outline-offset:-3px}
+.plan.small label{padding:6px 12px; min-width:0} .plan.small label b{font-size:15px} .plan.small label span{display:none}
+nav.chap .wrap{display:flex; align-items:center; gap:12px; justify-content:space-between}
+nav.chap ul{min-width:0}
+.compare{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+@media (max-width:980px){.compare{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.compare{grid-template-columns:1fr}}
+.cmp{display:grid; gap:10px; padding:20px 22px; border:1px solid var(--line); border-radius:8px; background:var(--surface); cursor:pointer; transition:border-color .15s}
+.cmp.on{border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent)}
+.cmp h4{font-family:var(--display); font-weight:800; font-size:26px; letter-spacing:-.01em}
+.cmp .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.cmp .rt b{color:var(--ink); font-weight:500}
+.cmp ul{margin:0; padding-left:1.1em; font-size:16px; color:var(--muted); display:grid; gap:3px}
+.cmp .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.off{opacity:.32}
+.skip{display:grid; gap:8px; padding:18px 22px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:16px}
+.skip b{color:var(--ink); font-weight:500}
+
+/* nav */
+nav.chap{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:color-mix(in oklab,var(--bg) 86%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+nav.chap ul{list-style:none; margin:0; padding:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none}
+nav.chap ul::-webkit-scrollbar{display:none}
+nav.chap a{display:block; padding:14px 12px; font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px}
+nav.chap a:hover,nav.chap a.on{color:var(--ink); border-color:var(--accent)}
+
+/* map */
+.mapgrid{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); gap:28px; align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px; min-width:0}
+svg.map{width:100%; height:auto; display:block}
+.map .country{fill:var(--land); stroke:var(--line); stroke-width:1.2; stroke-linejoin:round}
+.map .country.main{fill:var(--land2)}
+.map .sea{fill:var(--water)}
+.map .lake{fill:var(--water)}
+.map .park{fill:var(--park); stroke:none; opacity:.95}
+.map .parklbl{font-family:var(--mono); font-size:11px; fill:var(--muted); letter-spacing:.1em}
+.map .cn{font-family:var(--display); font-weight:800; font-size:30px; fill:var(--muted); opacity:.42; letter-spacing:.22em}
+.map .lbl{font-family:var(--mono); font-size:11.5px; fill:var(--muted); letter-spacing:.12em}
+.map .eq{stroke:var(--muted); stroke-width:1; stroke-dasharray:2 7; fill:none; opacity:.8}
+.map .peak{fill:var(--muted)}
+.map .fly,.map .drive{fill:none; stroke-linecap:round; stroke-dasharray:1200; stroke-dashoffset:1200; animation:draw 2.4s ease-out forwards}
+.map .fly{stroke:var(--river); stroke-width:2; stroke-dasharray:4 7}
+.map .drive{stroke:var(--accent); stroke-width:3.2}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map .fly{animation:none; stroke-dashoffset:0}
+.map .stop{cursor:pointer}
+.map .stop .halo{fill:var(--accent); opacity:0; transition:opacity .2s}
+.map .stop .dot{fill:var(--surface); stroke:var(--ink); stroke-width:2.5}
+.map .stop .n{font-family:var(--display); font-weight:800; font-size:14px; fill:var(--ink); text-anchor:middle; dominant-baseline:central; pointer-events:none}
+.map .stop .nm{font-family:var(--mono); font-size:13px; font-weight:500; fill:var(--ink); paint-order:stroke; stroke:var(--surface); stroke-width:4px; pointer-events:none}
+.map .stop.on .dot{fill:var(--accent); stroke:var(--accent)} .map .stop.on .n{fill:var(--bg)} .map .stop.on .halo{opacity:.25}
+.map .stop:focus{outline:none} .map .stop:focus-visible .dot{stroke:var(--accent); stroke-width:4}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; padding:8px 8px 4px; font-family:var(--mono); font-size:12.5px; color:var(--muted)}
+.legend span{display:inline-flex; align-items:center; gap:8px}
+.legend i{display:inline-block; width:26px; border-top:3px solid var(--accent)} .legend i.f{border-top:2px dashed var(--river)}
+.panel{display:grid; gap:14px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px)}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chips button{font-family:var(--mono); font-size:12.5px; padding:7px 11px; border-radius:999px; border:1px solid var(--line); background:transparent; cursor:pointer; color:var(--ink)}
+.chips button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--bg); font-weight:500}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:24px; display:grid; gap:12px; min-width:0}
+.card .days{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.card ul{margin:0; padding-left:1.1em; display:grid; gap:6px}
+.card .go{justify-self:start; font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--accent); padding-bottom:2px}
+.coords{font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* chapters */
+.chapter{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(24px,4vw,56px); padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line); align-items:start}
+@media (max-width:860px){.chapter{grid-template-columns:1fr}}
+.chapter .lead{display:grid; gap:16px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (max-width:860px){.chapter .lead{position:static}}
+.chapter .n{font-family:var(--display); font-weight:800; font-size:clamp(60px,9vw,120px); line-height:.8; color:var(--accent); letter-spacing:-.04em}
+.chapter .meta{display:flex; flex-wrap:wrap; gap:8px 22px}
+.chapter .meta div{display:grid; gap:1px}
+.chapter .meta b{font-family:var(--mono); font-weight:500; font-size:14px}
+.chapter .body{display:grid; gap:26px; min-width:0}
+.chapter .body p.big{font-size:21px; line-height:1.45}
+.sub{display:grid; gap:10px}
+.sub h4{color:var(--accent); font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:500}
+.fauna{display:flex; flex-wrap:wrap; gap:6px}
+.fauna span{font-family:var(--mono); font-size:12.5px; padding:5px 10px; border:1px solid var(--line); border-radius:4px; color:var(--muted)}
+.camps{display:grid; gap:0; border-top:1px solid var(--line)}
+.camp{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 16px; padding:12px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.camp b{font-weight:500}
+.camp small{grid-column:1; color:var(--muted); font-size:15px}
+.camp .band{font-family:var(--mono); font-size:12.5px; color:var(--muted); white-space:nowrap; text-align:right}
+.camp .band em{font-style:normal; color:var(--ink); display:block; font-size:14px}
+.teen{display:grid; gap:8px; padding-left:0; margin:0; list-style:none}
+.teen li{display:grid; grid-template-columns:22px minmax(0,1fr); gap:10px; align-items:baseline}
+.teen li::before{content:"→"; color:var(--accent); font-family:var(--mono)}
+
+/* day log */
+.log{display:grid; border-top:1px solid var(--line)}
+.leg{display:grid; grid-template-columns:72px 150px minmax(0,1fr) auto; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.leg .d{font-family:var(--display); font-weight:800; font-size:22px; color:var(--accent); letter-spacing:-.02em}
+.leg .w{font-family:var(--mono); font-size:13.5px; font-weight:500}
+.leg .t{min-width:0; color:var(--muted); font-size:16.5px}
+.leg .m{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; text-align:right}
+.leg.move{background:color-mix(in oklab,var(--surface) 60%,transparent)}
+@media (max-width:700px){.leg{grid-template-columns:52px minmax(0,1fr)} .leg .t{grid-column:2} .leg .m{grid-column:2; text-align:left}}
+
+/* costs */
+.calc{display:grid; grid-template-columns:minmax(280px,.9fr) minmax(0,1.3fr); gap:28px; align-items:start}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+.controls{display:grid; gap:20px; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:22px}
+.ctl{display:grid; gap:8px}
+.ctl label,.ctl .lab{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.seg{display:flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; flex-wrap:wrap}
+.seg input{position:absolute; opacity:0; pointer-events:none}
+.seg label{flex:1; text-align:center; padding:10px 8px; font-family:var(--mono); font-size:13.5px; cursor:pointer; letter-spacing:0; text-transform:none; color:var(--ink)}
+.seg input:checked+label{background:var(--ink); color:var(--bg)}
+.seg input:focus-visible+label{outline:2px solid var(--accent); outline-offset:-3px}
+.stepper{display:grid; grid-template-columns:40px 1fr 40px; border:1px solid var(--line); border-radius:6px; overflow:hidden}
+.stepper button{background:transparent; border:0; cursor:pointer; font-family:var(--mono); font-size:18px}
+.stepper button:hover{background:var(--surface2)}
+.stepper output{text-align:center; padding:9px; font-family:var(--mono); font-size:16px; border-inline:1px solid var(--line)}
+.switch{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:6px}
+.switch span{font-size:16px}
+.switch input{width:38px; height:22px; accent-color:var(--accent); margin:0}
+.result{display:grid; gap:22px; min-width:0}
+.hero-num{display:grid; gap:4px; border-left:4px solid var(--accent); padding-left:18px}
+.hero-num .big{font-family:var(--display); font-weight:800; font-size:clamp(46px,7vw,84px); line-height:.95; letter-spacing:-.03em}
+.hero-num .pp{font-family:var(--mono); font-size:15px; color:var(--muted)}
+.bars{display:grid; gap:8px}
+.bar{display:grid; grid-template-columns:minmax(120px,190px) minmax(0,1fr) 92px; gap:12px; align-items:center; font-size:15.5px}
+.bar .tr{height:14px; background:var(--surface2); border-radius:3px; overflow:hidden}
+.bar .fl{height:100%; background:var(--accent); border-radius:0 3px 3px 0; transition:width .3s}
+.bar .v{font-family:var(--mono); font-size:13.5px; text-align:right}
+@media (max-width:480px){.bar{grid-template-columns:minmax(0,1fr) 80px} .bar .tr{grid-column:1/-1; order:3}}
+.tablewrap{overflow-x:auto}
+table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
+th,td{padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:baseline; font-size:16px}
+th{font-family:var(--mono); font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+td.r,th.r{text-align:right; font-family:var(--mono); font-size:14px; white-space:nowrap}
+td small{color:var(--muted); display:block; font-size:14px}
+tfoot td{border-bottom:0; border-top:2px solid var(--ink); font-weight:500}
+.note{font-size:15.5px; color:var(--muted); max-width:72ch}
+details{border-top:1px solid var(--line); padding:12px 0}
+summary{cursor:pointer; font-family:var(--mono); font-size:13.5px; letter-spacing:.04em}
+details p{padding-top:8px; color:var(--muted); font-size:16px}
+
+/* timing */
+.timegrid{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:32px; align-items:start}
+@media (max-width:860px){.timegrid{grid-template-columns:1fr}}
+.count{display:grid; grid-template-columns:repeat(3,auto); gap:18px; justify-content:start}
+.count div{display:grid; gap:2px}
+.count b{font-family:var(--display); font-weight:800; font-size:clamp(44px,6vw,72px); line-height:.95; letter-spacing:-.03em}
+.miles{display:grid; border-left:2px solid var(--line); margin-left:6px}
+.mile{display:grid; grid-template-columns:110px minmax(0,1fr); gap:12px; padding:0 0 22px 20px; position:relative}
+.mile::before{content:""; position:absolute; left:-7px; top:8px; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--muted)}
+.mile.now::before{background:var(--accent); border-color:var(--accent)}
+.mile .when{font-family:var(--mono); font-size:13px; color:var(--muted); padding-top:3px}
+.mile.now .when{color:var(--accent)}
+.mile b{font-weight:500; display:block}
+.mile span{color:var(--muted); font-size:16px}
+@media (max-width:480px){.mile{grid-template-columns:1fr; gap:2px}}
+.migr{display:grid; gap:10px}
+.migr .months{display:grid; grid-template-columns:repeat(12,1fr); gap:3px}
+.migr .m{display:grid; gap:4px; text-align:center}
+.migr .m i{display:block; height:38px; border-radius:3px; background:var(--surface2)}
+.migr .m.s1 i{background:color-mix(in oklab,var(--accent) 28%,var(--surface2))}
+.migr .m.s2 i{background:color-mix(in oklab,var(--accent) 55%,var(--surface2))}
+.migr .m.s3 i{background:var(--accent)}
+.migr .m.you i{outline:2px solid var(--ink); outline-offset:1px}
+.migr .m span{font-family:var(--mono); font-size:11px; color:var(--muted)}
+.migr .key{display:flex; flex-wrap:wrap; gap:4px 16px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* practical */
+.prac{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:26px}
+.prac article{display:grid; gap:8px; align-content:start; border-top:2px solid var(--ink); padding-top:14px}
+.prac h4{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.prac p,.prac li{font-size:16.5px; color:var(--muted)}
+.prac ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+.climate{display:grid; gap:0}
+.climate div{display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); font-size:15px}
+.climate div span:not(:first-child){font-family:var(--mono); font-size:13px}
+.sw{display:grid; gap:4px}
+.sw div{display:grid; grid-template-columns:120px 1fr; gap:10px; font-size:16px}
+.sw b{font-family:var(--mono); font-weight:500; font-size:14px; color:var(--accent)}
+
+/* checklist */
+.check{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px}
+.cg{display:grid; gap:6px; align-content:start}
+.cg h4{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:500; padding-bottom:6px; border-bottom:1px solid var(--line)}
+.cg label{display:grid; grid-template-columns:20px minmax(0,1fr); gap:10px; align-items:start; font-size:16.5px; padding:4px 0; cursor:pointer}
+.cg input{accent-color:var(--accent); width:18px; height:18px; margin-top:4px}
+.cg input:checked+span{color:var(--muted); text-decoration:line-through}
+.progress{display:grid; gap:6px; max-width:420px}
+.progress .tr{height:8px; background:var(--surface2); border-radius:4px; overflow:hidden}
+.progress .fl{height:100%; background:var(--grass); transition:width .3s}
+.progress .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+
+/* alternatives */
+.alts{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:20px}
+.alt{display:grid; gap:10px; padding:22px; border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+.alt h4{font-family:var(--display); font-weight:800; font-size:24px}
+.alt .row{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:13px; border-bottom:1px solid var(--line); padding:5px 0}
+.alt .row span:last-child{color:var(--muted); text-align:right}
+.alt p{font-size:16px; color:var(--muted)}
+
+footer{border-top:1px solid var(--line); padding-block:36px 56px; display:grid; gap:12px; font-size:15px; color:var(--muted)}
+footer ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+
+.map .train{fill:none; stroke:var(--grass); stroke-width:3.2; stroke-linecap:round; stroke-dasharray:10 6}
+.legend i.t{border-top:3px dashed var(--grass)}
+.budget{display:grid; gap:6px; max-width:560px}
+.budget .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.budget .tr{position:relative; height:10px; background:var(--surface2); border-radius:5px; overflow:visible}
+.budget .fl{height:100%; background:var(--grass); border-radius:5px; transition:width .3s}
+.budget .fl.over{background:var(--ember)}
+.budget .mark{position:absolute; top:-4px; width:2px; height:18px; background:var(--ink); transform:translateX(-1px)}
+.chapter[hidden]{display:none}
+.dest{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+@media (max-width:820px){.dest{grid-template-columns:1fr}}
+.dcard{display:grid; gap:14px; padding:28px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:inherit; text-decoration:none; align-content:start; transition:border-color .15s}
+.dcard:hover{border-color:var(--accent)}
+.dcard .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.dcard h3{font-size:clamp(28px,3.6vw,40px)}
+.dcard .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.dcard p{color:var(--muted); font-size:17px}
+.dcard .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; border-top:1px solid var(--line); padding-top:14px}
+.dcard .kpis div{display:grid; gap:2px}
+.dcard .kpis b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.dcard .kpis span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.dcard .go{font-family:var(--mono); font-size:13.5px; color:var(--ink); border-bottom:1px solid var(--accent); justify-self:start; padding-bottom:2px}
+@media (max-width:480px){.dcard .kpis{grid-template-columns:1fr}}
+table.cmpt td:first-child{font-family:var(--mono); font-size:13px; color:var(--muted); white-space:nowrap}
+table.cmpt td{vertical-align:top}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <canvas id="sky" aria-hidden="true" data-mode="andes"></canvas>
+  <div class="wrap inner">
+    <p class="eyebrow" style="color:var(--ink);opacity:.8"><a href="../" style="color:inherit;text-decoration:none">← Estate 2027</a> · famiglia di sei · luglio – agosto 2027</p>
+    <h1>Perù <em>2027</em></h1>
+    <p class="sub" id="f-sub">Ventuno giorni dalle Ande all'Amazzonia: Lima, la Valle Sacra, un trekking fino a Machu Picchu, tre notti nella foresta di Tambopata e il canyon del Colca.</p>
+    <div class="facts">
+      <div><span class="eyebrow">Partenza</span><b>22 luglio 2027</b></div>
+      <div><span class="eyebrow">Rientro</span><b>12 agosto 2027</b></div>
+      <div><span class="eyebrow">Notti</span><b>20</b></div>
+      <div><span class="eyebrow">Budget</span><b>≤ €25.000 in sei</b></div>
+      <div><span class="eyebrow">Mancano</span><b id="dleft" class="num">—</b></div>
+    </div>
+  </div>
+</header>
+
+<nav class="chap" aria-label="Capitoli"><div class="wrap"><ul>
+  <li><a href="#percorso">Percorso</a></li>
+  <li><a href="#tappe">Tappe</a></li>
+  <li><a href="#giorni">Giorno per giorno</a></li>
+  <li><a href="#costi">Costi</a></li>
+  <li><a href="#tempi">Quando prenotare</a></li>
+  <li><a href="#pratico">Pratico</a></li>
+  <li><a href="#checklist">Checklist</a></li>
+  <li><a href="../safari/">↔ Safari</a></li>
+</ul></div></nav>
+
+<main>
+<section class="block wrap" id="percorso">
+  <div class="sechead">
+    <p class="eyebrow">01 · Percorso</p>
+    <h2>Costa, Ande, foresta, canyon</h2>
+    <p>Un anello con Lima come porta d'ingresso e d'uscita. I tratti lunghi sono in aereo, un'ora ciascuno; il resto è strada, treno e i propri piedi. Tocca una tappa per i dettagli.</p>
+  </div>
+  <div class="mapgrid">
+    <div class="mapbox">
+      <svg class="map" viewBox="0 0 840 560" role="img" aria-labelledby="mt">
+        <title id="mt">Mappa del Perù con le tappe del viaggio</title>
+        <rect class="sea" x="0" y="0" width="840" height="560"/>
+        <g id="countries"></g>
+        <path class="lake" id="titicaca"></path>
+        <g id="parks"></g>
+        <text class="cn" x="250" y="110">PERÙ</text>
+        <text class="cn" x="640" y="60" style="font-size:22px">BRASILE</text>
+        <text class="cn" x="610" y="548" style="font-size:22px">BOLIVIA</text>
+        <text class="lbl" x="60" y="420">OCEANO</text>
+        <text class="lbl" x="60" y="438">PACIFICO</text>
+        <g id="peaks"></g>
+        <g id="routes"></g>
+        <g id="stops"></g>
+      </svg>
+      <div class="legend"><span><i></i>su strada</span><span><i class="t"></i>trekking e treno</span><span><i class="f"></i>volo</span><span>Confini Natural Earth</span></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="chips" role="group" aria-label="Tappe"></div>
+      <article class="card" id="card" aria-live="polite"></article>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap" id="tappe" style="padding-bottom:0">
+  <div class="sechead">
+    <p class="eyebrow">02 · Tappe</p>
+    <h2>Cinque capitoli, un filo</h2>
+    <p>Ogni tappa ha un compito: la città e il cibo, l'acclimatazione, la montagna, la foresta, il canyon. Le fasce di prezzo sono per camera doppia a notte in agosto; la fascia Essenziale è quella che sta nel budget.</p>
+  </div>
+  <div id="chapters"></div>
+</section>
+
+<section class="block wrap" id="giorni">
+  <div class="sechead">
+    <p class="eyebrow">03 · Giorno per giorno</p>
+    <h2>Ventuno giorni</h2>
+    <p>Le righe evidenziate sono giorni di spostamento. La regola delle Ande: si sale piano, si dorme in basso. Per questo la Valle Sacra viene prima di Cusco.</p>
+  </div>
+  <div class="log" id="log"></div>
+</section>
+
+<section class="block wrap" id="costi">
+  <div class="sechead">
+    <p class="eyebrow">04 · Costi</p>
+    <h2>Come si sta nei 25.000</h2>
+    <p>Regola i parametri e il totale si aggiorna. Il Perù è economico a terra: la voce che muove il totale è come arrivate a Machu Picchu.</p>
+  </div>
+  <div class="calc">
+    <form class="controls" id="form" onsubmit="return false">
+      <div class="ctl"><span class="lab">Per Machu Picchu</span>
+        <div class="seg" role="radiogroup" aria-label="Machu Picchu">
+          <input type="radio" name="trek" id="k1" value="salkantay" checked><label for="k1">Salkantay, 5 giorni</label>
+          <input type="radio" name="trek" id="k2" value="inca"><label for="k2">Inca Trail, 4 giorni</label>
+          <input type="radio" name="trek" id="k3" value="train"><label for="k3">Treno</label>
+        </div></div>
+      <div class="ctl"><span class="lab">Livello</span>
+        <div class="seg" role="radiogroup" aria-label="Livello">
+          <input type="radio" name="tier" id="t0" value="essenziale" checked><label for="t0">Essenziale</label>
+          <input type="radio" name="tier" id="t1" value="comfort"><label for="t1">Comfort</label>
+          <input type="radio" name="tier" id="t2" value="premium"><label for="t2">Premium</label>
+        </div></div>
+      <div class="ctl"><label for="adults">Adulti (18+)</label>
+        <div class="stepper"><button type="button" data-step="adults" data-d="-1" aria-label="Meno adulti">−</button><output id="adults">4</output><button type="button" data-step="adults" data-d="1" aria-label="Più adulti">+</button></div></div>
+      <div class="ctl"><label for="kids">Under 18</label>
+        <div class="stepper"><button type="button" data-step="kids" data-d="-1" aria-label="Meno ragazzi">−</button><output id="kids">2</output><button type="button" data-step="kids" data-d="1" aria-label="Più ragazzi">+</button></div></div>
+      <label class="switch"><span>Amazzonia: 3 notti a Tambopata</span><input type="checkbox" id="amz" checked></label>
+      <label class="switch"><span>Canyon del Colca, 2 notti</span><input type="checkbox" id="colca" checked></label>
+    </form>
+    <div class="result">
+      <div class="hero-num">
+        <span class="eyebrow">Totale stimato per il gruppo</span>
+        <span class="big num" id="total">—</span>
+        <span class="pp num" id="pp">—</span>
+      </div>
+      <div class="budget">
+        <div class="lab"><span id="b-lab">Budget €25.000</span><span id="b-left"></span></div>
+        <div class="tr"><div class="fl" id="b-fl"></div><i class="mark" style="left:100%"></i></div>
+      </div>
+      <div class="bars" id="bars" role="img" aria-label="Ripartizione dei costi per voce"></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Voce</th><th class="r">Adulto</th><th class="r">Under 18</th><th class="r">Gruppo</th></tr></thead>
+        <tbody id="rows"></tbody>
+        <tfoot><tr><td>Totale</td><td class="r" id="ta"></td><td class="r" id="tk"></td><td class="r" id="tg"></td></tr></tfoot>
+      </table></div>
+      <details><summary>Come sono calcolate le stime</summary>
+        <p>Voli: Málaga – Madrid – Lima andata e ritorno con Iberia o LATAM, prenotati con 8 mesi di anticipo. Voli interni con LATAM o Sky: Lima–Cusco, Cusco–Puerto Maldonado, Puerto Maldonado–Lima–Arequipa, Arequipa–Lima. Alberghi in tre camere: Essenziale €70–90 a camera con colazione, Comfort il doppio, Premium hotel storici. Trekking con operatore con licenza, tutto incluso: Salkantay €450, Inca Trail €750 (permessi, portatori, cuoco, treno di ritorno); treno Ollantaytambo–Aguas Calientes, bus e ingresso €200. Tambopata: lodge 3 notti con pensione completa, escursioni e barca, €450 Essenziale. Colca: trasporto privato 2 giorni e ingresso. Pasti nei giorni non inclusi €25 a persona. Boleto turístico della Valle Sacra €35. Under 18: sconto del 25% su alberghi e lodge. Assicurazione €80 a persona.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap" id="tempi">
+  <div class="sechead">
+    <p class="eyebrow">05 · Quando prenotare</p>
+    <h2>Le scadenze che contano</h2>
+    <p>Luglio e agosto sono alta stagione sulle Ande. Due cose vanno esaurite: i permessi dell'Inca Trail, con 8–9 mesi di anticipo, e i biglietti di Machu Picchu, con 3–4.</p>
+  </div>
+  <div class="timegrid">
+    <div style="display:grid;gap:28px">
+      <div class="count" id="count"></div>
+      <div class="migr">
+        <span class="eyebrow">Clima a Cusco, mese per mese</span>
+        <div class="months" id="months"></div>
+        <div class="key"><span>Secco, cielo limpido</span><span>Mezza stagione</span><span>Piogge</span><span>Riquadro: le vostre date</span></div>
+      </div>
+    </div>
+    <div class="miles" id="miles"></div>
+  </div>
+</section>
+
+<section class="block wrap" id="pratico">
+  <div class="sechead">
+    <p class="eyebrow">06 · Pratico</p>
+    <h2>Da sapere prima di partire</h2>
+  </div>
+  <div class="prac">
+    <article><h4>Quota</h4><ul><li>Cusco è a 3.400 m: i primi due giorni in Valle Sacra a 2.800 m, non in città</li><li>Niente alcol e pasti leggeri le prime 48 ore; mate de coca aiuta</li><li>Il Salkantay passa a 4.630 m: acclimatazione di 4 giorni prima</li><li>Acetazolamide su consiglio del medico per chi soffre</li></ul></article>
+    <article><h4>Documenti e salute</h4><ul><li>Nessun visto per cittadini UE, 90 giorni con il passaporto</li><li>Febbre gialla consigliata per Tambopata, non obbligatoria</li><li>Antimalarica non necessaria a Tambopata in stagione secca; repellente sì</li><li>Assicurazione con copertura in quota e trekking</li></ul></article>
+    <article><h4>Clima a fine luglio</h4><div class="climate">
+      <div><span>Lima</span><span>14–18 °C</span><span>grigio, umido</span></div>
+      <div><span>Valle Sacra</span><span>3–21 °C</span><span>sole, notti fredde</span></div>
+      <div><span>Salkantay</span><span>−5–18 °C</span><span>gelo al passo</span></div>
+      <div><span>Tambopata</span><span>18–30 °C</span><span>caldo, friaje possibile</span></div>
+      <div><span>Colca</span><span>0–20 °C</span><span>secco, freddo di notte</span></div>
+    </div></article>
+    <article><h4>Bagagli</h4><ul><li>Strati: la stessa giornata va da −5 a 25 gradi</li><li>Sacco a pelo da −10 per il trek, noleggiabile dall'operatore</li><li>Scarponi rodati, non nuovi</li><li>Borsa da 7 kg per i portatori, il resto resta a Cusco</li></ul></article>
+    <article><h4>Soldi e mance</h4><ul><li>Sol peruviano; carte ovunque nelle città, contanti nei villaggi</li><li>Prelievi con BCP o Interbank, commissioni basse</li><li>Trek: 60–80 soles a persona per i portatori, 100 per la guida</li><li>Ristoranti: 10%</li></ul></article>
+    <article><h4>Sei parole di quechua</h4><div class="sw">
+      <div><b>Allillanchu</b><span>come stai</span></div>
+      <div><b>Sulpayki</b><span>grazie</span></div>
+      <div><b>Apu</b><span>spirito della montagna</span></div>
+      <div><b>Inti · Killa</b><span>sole · luna</span></div>
+      <div><b>Wasi</b><span>casa</span></div>
+      <div><b>Tupananchiskama</b><span>arrivederci</span></div>
+    </div></article>
+  </div>
+</section>
+
+<section class="block wrap" id="checklist">
+  <div class="sechead">
+    <p class="eyebrow">07 · Checklist</p>
+    <h2>Cosa mettere in valigia</h2>
+    <p>Le spunte restano salvate su questo dispositivo.</p>
+  </div>
+  <div class="progress"><div class="lab"><span id="plab">0 di 0</span><span id="ppct">0%</span></div><div class="tr"><div class="fl" id="pfl" style="width:0"></div></div></div>
+  <div class="check" id="check"></div>
+</section>
+</main>
+
+<footer class="wrap">
+  <p>Cifre indicative in euro, da confermare con preventivi reali per il 2027. Confini da Natural Earth 1:110m; lago e parchi schematici.</p>
+  <ul>
+    <li><a href="https://www.machupicchu.gob.pe">Biglietti ufficiali Machu Picchu</a></li>
+    <li><a href="https://www.alpacaexpeditions.com">Alpaca Expeditions, Inca Trail e Salkantay</a></li>
+    <li><a href="https://www.perurail.com">PeruRail, treni per Aguas Calientes</a></li>
+  </ul>
+</footer>
+
+<script>
+const COUNTRIES = {"Chile":"M712.8 566.4 L752.0 620.8 L762.7 678.5 L804.6 712.4 L779.4 789.8 L822.4 879.5 L853.7 989.8 L911.5 978.9 L921.2 998.9 L893.7 1082.0 L806.6 1121.5 L809.1 1254.8 L792.4 1280.6 L816.4 1311.9 L759.9 1361.7 L707.5 1436.7 L678.9 1509.4 L686.5 1586.9 L637.2 1669.2 L674.0 1807.3 L694.8 1821.9 L694.6 1895.5 L649.0 1973.6 L650.8 2040.4 L590.2 2092.6 L590.5 2166.1 L614.8 2244.2 L566.9 2273.3 L545.5 2344.7 L526.7 2426.6 L540.3 2524.1 L508.1 2540.4 L526.8 2632.7 L562.9 2663.0 L536.5 2696.6 L573.6 2712.6 L582.2 2742.7 L547.3 2757.9 L555.8 2804.9 L526.6 2910.8 L484.2 2979.1 L493.5 3019.5 L468.1 3070.3 L406.8 3105.5 L413.8 3190.3 L441.9 3219.3 L495.2 3214.2 L493.6 3274.1 L526.8 3320.7 L720.1 3331.4 L794.3 3344.0 L723.1 3343.4 L684.6 3363.0 L612.4 3391.9 L599.5 3466.7 L565.6 3468.5 L475.4 3442.5 L383.8 3386.8 L383.8 3386.8 L284.3 3341.0 L259.2 3290.3 L281.9 3243.5 L241.6 3190.3 L231.4 3053.9 L265.4 2977.0 L349.9 2915.1 L228.4 2891.8 L304.6 2821.1 L331.9 2688.2 L420.8 2716.4 L462.6 2550.7 L408.9 2529.4 L383.9 2629.3 L333.4 2618.0 L358.6 2503.6 L385.8 2355.4 L422.6 2300.7 L399.6 2222.6 L393.0 2132.5 L426.7 2129.9 L475.7 2000.7 L531.1 1872.7 L564.9 1753.5 L546.5 1633.7 L570.4 1567.7 L560.8 1468.9 L607.6 1371.2 L622.0 1216.5 L647.7 1050.3 L672.7 871.5 L666.8 740.5 L650.2 627.8 L691.3 607.4 L712.8 566.4 Z","Brazil":"M2010.1 1861.5 L1988.0 1816.2 L2023.2 1778.2 L1977.0 1723.8 L1914.2 1679.6 L1831.9 1628.3 L1802.1 1630.6 L1721.9 1568.8 L1670.0 1577.3 L1776.7 1468.2 L1867.0 1390.6 L1920.7 1358.0 L1988.1 1313.9 L1989.7 1250.0 L1949.6 1203.8 L1910.0 1219.1 L1925.7 1173.0 L1936.5 1125.7 L1936.6 1081.7 L1907.8 1067.2 L1877.8 1080.1 L1847.9 1076.6 L1838.6 1045.8 L1831.1 972.4 L1816.2 948.6 L1762.1 926.9 L1729.5 942.6 L1645.0 927.2 L1650.3 818.6 L1626.7 774.1 L1651.7 757.6 L1644.0 712.0 L1665.9 676.9 L1680.1 613.9 L1661.2 564.2 L1617.5 541.7 L1609.0 510.2 L1620.7 464.0 L1467.3 460.7 L1436.6 367.5 L1459.9 366.2 L1458.9 331.7 L1443.3 308.3 L1439.7 262.1 L1393.3 238.4 L1342.9 239.1 L1309.8 215.9 L1255.8 200.1 L1224.3 170.2 L1134.7 157.0 L1047.8 85.3 L1054.2 31.7 L1044.4 0.9 L1052.9 -59.0 L948.2 -45.5 L906.1 -15.5 L836.1 17.0 L818.3 41.2 L777.1 42.9 L717.6 36.1 L672.5 49.9 L636.1 40.7 L641.4 -80.8 L575.8 -33.6 L505.2 -35.7 L475.0 -78.4 L421.9 -83.0 L438.8 -117.4 L394.3 -166.0 L361.0 -238.1 L382.1 -252.7 L382.0 -286.5 L430.4 -309.6 L422.4 -352.9 L442.8 -380.7 L448.6 -418.0 L540.1 -472.5 L605.7 -487.9 L616.4 -499.9 L688.5 -496.1 L724.5 -715.5 L726.4 -750.2 L713.8 -796.0 L678.3 -825.2 L678.8 -883.3 L723.8 -896.5 L739.8 -888.2 L742.5 -918.9 L695.6 -927.1 L694.6 -977.2 L850.5 -975.4 L877.0 -1003.0 L899.2 -977.6 L914.8 -930.4 L929.9 -940.3 L973.9 -898.0 L1036.1 -903.1 L1051.6 -927.6 L1111.1 -946.3 L1144.1 -959.4 L1153.4 -993.3 L1210.5 -1016.1 L1206.2 -1032.9 L1138.4 -1039.8 L1127.3 -1090.1 L1130.5 -1143.8 L1094.7 -1164.5 L1109.7 -1171.9 L1168.9 -1161.6 L1232.5 -1141.6 L1255.6 -1160.6 L1313.2 -1173.0 L1402.6 -1202.9 L1431.9 -1233.4 L1421.3 -1256.0 L1462.9 -1259.6 L1481.5 -1241.1 L1471.1 -1206.0 L1498.6 -1193.9 L1517.0 -1156.7 L1494.8 -1128.5 L1482.0 -1060.4 L1502.5 -1020.0 L1508.3 -983.0 L1557.5 -945.4 L1596.8 -941.4 L1605.6 -957.1 L1630.9 -960.6 L1667.1 -974.6 L1693.1 -995.9 L1737.4 -989.1 L1756.8 -992.0 L1800.3 -985.4 L1807.6 -1001.8 L1794.1 -1017.7 L1802.1 -1040.8 L1834.4 -1033.7 L1872.2 -1041.9 L1918.0 -1024.9 L1953.0 -1008.4 L1977.7 -1030.1 L1995.6 -1026.8 L2006.5 -1004.3 L2044.8 -1010.0 L2075.5 -1040.4 L2100.1 -1099.3 L2147.4 -1172.5 L2174.6 -1176.3 L2194.4 -1132.0 L2239.3 -992.1 L2282.1 -978.9 L2284.2 -923.7 L2224.1 -857.8 L2248.9 -833.7 L2390.4 -821.2 L2393.2 -741.0 L2454.0 -793.5 L2554.7 -764.7 L2687.5 -715.9 L2726.6 -669.0 L2713.5 -624.7 L2806.5 -649.4 L2962.2 -607.0 L3081.7 -610.2 L3200.0 -543.9 L3302.1 -454.3 L3363.8 -431.2 L3432.2 -428.0 L3461.2 -402.8 L3488.3 -300.9 L3501.6 -252.5 L3469.7 -120.3 L3429.0 -68.1 L3316.3 43.3 L3265.3 133.7 L3206.1 203.0 L3186.1 204.6 L3163.7 263.5 L3169.4 413.4 L3147.1 536.7 L3138.6 589.4 L3113.3 621.0 L3099.1 727.9 L3018.0 832.4 L3004.4 915.0 L2939.7 949.7 L2920.9 997.6 L2834.0 997.4 L2708.2 1028.2 L2651.8 1063.7 L2562.2 1087.1 L2468.1 1150.8 L2400.4 1230.2 L2388.7 1289.9 L2402.0 1334.1 L2387.1 1414.9 L2368.9 1453.9 L2313.0 1498.0 L2224.3 1638.8 L2153.9 1702.2 L2099.5 1739.6 L2063.0 1815.7 L2010.1 1861.5 Z","Bolivia":"M717.6 36.1 L777.1 42.9 L818.3 41.2 L836.1 17.0 L906.1 -15.5 L948.2 -45.5 L1052.9 -59.0 L1044.4 0.9 L1054.2 31.7 L1047.8 85.3 L1134.7 157.0 L1224.3 170.2 L1255.8 200.1 L1309.8 215.9 L1342.9 239.1 L1393.3 238.4 L1439.7 262.1 L1443.3 308.3 L1458.9 331.7 L1459.9 366.2 L1436.6 367.5 L1467.3 460.7 L1620.7 464.0 L1609.0 510.2 L1617.5 541.7 L1661.2 564.2 L1680.1 613.9 L1665.9 676.9 L1644.0 712.0 L1651.7 757.6 L1626.7 774.1 L1625.3 749.5 L1550.8 708.6 L1476.5 707.4 L1337.1 730.7 L1298.7 801.1 L1296.7 844.1 L1265.2 939.9 L1252.3 922.8 L1161.1 919.5 L1129.8 983.8 L1082.8 926.1 L978.1 906.6 L911.5 978.9 L853.7 989.8 L822.4 879.5 L779.4 789.8 L804.6 712.4 L762.7 678.5 L752.0 620.8 L712.8 566.4 L763.2 480.1 L728.8 412.8 L747.2 385.9 L732.8 356.3 L764.1 316.3 L765.7 248.2 L769.6 192.0 L786.8 164.9 L717.6 36.1 Z","Peru":"M688.5 -496.1 L616.4 -499.9 L605.7 -487.9 L540.1 -472.5 L448.6 -418.0 L442.8 -380.7 L422.4 -352.9 L430.4 -309.6 L382.0 -286.5 L382.1 -252.7 L361.0 -238.1 L394.3 -166.0 L438.8 -117.4 L421.9 -83.0 L475.0 -78.4 L505.2 -35.7 L575.8 -33.6 L641.4 -80.8 L636.1 40.7 L672.5 49.9 L717.6 36.1 L786.8 164.9 L769.6 192.0 L765.7 248.2 L764.1 316.3 L732.8 356.3 L747.2 385.9 L728.8 412.8 L763.2 480.1 L712.8 566.4 L691.3 607.4 L650.2 627.8 L570.0 581.9 L563.0 549.1 L404.4 468.7 L261.0 381.3 L199.3 331.9 L166.1 265.9 L179.3 242.8 L111.5 137.8 L32.6 -9.8 L-43.0 -169.1 L-75.7 -205.5 L-100.8 -264.5 L-163.0 -316.7 L-220.0 -349.1 L-194.1 -384.8 L-232.9 -461.1 L-208.0 -517.1 L-144.2 -567.6 L-134.7 -534.3 L-157.5 -515.3 L-155.4 -485.9 L-122.3 -492.3 L-90.0 -483.7 L-56.4 -443.3 L-11.2 -476.2 L3.9 -530.2 L53.0 -599.8 L149.2 -631.3 L236.4 -715.1 L261.3 -767.1 L250.1 -827.8 L271.5 -835.4 L324.7 -797.5 L350.2 -759.8 L387.2 -739.2 L434.4 -655.3 L493.9 -645.3 L538.0 -666.4 L566.9 -652.6 L614.9 -659.5 L676.2 -622.0 L624.6 -540.6 L648.5 -538.7 L688.5 -496.1 Z"};
+const LON0=-78.5, LAT0=-10.5, S=80;
+const P=(lon,lat)=>[(lon-LON0)*S,(LAT0-lat)*S];
+
+const STOPS=[
+ {id:"lim",n:1,name:"Lima",lat:-12.05,lon:-77.04,lx:14,ly:-14,days:"Giorni 1–2, 19–20 · 4 notti",chap:"c-lim",
+  text:"Porta d'ingresso e d'uscita. Miraflores e Barranco sulla scogliera, e la cucina migliore del Sudamerica.",
+  items:["Cevicheria a pranzo, non a cena","Barranco la sera, Huaca Pucllana di giorno","Museo Larco per capire cosa vedrete dopo"]},
+ {id:"val",n:2,name:"Valle Sacra",lat:-13.26,lon:-72.26,lx:14,ly:-18,days:"Giorni 3–5 · 3 notti",chap:"c-val",
+  text:"A 2.800 m, 600 più in basso di Cusco: il posto giusto per acclimatarsi. Rovine, mercati, le saline di Maras.",
+  items:["Pisac e il mercato","Moray e le saline di Maras","Ollantaytambo, da dove parte tutto"]},
+ {id:"mp",n:3,name:"Machu Picchu",lat:-13.16,lon:-72.55,lx:-118,ly:-6,days:"Giorni 6–10 · trek 4 notti",chap:"c-mp",
+  text:"Il Salkantay in cinque giorni: dal passo a 4.630 m giù nella foresta nuvolosa, fino alla cittadella all'alba del quinto giorno.",
+  items:["Laguna Humantay il primo giorno","Passo Salkantay il secondo","Machu Picchu alle 6 del mattino"]},
+ {id:"cus",n:4,name:"Cusco",lat:-13.52,lon:-71.97,lx:16,ly:22,days:"Giorni 10–11 · 2 notti",chap:"c-val",
+  text:"La capitale inca a 3.400 m, dopo il trek quando le gambe e i polmoni sono pronti. San Blas, Sacsayhuamán, un giorno di riposo.",
+  items:["Rainbow Mountain in giornata per chi ha ancora energia","San Pedro, il mercato","Volo per l'Amazzonia il giorno 12"]},
+ {id:"tam",n:5,name:"Tambopata",lat:-12.59,lon:-69.19,lx:14,ly:-14,days:"Giorni 12–14 · 3 notti",chap:"c-tam",
+  text:"Volo di 50 minuti e si passa dalle Ande alla foresta. Lodge sul fiume, raggiungibile solo in barca.",
+  items:["Collpa: centinaia di pappagalli all'alba","Caimani di notte in barca","Lago Sandoval in canoa"]},
+ {id:"aqp",n:6,name:"Arequipa",lat:-16.41,lon:-71.54,lx:14,ly:22,days:"Giorni 15–16 · 2 notti",chap:"c-aqp",
+  text:"La città bianca sotto il vulcano Misti. Il monastero di Santa Catalina, le picanterías, un giorno senza programma.",
+  items:["Santa Catalina, una città nella città","Rocoto relleno in una picantería","Base per il Colca"]},
+ {id:"col",n:7,name:"Colca",lat:-15.64,lon:-71.60,lx:-66,ly:-14,days:"Giorni 17–18 · 2 notti",chap:"c-aqp",
+  text:"Uno dei canyon più profondi del mondo. I condor alla Cruz del Cóndor alle 8 del mattino, terrazze inca, terme.",
+  items:["Cruz del Cóndor all'alba","Terme di La Calera","Trekking facoltativo sul fondo"]}
+];
+const ROUTES=[["lim","val","fly"],["val","mp","train"],["mp","cus","train"],["cus","tam","fly"],["tam","aqp","fly"],["aqp","col","drive"],["col","aqp","drive"],["aqp","lim","fly"]];
+
+const CHAPTERS=[
+ {id:"c-lim",n:"01",title:"Lima",sub:"La città dove si mangia",nights:"2 + 2 notti",days:"G 1–2, 19–20",alt:"150 m",
+  lead:"Lima in agosto è grigia e umida, e non importa: è la capitale gastronomica del continente, e due notti all'inizio servono per atterrare prima della quota. Miraflores per dormire, Barranco per la sera, il centro storico per mezza giornata.",
+  why:"Si torna a Lima alla fine, con due notti prima del volo: il modo giusto per chiudere, con una cena che non si dimentica e una giornata di mare freddo e surf a Miraflores per chi vuole. Il Museo Larco all'inizio dà un senso a tutto quello che vedrete dopo.",
+  fauna:["Ceviche","Nikkei e chifa","Pisco sour","Surf a Miraflores"],
+  camps:[["Hotel a Miraflores, 3 stelle","Vicino al Malecón, colazione inclusa","Essenziale","€70–90"],["Casa Andina Select","Catena peruviana affidabile","Comfort","€130–170"],["Hotel B, Barranco","Boutique in una villa d'epoca","Premium","€300+"]],
+  teen:["Lezione di surf a Playa Makaha, acqua a 16 gradi, muta inclusa","Tour gastronomico serale a Barranco","Paragliding sulla scogliera di Miraflores, €60"]},
+ {id:"c-val",n:"02",title:"Valle Sacra e Cusco",sub:"Dove si impara a respirare",nights:"3 + 2 notti",days:"G 3–5, 10–11",alt:"2.800 – 3.400 m",
+  lead:"Si atterra a Cusco e si scende subito nella Valle Sacra, 600 metri più in basso: tre giorni tra Pisac, Moray, le saline di Maras e Ollantaytambo, il villaggio inca ancora abitato da cui parte il trek. Cusco arriva dopo, quando il corpo è pronto.",
+  why:"L'acclimatazione è la differenza tra un viaggio riuscito e uno passato a letto con il mal di testa. Tre notti a 2.800 m e il Salkantay, che sale a 4.630, diventa faticoso ma fattibile. Cusco dopo il trek è il premio: due notti a San Blas, un giorno senza programma.",
+  fauna:["Terrazze di Moray","Saline di Maras","Ollantaytambo","Sacsayhuamán","San Blas"],
+  camps:[["Hostal a Ollantaytambo","Cortile, vista sulle rovine, colazione","Essenziale","€60–80"],["Hotel a San Blas, Cusco","Casa coloniale, camere famiglia","Essenziale","€70–90"],["Sol y Luna, Urubamba","Casitas in giardino, cavalli","Premium","€400+"],["Palacio del Inka, Cusco","Palazzo del XVI secolo","Premium","€300+"]],
+  teen:["Mountain bike in discesa da Moray alle saline di Maras","Rafting sull'Urubamba, classe III in stagione secca","Rainbow Mountain: partenza alle 4, 5.000 m, per chi ha ancora gambe dopo il trek"]},
+ {id:"c-mp",n:"03",title:"Salkantay e Machu Picchu",sub:"Cinque giorni a piedi fino alla cittadella",nights:"4 notti",days:"G 6–10",alt:"fino a 4.630 m",
+  lead:"Il Salkantay è l'alternativa all'Inca Trail: più alto, più spettacolare, senza il tetto di permessi. Si parte dalla laguna Humantay, si passa sotto il ghiacciaio del Salkantay a 4.630 m, e in tre giorni si scende nella foresta nuvolosa fino ad Aguas Calientes. Il quinto giorno, Machu Picchu alle sei del mattino.",
+  why:"Con un operatore con licenza il trek è tutto incluso: guida, cuoco, muli per i bagagli, tende o lodge, pasti, ingresso e treno di ritorno. Costa €450 a persona contro i €750 dell'Inca Trail, e i permessi non vanno presi nove mesi prima. Chi non vuole camminare raggiunge gli altri in treno il giorno 9 e vede Machu Picchu con loro.",
+  fauna:["Laguna Humantay","Passo Salkantay","Foresta nuvolosa","Machu Picchu all'alba","Huayna Picchu"],
+  camps:[["Salkantay con tende, operatore locale","Tende a cupola, cuoco, muli; Aguas Calientes in hostal","Essenziale","€450 pp"],["Salkantay con lodge, Alpaca o Salkantay Trekking","Lodge a cupola con letti veri e docce calde","Comfort","€650 pp"],["Inca Trail classico, 4 giorni","Permessi, portatori; il sentiero originale fino alla Porta del Sole","Comfort","€750 pp"],["Mountain Lodges of Peru","Lodge con jacuzzi in quota, la versione lusso","Premium","€2.500 pp"]],
+  teen:["Il passo a 4.630 m il secondo giorno: 7 ore, la giornata più dura del viaggio","Huayna Picchu, la salita ripida sopra la cittadella: 400 permessi al giorno, prenotare con il biglietto","Zipline a Santa Teresa il terzo giorno, €25"]},
+ {id:"c-tam",n:"04",title:"Tambopata",sub:"Tre notti nella foresta",nights:"3 notti",days:"G 12–14",alt:"200 m",
+  lead:"Da Cusco a Puerto Maldonado sono cinquanta minuti di volo e tremila metri di discesa. Poi due ore di barca sul fiume Tambopata fino a un lodge senza strada, senza rete, con le scimmie sul tetto. È la parte del viaggio che i ragazzi ricordano di più.",
+  why:"Tre notti sono il minimo per la collpa, la parete d'argilla dove all'alba arrivano centinaia di ara e pappagalli, e per una notte in barca a cercare i caimani con la torcia. Agosto è stagione secca: meno zanzare, sentieri asciutti, i caimani sulle spiagge del fiume.",
+  fauna:["Ara alla collpa","Scimmie urlatrici","Caimani di notte","Lontre giganti al lago Sandoval","Tarantole e rane"],
+  camps:[["Explorer's Inn o Corto Maltes","Lodge storico, bungalow con zanzariera, pensione completa","Essenziale","€450 pp / 3 notti"],["Posada Amazonas","Gestito con la comunità locale, torre di osservazione","Comfort","€700 pp"],["Refugio Amazonas","Più a monte, più fauna, camere aperte sulla foresta","Comfort","€900 pp"],["Tambopata Research Center","Il più remoto, dentro la riserva","Premium","€1.500 pp"]],
+  teen:["Collpa all'alba, partenza in barca alle 4:30","Uscita notturna a piedi con la guida: ragni, rane, serpenti","Canoa sul lago Sandoval alla ricerca delle lontre giganti","Niente rete per tre giorni: il dettaglio che fa la differenza"]},
+ {id:"c-aqp",n:"05",title:"Arequipa e il Colca",sub:"La città bianca e i condor",nights:"2 + 2 notti",days:"G 15–18",alt:"2.300 – 3.600 m",
+  lead:"Arequipa è la città più bella del Perù: bianca, di pietra vulcanica, con tre vulcani alle spalle. Due notti per il monastero di Santa Catalina e le picanterías, poi su verso il canyon del Colca, due volte più profondo del Grand Canyon, dove i condor volano a pochi metri dalla terrazza.",
+  why:"Il Colca si fa in due notti, non in un giorno: la Cruz del Cóndor si vede alle otto del mattino, quando l'aria si scalda e i condor salgono, e chi arriva in giornata da Arequipa non è lì in tempo. Le terme di La Calera la sera, le terrazze inca, un villaggio con la piazza di pietra.",
+  fauna:["Condor delle Ande","Vigogne sull'altopiano","Vulcano Misti","Santa Catalina"],
+  camps:[["Hostal nel centro di Arequipa","Casa coloniale a due isolati dalla plaza","Essenziale","€60–80"],["Lodge a Chivay o Yanque","Camere con stufa, terme a 10 minuti","Essenziale","€60–80"],["Casa Andina Premium, Arequipa","Nella casa della Moneda","Comfort","€150–200"],["Colca Lodge","Sul fiume, terme private","Premium","€250+"]],
+  teen:["Discesa a piedi nel canyon fino all'oasi di Sangalle: 1.100 m di dislivello, 2 giorni","Sandboarding e buggy a Huacachina se si aggiunge un giorno sulla costa","Terme di La Calera di sera, sotto le stelle"]}
+];
+
+const LOG=[
+ [1,"Málaga → Lima","Volo per Madrid, poi 12 ore diretti con Iberia. Arrivo nel pomeriggio, hotel a Miraflores.","volo",1],
+ [2,"Lima","Museo Larco al mattino, ceviche a pranzo, Barranco la sera.","città",0],
+ [3,"Lima → Valle Sacra","Volo di un'ora per Cusco, subito giù in valle a Ollantaytambo. Pomeriggio lento.","volo",1],
+ [4,"Valle Sacra","Pisac, rovine e mercato. Prime salite leggere.","ande",0],
+ [5,"Valle Sacra","Moray e le saline di Maras in mountain bike. Briefing del trek la sera.","attivo",0],
+ [6,"Salkantay, giorno 1","Soraypampa, salita alla laguna Humantay. Notte a 3.900 m.","trek",0],
+ [7,"Salkantay, giorno 2","Il passo a 4.630 m, poi giù nella foresta nuvolosa. Il giorno più duro.","trek",0],
+ [8,"Salkantay, giorno 3","Discesa tra caffè e orchidee fino a Santa Teresa. Terme la sera.","trek",0],
+ [9,"Salkantay, giorno 4","Lungo i binari fino ad Aguas Calientes. Chi non cammina arriva in treno.","trek",0],
+ [10,"Machu Picchu → Cusco","Bus alle 5:30, cittadella alle 6. Huayna Picchu per chi l'ha prenotato. Treno e bus a Cusco.","treno",1],
+ [11,"Cusco","Giorno di riposo. San Blas, Sacsayhuamán, lavanderia.","città",0],
+ [12,"Cusco → Tambopata","Volo di 50 minuti, poi 2 ore di barca fino al lodge.","volo",1],
+ [13,"Tambopata","Collpa all'alba, lago Sandoval, uscita notturna.","foresta",0],
+ [14,"Tambopata","Torre di osservazione, caimani in barca di notte.","foresta",0],
+ [15,"Tambopata → Arequipa","Barca e volo via Lima o Cusco. Arrivo serale nella città bianca.","volo",1],
+ [16,"Arequipa","Santa Catalina, picantería a pranzo.","città",0],
+ [17,"Arequipa → Colca","4 ore di strada sull'altopiano, vigogne. Terme la sera a Chivay.","strada",1],
+ [18,"Colca","Cruz del Cóndor alle 8, villaggi e terrazze. Seconda notte.","ande",0],
+ [19,"Colca → Arequipa → Lima","Strada e volo serale. Ultima base a Miraflores.","volo",1],
+ [20,"Lima","Surf o niente. Cena d'addio.","città",0],
+ [21,"Lima → Málaga","Volo serale via Madrid. Arrivo il giorno dopo.","volo",1]
+];
+
+const TIERS={
+ essenziale:{lab:"Essenziale",intl:950,hotelRoom:80,trekMul:1,amz:450,colcaRoom:70},
+ comfort:{lab:"Comfort",intl:1050,hotelRoom:150,trekMul:1.45,amz:750,colcaRoom:130},
+ premium:{lab:"Premium",intl:1250,hotelRoom:320,trekMul:3.3,amz:1500,colcaRoom:250}
+};
+const TREK={salkantay:{lab:"Salkantay, 5 giorni",pp:450,nights:4},inca:{lab:"Inca Trail, 4 giorni",pp:750,nights:3},train:{lab:"Treno e Machu Picchu",pp:200,nights:1}};
+const KID=0.75, BUDGET=25000;
+
+const MILES=[
+ ["Nov 2026","Decidere il trek","Inca Trail per luglio: i permessi si esauriscono ora. Salkantay: basta prenotare in primavera.",true],
+ ["Dic 2026","Voli intercontinentali","Iberia e LATAM aprono le tariffe 11 mesi prima; sei posti insieme vanno presi presto."],
+ ["Feb 2027","Operatore del trek e lodge amazzonico","Acconto del 30%. Chiedere Huayna Picchu nel biglietto."],
+ ["Mar 2027","Biglietti Machu Picchu","Sul sito ufficiale, 4 mesi prima: circuito 2 per la vista classica."],
+ ["Apr 2027","Voli interni e alberghi","LATAM e Sky: i prezzi raddoppiano negli ultimi due mesi."],
+ ["Giu 2027","Medico e assicurazione","Febbre gialla consigliata, consiglio sull'acetazolamide, polizza con trekking in quota."],
+ ["Lug 2027","Scarponi rodati, soles","Contanti per i villaggi. Sacco a pelo noleggiato dall'operatore."],
+];
+const MONTHS=[["Gen","s3"],["Feb","s3"],["Mar","s2"],["Apr","s1"],["Mag","s1"],["Giu","s1"],["Lug","s1 you"],["Ago","s1 you"],["Set","s2"],["Ott","s2"],["Nov","s3"],["Dic","s3"]];
+
+const CHECK={
+ "Documenti":["Passaporti validi 6 mesi","Assicurazione con trekking e quota","Biglietti Machu Picchu stampati","Conferma del trek e del lodge","Fotocopie e scansioni sul telefono"],
+ "Trek":["Scarponi rodati","Sacco a pelo −10 o noleggio","Lampada frontale","Bastoncini","Borraccia e pastiglie per l'acqua","Borsa da 7 kg per i muli"],
+ "Quota e salute":["Acetazolamide se prescritta","Antidolorifici, antidiarroico","Crema solare 50: a 4.000 m brucia","Repellente per Tambopata","Farmaci personali con ricetta"],
+ "Strati":["Piumino leggero","Guscio antipioggia","Pile","Cappello di lana e guanti","Cappello da sole"],
+ "Ragazzi":["Scarpe da trail per Maras e Colca","Costume per le terme e il surf","Powerbank grande: niente corrente al lodge","Giochi di carte per le sere in tenda","Quaderno per il diario"]
+};
+
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,ns){const e=ns?document.createElementNS(NS,tag):document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+const fmt=n=>"€"+Math.round(n).toLocaleString("it-IT");
+const fmtK=n=>"€"+(Math.round(n/100)/10).toLocaleString("it-IT",{maximumFractionDigits:1})+"k";
+
+/* hero: Andes */
+(function(){
+  const c=document.getElementById("sky"); const ctx=c.getContext("2d");
+  function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function rnd(seed){let s=seed;return()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+  function draw(){
+    const w=c.clientWidth,h=c.clientHeight,dpr=Math.min(window.devicePixelRatio||1,2);
+    c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,tok("--sky1"));g.addColorStop(.55,tok("--sky2"));g.addColorStop(.78,tok("--sky3"));
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    const sx=w*.3, sy=h*.62;
+    const sg=ctx.createRadialGradient(sx,sy,0,sx,sy,h*.3);
+    sg.addColorStop(0,"rgba(255,235,190,.85)");sg.addColorStop(.2,"rgba(255,225,170,.45)");sg.addColorStop(1,"rgba(255,200,120,0)");
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,h*.3,0,7);ctx.fill();
+    const layers=[["--hill1",.60,.16,11,14],["--hill2",.70,.12,17,18],["--hill3",.82,.07,23,22]];
+    layers.forEach(([t,base,amp,seed,n],li)=>{
+      const r=rnd(seed*97+13);
+      ctx.fillStyle=tok(t);ctx.beginPath();ctx.moveTo(0,h);
+      const pts=[];for(let i=0;i<=n;i++){pts.push([w*i/n,h*(base+(r()-.5)*amp*2)]);}
+      pts.forEach(([x,y])=>ctx.lineTo(x,y));
+      ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+      if(li===0){ // snow on the highest peaks
+        ctx.fillStyle=tok("--sky3");
+        for(let i=1;i<n;i++){const [x,y]=pts[i];if(y<pts[i-1][1]&&y<pts[i+1][1]&&y<h*(base-amp*.5)){const d=h*.05;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+d*.9,y+d);ctx.lineTo(x+d*.3,y+d*.8);ctx.lineTo(x-d*.2,y+d*1.1);ctx.lineTo(x-d*.8,y+d*.9);ctx.closePath();ctx.fill();}}
+      }
+    });
+    const fg=ctx.createLinearGradient(0,h*.82,0,h);fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(1,tok("--bg"));
+    ctx.fillStyle=fg;ctx.fillRect(0,h*.82,w,h*.18);
+  }
+  let t;window.addEventListener("resize",()=>{clearTimeout(t);t=setTimeout(draw,120);});
+  if(window.matchMedia){window.matchMedia("(prefers-color-scheme: light)").addEventListener("change",draw);}
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);} draw();
+})();
+
+(function(){
+  const dep=new Date(2027,6,22,0,0,0); const days=Math.max(0,Math.floor((dep-new Date())/864e5));
+  document.getElementById("dleft").textContent=days+" giorni";
+  const months=Math.floor(days/30.44), weeks=Math.floor((days%30.44)/7), d=Math.floor(days-months*30.44-weeks*7);
+  const c=document.getElementById("count");
+  [[months,"mesi"],[weeks,"settimane"],[d,"giorni"]].forEach(([v,l])=>{const div=el("div",{},c);el("b",{class:"num"},div).textContent=v;el("span",{class:"eyebrow"},div).textContent=l;});
+})();
+
+/* map */
+(function(){
+  const g=document.getElementById("countries");
+  for(const name in COUNTRIES){el("path",{d:COUNTRIES[name],class:"country"+(name==="Peru"?" main":"")},g,true);}
+  const tit=[[-69.95,-15.25],[-69.4,-15.3],[-68.9,-15.7],[-68.65,-16.2],[-68.9,-16.55],[-69.3,-16.4],[-69.6,-16.1],[-69.95,-15.75]];
+  document.getElementById("titicaca").setAttribute("d","M"+tit.map(([a,b])=>P(a,b).map(v=>v.toFixed(1)).join(" ")).join(" L")+" Z");
+  const parks=document.getElementById("parks");
+  const blob=(pts,label,lx,ly)=>{el("path",{class:"park",d:"M"+pts.map(([a,b])=>P(a,b).map(v=>v.toFixed(1)).join(" ")).join(" L")+" Z"},parks,true);if(label){el("text",{class:"parklbl",x:P(lx,ly)[0],y:P(lx,ly)[1]},parks,true).textContent=label;}};
+  blob([[-69.6,-12.6],[-68.7,-12.7],[-68.6,-13.3],[-69.4,-13.5],[-69.9,-13.0]],"RISERVA TAMBOPATA",-69.9,-13.75);
+  blob([[-72.9,-12.9],[-72.3,-12.9],[-72.2,-13.3],[-72.8,-13.4]],null);
+  const pk=document.getElementById("peaks");
+  [[-72.6,-13.42,"SALKANTAY 6.271",-1],[-71.4,-16.3,"MISTI 5.822",1]].forEach(([lo,la,n,side])=>{const [x,y]=P(lo,la);el("path",{class:"peak",d:`M${x} ${y-9} L${x+7} ${y+4} L${x-7} ${y+4} Z`},pk,true);const t=el("text",{class:"lbl",x:x+10*side,y:y+6},pk,true);if(side<0)t.setAttribute("text-anchor","end");t.textContent=n;});
+  const by=Object.fromEntries(STOPS.map(s=>[s.id,s]));
+  const rg=document.getElementById("routes"),sg=document.getElementById("stops"),chips=document.getElementById("chips"),card=document.getElementById("card");
+  ROUTES.forEach(([a,b,k],i)=>{const [x0,y0]=P(by[a].lon,by[a].lat),[x1,y1]=P(by[b].lon,by[b].lat);const mx=(x0+x1)/2,my=(y0+y1)/2;const dx=x1-x0,dy=y1-y0;const bend=k==="fly"?0.18:0.07;const p=el("path",{class:k,d:`M${x0} ${y0} Q${mx-dy*bend} ${my+dx*bend} ${x1} ${y1}`},rg,true);p.style.animationDelay=(i*.22)+"s";});
+  STOPS.forEach(s=>{
+    const [x,y]=P(s.lon,s.lat);
+    const g=el("g",{class:"stop",tabindex:"0",role:"button","aria-label":s.name+", "+s.days,"data-id":s.id},sg,true);
+    el("circle",{class:"halo",cx:x,cy:y,r:24},g,true);el("circle",{class:"dot",cx:x,cy:y,r:13},g,true);
+    el("text",{class:"n",x:x,y:y+.5},g,true).textContent=s.n;el("text",{class:"nm",x:x+s.lx,y:y+s.ly},g,true).textContent=s.name;
+    g.addEventListener("click",()=>select(s.id));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(s.id);}});
+    const b=el("button",{type:"button","aria-pressed":"false","data-id":s.id},chips);b.textContent=s.n+" · "+s.name;b.addEventListener("click",()=>select(s.id));
+  });
+  function select(id){
+    const s=by[id];
+    sg.querySelectorAll(".stop").forEach(g=>g.classList.toggle("on",g.dataset.id===id));
+    chips.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id?"true":"false"));
+    card.innerHTML="";el("span",{class:"days"},card).textContent=s.days;el("h3",{},card).textContent=s.name;el("p",{},card).textContent=s.text;
+    const ul=el("ul",{},card);s.items.forEach(t=>{el("li",{},ul).textContent=t;});
+    if(s.chap)el("a",{class:"go",href:"#"+s.chap},card).textContent="Leggi il capitolo →";
+    el("span",{class:"coords"},card).textContent=Math.abs(s.lat).toFixed(2)+"°S  "+Math.abs(s.lon).toFixed(2)+"°W";
+    try{localStorage.setItem("peru27-stop",id);}catch(e){}
+  }
+  let start="mp";try{const v=localStorage.getItem("peru27-stop");if(v&&by[v])start=v;}catch(e){}
+  select(start);
+})();
+
+(function(){
+  const root=document.getElementById("chapters");
+  CHAPTERS.forEach(c=>{
+    const a=el("article",{class:"chapter",id:c.id},root);
+    const lead=el("div",{class:"lead"},a);
+    el("div",{class:"n"},lead).textContent=c.n;el("h3",{},lead).textContent=c.title;
+    el("p",{style:"font-size:21px;font-style:italic;color:var(--muted)"},lead).textContent=c.sub;
+    const meta=el("div",{class:"meta"},lead);
+    [["Giorni",c.days],["Notti",c.nights],["Quota",c.alt]].forEach(([k,v])=>{const d=el("div",{},meta);el("span",{class:"eyebrow"},d).textContent=k;el("b",{},d).textContent=v;});
+    const fa=el("div",{class:"fauna"},lead);c.fauna.forEach(f=>{el("span",{},fa).textContent=f;});
+    const body=el("div",{class:"body"},a);
+    el("p",{class:"big"},body).textContent=c.lead;el("p",{},body).textContent=c.why;
+    const s1=el("div",{class:"sub"},body);el("h4",{},s1).textContent="Dove dormire e con chi";
+    const camps=el("div",{class:"camps"},s1);
+    c.camps.forEach(([n,dd,band,pr])=>{const r=el("div",{class:"camp"},camps);el("b",{},r).textContent=n;const b=el("span",{class:"band"},r);b.textContent=band;el("em",{},b).textContent=pr.includes("pp")?pr:pr+" / notte";el("small",{},r).textContent=dd;});
+    const s2=el("div",{class:"sub"},body);el("h4",{},s2).textContent="Per teenager e ventenni";
+    const ul=el("ul",{class:"teen"},s2);c.teen.forEach(t=>{el("li",{},ul).textContent=t;});
+  });
+})();
+
+(function(){
+  const log=document.getElementById("log");
+  LOG.forEach(([d,w,t,m,move])=>{const r=el("div",{class:"leg"+(move?" move":"")},log);el("span",{class:"d num"},r).textContent=d;el("span",{class:"w"},r).textContent=w;el("span",{class:"t"},r).textContent=t;el("span",{class:"m"},r).textContent=m;});
+})();
+
+(function(){
+  const st={tier:"essenziale",trek:"salkantay",adults:4,kids:2,amz:true,colca:true};
+  const out={adults:document.getElementById("adults"),kids:document.getElementById("kids")};
+  document.querySelectorAll("[data-step]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.step,d=+b.dataset.d;st[k]=Math.min(10,Math.max(0,st[k]+d));if(st.adults+st.kids<1)st.adults=1;render();}));
+  document.querySelectorAll('input[name="tier"]').forEach(r=>r.addEventListener("change",()=>{st.tier=r.value;render();}));
+  document.querySelectorAll('input[name="trek"]').forEach(r=>r.addEventListener("change",()=>{st.trek=r.value;render();}));
+  document.getElementById("amz").addEventListener("change",e=>{st.amz=e.target.checked;render();});
+  document.getElementById("colca").addEventListener("change",e=>{st.colca=e.target.checked;render();});
+  function render(){
+    for(const k in out)out[k].textContent=st[k];
+    const T=TIERS[st.tier],K=TREK[st.trek],A=st.adults,Kd=st.kids,n=A+Kd;
+    const rooms=Math.ceil(n/2);
+    const hotelN=4+3+2+(st.colca?2:4); // Lima 4, valle 3, Cusco 2, Arequipa 2 (+2 extra Lima/Arequipa if no Colca)
+    const colcaN=st.colca?2:0;
+    const amzN=st.amz?3:0; const extraCityN=st.amz?0:3;
+    const intFlights=st.amz?440:330;
+    const rows=[
+      ["Voli Málaga ↔ Lima","Via Madrid, Iberia o LATAM, andata e ritorno",T.intl,T.intl],
+      ["Voli interni","Lima–Cusco, "+(st.amz?"Cusco–Puerto Maldonado–":"Cusco–")+"Arequipa, Arequipa–Lima",intFlights,intFlights],
+      ["Alberghi, "+(hotelN+extraCityN)+" notti","Lima, Valle Sacra, Cusco, Arequipa · "+rooms+" camere",null,null,T.hotelRoom*(hotelN+extraCityN)*rooms],
+      [K.lab,"Tutto incluso: guida, cuoco, muli, ingresso, treno",Math.round(K.pp*T.trekMul),Math.round(K.pp*T.trekMul*0.9)],
+      st.amz?["Tambopata, 3 notti","Lodge con pensione completa, barca ed escursioni",T.amz,T.amz*KID]:null,
+      st.colca?["Colca, 2 notti","Lodge a Chivay · "+rooms+" camere, trasporto privato, ingresso",20,20,T.colcaRoom*2*rooms+400]:null,
+      ["Valle Sacra","Autista privato 2 giorni, boleto turístico, bici",35,35,300],
+      ["Pasti fuori dal trek e dal lodge",(21-K.nights-1-amzN)+" giorni, €25 a persona",25*(21-K.nights-1-amzN),20*(21-K.nights-1-amzN)],
+      ["Attività","Huayna Picchu, Rainbow Mountain, surf, tour gastronomico",120,100],
+      ["Mance e assicurazione","Portatori, guide, lodge; polizza con trekking",150,130]
+    ].filter(Boolean);
+    const tb=document.getElementById("rows");tb.innerHTML="";let ta=0,tk=0,tg=0;const cats=[];
+    rows.forEach(([lab,sub,a,k,grp])=>{const ga=(a||0)*A+(k||0)*Kd+(grp||0);if(ga===0)return;ta+=a||0;tk+=k||0;tg+=ga;cats.push([lab,ga]);
+      const tr=el("tr",{},tb);const td=el("td",{},tr);td.textContent=lab;el("small",{},td).textContent=sub;
+      el("td",{class:"r"},tr).textContent=a?fmt(a):"—";el("td",{class:"r"},tr).textContent=k?fmt(k):"—";el("td",{class:"r"},tr).textContent=fmt(ga);});
+    document.getElementById("ta").textContent=fmt(ta);document.getElementById("tk").textContent=fmt(tk);document.getElementById("tg").textContent=fmt(tg);
+    document.getElementById("total").textContent=fmt(tg);
+    document.getElementById("pp").textContent=fmtK(tg/n)+" a persona · "+n+" viaggiatori · "+T.lab+" · "+K.lab;
+    const pct=Math.min(100,tg/BUDGET*100);const fl=document.getElementById("b-fl");fl.style.width=pct+"%";fl.classList.toggle("over",tg>BUDGET);
+    document.getElementById("b-left").textContent=tg<=BUDGET?"Margine "+fmt(BUDGET-tg):"Oltre di "+fmt(tg-BUDGET);
+    const bars=document.getElementById("bars");bars.innerHTML="";const mx=Math.max(...cats.map(c=>c[1]));
+    cats.sort((a,b)=>b[1]-a[1]).forEach(([lab,v])=>{const r=el("div",{class:"bar"},bars);el("span",{},r).textContent=lab;const tr=el("div",{class:"tr"},r);el("div",{class:"fl",style:"width:"+(v/mx*100).toFixed(1)+"%"},tr);el("span",{class:"v num"},r).textContent=fmt(v);});
+  }
+  render();
+})();
+
+(function(){
+  const m=document.getElementById("miles");
+  MILES.forEach(([w,t,d,now])=>{const r=el("div",{class:"mile"+(now?" now":"")},m);el("span",{class:"when"},r).textContent=w;const b=el("div",{},r);el("b",{},b).textContent=t;el("span",{},b).textContent=d;});
+  const mo=document.getElementById("months");
+  MONTHS.forEach(([n,cls])=>{const d=el("div",{class:"m "+cls},mo);el("i",{},d);el("span",{},d).textContent=n;});
+})();
+
+(function(){
+  const root=document.getElementById("check");let saved={};try{saved=JSON.parse(localStorage.getItem("peru27-check")||"{}");}catch(e){}
+  const boxes=[];
+  Object.entries(CHECK).forEach(([cat,items])=>{const g=el("div",{class:"cg"},root);el("h4",{},g).textContent=cat;
+    items.forEach((it,i)=>{const id="ck-"+cat.replace(/\W/g,"")+"-"+i;const l=el("label",{for:id},g);const inp=el("input",{type:"checkbox",id:id},l);inp.checked=!!saved[id];el("span",{},l).textContent=it;boxes.push(inp);inp.addEventListener("change",()=>{saved[id]=inp.checked;try{localStorage.setItem("peru27-check",JSON.stringify(saved));}catch(e){}prog();});});});
+  function prog(){const n=boxes.length,k=boxes.filter(b=>b.checked).length;document.getElementById("plab").textContent=k+" di "+n;document.getElementById("ppct").textContent=Math.round(k/n*100)+"%";document.getElementById("pfl").style.width=(k/n*100)+"%";}
+  prog();
+})();
+
+(function(){
+  const links=[...document.querySelectorAll("nav.chap a[href^='#']")];const secs=links.map(a=>document.querySelector(a.getAttribute("href")));
+  if(!("IntersectionObserver" in window))return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));}});},{rootMargin:"-40% 0px -55% 0px"});
+  secs.forEach(s=>s&&io.observe(s));
+})();
+</script>
+
+</body>
+</html>
