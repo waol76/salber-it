@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Tuscia, ottobre 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: travel album. Full-bleed photo hero, sticky day nav, map of the route with clickable stops, then one chapter per day: short story on the left, photo wall on the right, lightbox on click. Shares the salber.it field-journal palette. */
+:root{
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --hill:#C6D3BA;
+  --display:"Bricolage Grotesque","Arial Narrow",Impact,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --hill:#27402D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --hill:#27402D; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{transition:none!important; animation:none!important}}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:18px; line-height:1.55}
+h1,h2,h3{font-family:var(--display); font-weight:800; margin:0; line-height:.95; text-wrap:balance}
+h2{font-size:clamp(36px,5.5vw,60px); letter-spacing:-.02em}
+p{margin:0; max-width:62ch}
+a{color:var(--river)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+button{font:inherit; color:inherit}
+.eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.wrap{max-width:1200px; margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+
+/* hero: a real photo */
+.hero{position:relative; min-height:min(86vh,780px); display:grid; align-items:end; color:#F4EFE4; overflow:hidden; isolation:isolate; background:#1a1a1a}
+.hero img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2}
+.hero::after{content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,rgba(10,14,12,.15) 0%,rgba(10,14,12,.05) 35%,rgba(10,14,12,.75) 82%,var(--bg) 100%)}
+.hero .inner{display:grid; gap:18px; padding-block:48px 34px}
+.hero .eyebrow{color:#F4EFE4; opacity:.85}
+.hero h1{font-size:clamp(84px,17vw,230px); letter-spacing:-.045em; line-height:.84}
+.hero .sub{font-size:clamp(19px,2.3vw,25px); max-width:34ch; line-height:1.3; font-weight:500}
+.facts{display:flex; flex-wrap:wrap; gap:14px 36px; border-top:1px solid rgba(244,239,228,.35); padding-top:16px}
+.facts div{display:grid; gap:2px}
+.facts span{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; opacity:.8}
+.facts b{font-family:var(--display); font-weight:800; font-size:22px}
+
+nav.days{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:color-mix(in oklab,var(--bg) 88%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+nav.days ul{list-style:none; margin:0; padding:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none}
+nav.days a{display:block; padding:14px 12px; font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px}
+nav.days a:hover,nav.days a.on{color:var(--ink); border-color:var(--accent)}
+
+section{padding-block:clamp(56px,8vw,104px)}
+.sechead{display:grid; gap:12px; margin-bottom:32px}
+.sechead p{color:var(--muted); font-size:20px}
+
+/* map */
+.mapgrid{display:grid; grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr); gap:28px; align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px; min-width:0}
+svg.map{width:100%; height:auto; display:block}
+.map .sea{fill:var(--water)} .map .land{fill:var(--land)} .map .lake{fill:var(--water)} .map .hill{fill:var(--hill); opacity:.9}
+.map .river{fill:none; stroke:var(--water); stroke-width:5; stroke-linecap:round; stroke-linejoin:round}
+.map .town circle{fill:var(--muted)} .map .town text{font-family:var(--mono); font-size:12px; fill:var(--muted)}
+.map .lbl{font-family:var(--mono); font-size:11.5px; fill:var(--muted); letter-spacing:.14em}
+.map .route{fill:none; stroke:var(--accent); stroke-width:3.2; stroke-linecap:round; stroke-dasharray:1400; stroke-dashoffset:1400; animation:draw 2.4s ease-out .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map .stop{cursor:pointer}
+.map .stop .halo{fill:var(--accent); opacity:0; transition:opacity .2s}
+.map .stop .dot{fill:var(--surface); stroke:var(--ink); stroke-width:2.5}
+.map .stop .n{font-family:var(--display); font-weight:800; font-size:13px; fill:var(--ink); text-anchor:middle; dominant-baseline:central; pointer-events:none}
+.map .stop .nm{font-family:var(--mono); font-size:13px; font-weight:500; fill:var(--ink); paint-order:stroke; stroke:var(--surface); stroke-width:4px; pointer-events:none}
+.map .stop.on .dot{fill:var(--accent); stroke:var(--accent)} .map .stop.on .n{fill:var(--bg)} .map .stop.on .halo{opacity:.25}
+.map .stop:focus{outline:none} .map .stop:focus-visible .dot{stroke:var(--accent); stroke-width:4}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; padding:8px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+.panel{display:grid; gap:14px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px)}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden; display:grid}
+.card img{width:100%; aspect-ratio:4/3; object-fit:cover; display:block; cursor:zoom-in}
+.card .body{padding:18px 20px 20px; display:grid; gap:8px}
+.card .when{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.card h3{font-size:28px}
+.card .go{justify-self:start; font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--accent)}
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+.stats div{display:grid; gap:2px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px}
+.stats b{font-family:var(--display); font-weight:800; font-size:26px; font-variant-numeric:tabular-nums}
+.stats span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+@media (max-width:480px){.stats{grid-template-columns:1fr 1fr}}
+
+/* days */
+.day{display:grid; grid-template-columns:minmax(260px,.75fr) minmax(0,1.6fr); gap:clamp(24px,4vw,56px); padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line); align-items:start}
+@media (max-width:900px){.day{grid-template-columns:1fr}}
+.day .story{display:grid; gap:16px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (max-width:900px){.day .story{position:static}}
+.day .num{font-family:var(--display); font-weight:800; font-size:clamp(64px,9vw,120px); line-height:.8; color:var(--accent); letter-spacing:-.04em}
+.day .date{font-family:var(--mono); font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.day h3{font-size:clamp(30px,3.6vw,44px); letter-spacing:-.015em}
+.day .story p{font-size:18px}
+.day .where{display:flex; flex-wrap:wrap; gap:6px}
+.day .where span{font-family:var(--mono); font-size:12.5px; padding:5px 10px; border:1px solid var(--line); border-radius:4px; color:var(--muted)}
+.wall{display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:120px; grid-auto-flow:dense; gap:8px; min-width:0}
+.wall figure{margin:0; position:relative; overflow:hidden; border-radius:4px; background:var(--surface2); cursor:zoom-in}
+.wall figure.p{grid-column:span 2; grid-row:span 3}
+.wall figure.l{grid-column:span 3; grid-row:span 2}
+.wall figure.big.l{grid-column:span 4; grid-row:span 3}
+.wall figure.big.p{grid-column:span 3; grid-row:span 4}
+.wall img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease}
+.wall figure:hover img{transform:scale(1.04)}
+.wall figcaption{position:absolute; left:0; right:0; bottom:0; padding:22px 10px 8px; font-size:14px; color:#F4EFE4; background:linear-gradient(180deg,transparent,rgba(0,0,0,.65)); opacity:0; transition:opacity .2s}
+.wall figure:hover figcaption,.wall figure:focus-visible figcaption{opacity:1}
+@media (max-width:600px){.wall{grid-template-columns:repeat(4,1fr); grid-auto-rows:90px} .wall figure.l,.wall figure.big.l{grid-column:span 4; grid-row:span 2} .wall figure.p,.wall figure.big.p{grid-column:span 2; grid-row:span 3}}
+@media (hover:none){.wall figcaption{opacity:1}}
+
+/* lightbox */
+.lb{position:fixed; inset:0; z-index:20; background:rgba(8,10,9,.94); display:grid; grid-template-rows:1fr auto; padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px)}
+.lb[hidden]{display:none}
+.lb .stage{display:grid; place-items:center; min-height:0}
+.lb img{max-width:100%; max-height:100%; object-fit:contain; border-radius:3px}
+.lb .bar{display:flex; align-items:center; justify-content:space-between; gap:16px; color:#EEE7D8; padding-top:12px}
+.lb .cap{font-size:17px} .lb .cap small{display:block; font-family:var(--mono); font-size:12px; opacity:.7}
+.lb .ctl{display:flex; gap:8px}
+.lb button{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); color:#EEE7D8; border-radius:6px; padding:8px 14px; font-family:var(--mono); font-size:14px; cursor:pointer}
+.lb button:hover{background:rgba(255,255,255,.16)}
+
+
+#lmap{height:min(72vh,620px); width:100%; border-radius:6px; background:var(--surface2)}
+.mapbox{position:relative}
+.mapmode{position:absolute; top:16px; right:16px; z-index:500; display:flex; border-radius:6px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.mapmode button{border:0; background:#fff; color:#182019; font-family:var(--mono); font-size:12.5px; padding:7px 11px; cursor:pointer}
+.mapmode button[aria-pressed="true"]{background:#182019; color:#fff}
+.leaflet-container{font-family:var(--mono)}
+.pin{width:30px; height:30px; border-radius:50%; background:var(--accent); color:#fff; border:3px solid #fff; display:grid; place-items:center; font-family:var(--display); font-weight:800; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.pin.on{transform:scale(1.2)}
+.leaflet-tooltip.plabel{font-family:var(--mono); font-size:12px; font-weight:500; background:rgba(255,255,255,.92); border:0; box-shadow:0 1px 3px rgba(0,0,0,.2); color:#182019}
+footer{border-top:1px solid var(--line); padding-block:32px 56px; color:var(--muted); font-size:15px; display:grid; gap:8px}
+</style>
+
+</head>
+<body>
+<header class="hero" id="top">
+  <img src="foto/6375.webp" alt="La piazza di Vallerano con il campanile, in una mattina di sole">
+  <div class="wrap inner">
+    <p class="eyebrow">Viaggi · 23 – 25 ottobre 2026 · Provincia di Viterbo</p>
+    <h1>Tuscia</h1>
+    <p class="sub">Tre giorni a Vallerano e dintorni: la campagna dei Monti Cimini, i 50 anni festeggiati a San Martino, la fiera dei trattori in piazza.</p>
+    <div class="facts">
+      <div><span>Giorni</span><b>3</b></div>
+      <div><span>Paesi</span><b>5</b></div>
+      <div><span>Km in auto</span><b>≈ 230</b></div>
+      <div><span>Foto scattate</span><b>85</b></div>
+    </div>
+  </div>
+</header>
+
+<nav class="days" aria-label="Giorni"><div class="wrap"><ul>
+  <li><a href="#percorso">Percorso</a></li>
+  <li><a href="#g1">Ven 23 · Arrivo</a></li>
+  <li><a href="#g2">Sab 24 · I 50 anni</a></li>
+  <li><a href="#g3">Dom 25 · La fiera</a></li>
+</ul></div></nav>
+
+<main>
+<section class="wrap" id="percorso">
+  <div class="sechead">
+    <p class="eyebrow">Il percorso</p>
+    <h2>Dall'aeroporto ai Monti Cimini</h2>
+    <p>Ricostruito dalle foto: ogni scatto porta con sé ora e posizione. I numeri sono le tappe, i puntini blu le singole foto; la mappa si ingrandisce e passa al satellite.</p>
+  </div>
+  <div class="mapgrid">
+    <div class="mapbox">
+      <div id="lmap" hidden></div>
+      <div class="mapmode" id="mapmode" hidden><button type="button" data-l="map" aria-pressed="true">Mappa</button><button type="button" data-l="sat" aria-pressed="false">Satellite</button></div>
+      <svg class="map" viewBox="0 0 760 760" role="img" aria-labelledby="mt">
+        <title id="mt">Mappa della Tuscia meridionale con il percorso da Fiumicino a Vallerano e San Martino al Cimino</title>
+        <rect class="sea" width="760" height="760"/>
+        <path class="land" id="land"/>
+        <g id="hills"></g>
+        <path class="river" id="tevere"/>
+        <g id="lakes"></g>
+        <g id="towns"></g>
+        <text class="lbl" x="40" y="640">MAR TIRRENO</text>
+        <text class="lbl" id="lbl-tevere">TEVERE</text>
+        <path class="route" id="route"/>
+        <g id="stops"></g>
+      </svg>
+      <div class="legend" id="legend"><span>— percorso in auto</span><span>Laghi, colline e costa schematici</span></div>
+    </div>
+    <div class="panel">
+      <article class="card" id="card" aria-live="polite"></article>
+      <div class="stats">
+        <div><b>85</b><span>km dall'aeroporto</span></div>
+        <div><b>1.053</b><span>m, Monte Cimino</span></div>
+        <div><b>28</b><span>foto scelte</span></div>
+        <div><b>50</b><span>candeline</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" id="giorni"></div>
+</main>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Foto">
+  <div class="stage"><img id="lbimg" alt=""></div>
+  <div class="bar">
+    <div class="cap" id="lbcap"></div>
+    <div class="ctl"><button type="button" id="lbprev" aria-label="Foto precedente">←</button><button type="button" id="lbnext" aria-label="Foto successiva">→</button><button type="button" id="lbclose" aria-label="Chiudi">Chiudi</button></div>
+  </div>
+</div>
+
+<footer class="wrap">
+  <p>Foto di famiglia, 23–25 ottobre 2026. Percorso ricostruito dai dati delle foto; le posizioni sono mostrate a livello di paese.</p>
+</footer>
+
+<script>
+const PHOTOS = [{"id": "6326", "day": 1, "cap": "La campagna tra Vignanello e Corchiano, alle cinque e mezza", "t": "17:30", "w": 1350, "h": 1800, "lat": 42.378, "lon": 12.321}, {"id": "6328", "day": 1, "cap": "Filari e noccioli", "t": "17:33", "w": 1350, "h": 1800, "lat": 42.377, "lon": 12.321}, {"id": "6331", "day": 1, "cap": "Il casale mangiato dall'edera", "t": "17:36", "w": 1350, "h": 1800, "lat": 42.377, "lon": 12.321}, {"id": "6336", "day": 1, "cap": "Il capanno verde", "t": "17:55", "w": 1350, "h": 1800, "lat": 42.376, "lon": 12.342}, {"id": "6334", "day": 1, "cap": "La strada sterrata tra gli alberi", "t": "17:42", "w": 1350, "h": 1800, "lat": 42.374, "lon": 12.327}, {"id": "6341", "day": 1, "cap": "Prima cena a Vallerano: panino con la porchetta", "t": "18:25", "w": 1350, "h": 1800, "lat": 42.382, "lon": 12.261}, {"id": "6346", "day": 2, "cap": "Con la nonna, prima di uscire", "t": "11:46", "w": 1350, "h": 1800, "lat": 42.382, "lon": 12.261}, {"id": "6349", "day": 2, "cap": "", "t": "11:47", "w": 1350, "h": 1800, "lat": 42.382, "lon": 12.261}, {"id": "6347", "day": 2, "cap": "Selfie di famiglia", "t": "11:47", "w": 1800, "h": 1350, "lat": 42.382, "lon": 12.261}, {"id": "6350", "day": 2, "cap": "Il ristorante a San Martino al Cimino", "t": "12:33", "w": 1350, "h": 1800, "lat": 42.368, "lon": 12.127}, {"id": "6353", "day": 2, "cap": "I 50 anni", "t": "14:10", "w": 1350, "h": 1800, "lat": 42.368, "lon": 12.127}, {"id": "6355", "day": 2, "cap": "", "t": "14:10", "w": 1350, "h": 1800, "lat": 42.368, "lon": 12.127}, {"id": "6357", "day": 2, "cap": "Tre generazioni intorno alla torta", "t": "14:10", "w": 1350, "h": 1800, "lat": 42.368, "lon": 12.127}, {"id": "6361", "day": 2, "cap": "Elmo e cotta di maglia alla festa", "t": "15:29", "w": 1350, "h": 1800, "lat": 42.368, "lon": 12.127}, {"id": "6360", "day": 2, "cap": "", "t": "15:29", "w": 1350, "h": 1800, "lat": 42.368, "lon": 12.127}, {"id": "6363", "day": 2, "cap": "I padelloni sul fuoco in piazza", "t": "15:40", "w": 1350, "h": 1800, "lat": 42.369, "lon": 12.126}, {"id": "6375", "day": 3, "cap": "La piazza e il campanile di Vallerano", "t": "11:54", "w": 1800, "h": 1350, "lat": 42.385, "lon": 12.263}, {"id": "6371", "day": 3, "cap": "Il mercato nei vicoli", "t": "11:47", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.264}, {"id": "6378", "day": 3, "cap": "Vicolo del centro storico", "t": "12:04", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.265}, {"id": "6380", "day": 3, "cap": "La fila dei trattori d'epoca", "t": "12:13", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.266}, {"id": "6381", "day": 3, "cap": "Trattore davanti al monumento ai caduti", "t": "12:14", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.266}, {"id": "6384", "day": 3, "cap": "Il più rosso di tutti", "t": "12:15", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.266}, {"id": "6374", "day": 3, "cap": "La chiesa in cima alla scalinata", "t": "11:54", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.263}, {"id": "6373", "day": 3, "cap": "", "t": "11:54", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.263}, {"id": "6372", "day": 3, "cap": "Dentro la cappella", "t": "11:53", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.263}, {"id": "6379", "day": 3, "cap": "", "t": "12:04", "w": 1350, "h": 1800, "lat": 42.385, "lon": 12.265}, {"id": "6370", "day": 3, "cap": "Il limone sul terrazzo", "t": "11:08", "w": 1350, "h": 1800, "lat": 42.382, "lon": 12.261}, {"id": "6392", "day": 3, "cap": "Una cartolina da New York, ritrovata in casa", "t": "15:55", "w": 1350, "h": 1800, "lat": 42.382, "lon": 12.261}];
+/* map frame: lon 11.90–12.70, lat 41.70–42.55 → 760×760 */
+const LON0=11.90, LON1=12.70, LAT0=42.55, LAT1=41.70;
+const P=(lon,lat)=>[((lon-LON0)/(LON1-LON0)*760).toFixed(1),((LAT0-lat)/(LAT0-LAT1)*760).toFixed(1)];
+const path=pts=>"M"+pts.map(([a,b])=>P(a,b).join(" ")).join(" L");
+
+const STOPS=[
+ {id:"fco",n:1,name:"Fiumicino",lon:12.254,lat:41.794,lx:14,ly:4,day:1,when:"Ven 23 · 15:55",photo:"6341",
+  text:"Atterraggio a Roma Fiumicino e ritiro dell'auto a noleggio. Il giro completo intorno alla macchina, foto per foto, prima di partire verso nord.",go:"g1"},
+ {id:"camp",n:2,name:"Vignanello · Corchiano",lon:12.33,lat:42.376,lx:16,ly:6,day:1,when:"Ven 23 · 17:30",photo:"6326",
+  text:"Un'ora e mezza dopo, in campagna tra Vignanello e Corchiano: noccioli, un casale coperto d'edera e un capanno verde nella luce del tramonto.",go:"g1"},
+ {id:"val",n:3,name:"Vallerano",lon:12.264,lat:42.385,lx:-30,ly:30,day:1,when:"23 – 25 ottobre",photo:"6375",
+  text:"La base del weekend. Un borgo di tufo sui Monti Cimini, con la piazza sotto il campanile e i vicoli in salita. Qui le cene, le notti e la domenica della fiera.",go:"g3"},
+ {id:"smc",n:4,name:"San Martino al Cimino",lon:12.127,lat:42.368,lx:-118,ly:26,day:2,when:"Sab 24 · 12:30",photo:"6357",
+  text:"Il pranzo dei 50 anni in un ristorante con il camino, poi la festa in paese: elmi e cotte di maglia da provare e i padelloni sul fuoco in piazza.",go:"g2"}
+];
+const ROUTE=[[12.254,41.794],[12.27,41.86],[12.30,41.98],[12.36,42.10],[12.40,42.22],[12.36,42.32],[12.33,42.376],[12.30,42.38],[12.264,42.385],[12.22,42.375],[12.18,42.37],[12.127,42.368]];
+
+const DAYS=[
+ {id:"g1",n:"1",date:"Venerdì 23 ottobre",title:"Arrivo in campagna",where:["Fiumicino","Vignanello","Corchiano","Vallerano"],
+  text:["Volo da Málaga, auto a noleggio a Fiumicino e un'ora e mezza di strada verso nord, lasciando Roma sulla destra.","Prima di arrivare a casa, una sosta in campagna tra Vignanello e Corchiano. La luce è quella del tardo pomeriggio d'ottobre: bassa, calda, che entra tra i noccioli e accende l'edera sui muri del casale.","Arrivo a Vallerano con il buio, e la cena più semplice possibile: un panino con la porchetta."]},
+ {id:"g2",n:"2",date:"Sabato 24 ottobre",title:"I 50 anni",where:["Vallerano","San Martino al Cimino"],
+  text:["Mattina a casa, con le foto di rito accanto alla nonna prima di uscire.","A mezzogiorno si sale a San Martino al Cimino, il paese costruito intorno all'abbazia. Pranzo in un ristorante di legno e pietra, con il camino acceso e la torta gialla con le candeline del 50.","Nel pomeriggio, la festa in paese: elmi medievali da provare davanti ai palazzi, e i grandi padelloni sul fuoco nella piazza."]},
+ {id:"g3",n:"3",date:"Domenica 25 ottobre",title:"La fiera in piazza",where:["Vallerano"],
+  text:["Domenica di fiera a Vallerano. Le bancarelle riempiono i vicoli, e in piazza, davanti al monumento ai caduti, si allineano i trattori d'epoca: arancioni, verdi, e uno rosso fuoco che ruba la scena.","Poi la salita alla chiesa, la piccola cappella aperta con l'altare dorato, il selfie sulla scalinata.","In casa, l'ultima scoperta del viaggio: una vecchia cartolina del ponte di Brooklyn, spedita da New York a Vallerano chissà quanti anni fa."]}
+];
+
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,ns){const e=ns?document.createElementNS(NS,tag):document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+const byId=Object.fromEntries(PHOTOS.map(p=>[p.id,p]));
+
+/* ---------- map ---------- */
+(function(){
+  // coastline: land is everything east of the coast
+  const coast=[[11.90,42.06],[11.98,42.02],[12.08,41.95],[12.20,41.86],[12.23,41.77],[12.29,41.72],[12.33,41.70]];
+  document.getElementById("land").setAttribute("d",path(coast)+` L${P(12.70,41.70).join(" ")} L${P(12.70,42.55).join(" ")} L${P(11.90,42.55).join(" ")} Z`);
+  const tev=[[12.40,42.55],[12.39,42.46],[12.44,42.38],[12.47,42.30],[12.52,42.18],[12.52,42.08],[12.49,41.95],[12.47,41.88],[12.42,41.83],[12.33,41.78],[12.24,41.74]];
+  document.getElementById("tevere").setAttribute("d",path(tev));
+  const lt=P(12.535,42.12);const t=document.getElementById("lbl-tevere");t.setAttribute("x",lt[0]);t.setAttribute("y",lt[1]);
+  const hills=document.getElementById("hills");
+  const blob=(pts)=>el("path",{class:"hill",d:path(pts)+" Z"},hills,true);
+  blob([[12.10,42.46],[12.22,42.47],[12.30,42.42],[12.30,42.34],[12.22,42.29],[12.10,42.30],[12.05,42.37]]); // Cimini
+  blob([[12.05,42.20],[12.17,42.21],[12.25,42.15],[12.24,42.06],[12.12,42.05],[12.03,42.10]]); // Sabatini
+  const lakes=document.getElementById("lakes");
+  const ell=(lon,lat,rx,ry,name,lx,ly)=>{const [x,y]=P(lon,lat);el("ellipse",{class:"lake",cx:x,cy:y,rx:rx,ry:ry},lakes,true);const tt=el("text",{class:"lbl",x:+x+lx,y:+y+ly},lakes,true);tt.textContent=name;};
+  ell(12.172,42.322,24,20,"LAGO DI VICO",-50,38);
+  ell(12.225,42.120,52,44,"LAGO DI BRACCIANO",-70,62);
+  ell(12.03,42.155,8,7,"",0,0);
+  const towns=[["Viterbo",12.105,42.417,-58,4],["Roma",12.496,41.903,10,4],["Civita Castellana",12.41,42.295,10,14],["Orte",12.387,42.46,10,4],["Monte Cimino 1.053",12.20,42.408,-40,-12]];
+  const tg=document.getElementById("towns");
+  towns.forEach(([n,lo,la,dx,dy])=>{const [x,y]=P(lo,la);const g=el("g",{class:"town"},tg,true);el("circle",{cx:x,cy:y,r:n==="Roma"?6:3.5},g,true);el("text",{x:+x+dx,y:+y+dy},g,true).textContent=n;});
+  document.getElementById("route").setAttribute("d",(()=>{const pts=ROUTE.map(([a,b])=>P(a,b).map(Number));let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i];d+=` Q${x0} ${y0} ${(x0+x1)/2} ${(y0+y1)/2}`;}d+=` L${pts.at(-1)[0]} ${pts.at(-1)[1]}`;return d;})());
+  const sg=document.getElementById("stops"),card=document.getElementById("card");
+  STOPS.forEach(s=>{
+    const [x,y]=P(s.lon,s.lat);
+    const g=el("g",{class:"stop",tabindex:"0",role:"button","aria-label":s.name,"data-id":s.id},sg,true);
+    el("circle",{class:"halo",cx:x,cy:y,r:22},g,true);el("circle",{class:"dot",cx:x,cy:y,r:12},g,true);
+    el("text",{class:"n",x:x,y:+y+.5},g,true).textContent=s.n;
+    el("text",{class:"nm",x:+x+s.lx,y:+y+s.ly},g,true).textContent=s.name;
+    g.addEventListener("click",()=>select(s.id));
+    g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(s.id);}});
+  });
+  function select(id){
+    const s=STOPS.find(x=>x.id===id);
+    sg.querySelectorAll(".stop").forEach(g=>g.classList.toggle("on",g.dataset.id===id));
+    card.innerHTML="";
+    const img=el("img",{src:"foto/"+s.photo+"-t.webp",alt:byId[s.photo]?.cap||s.name,loading:"lazy"},card);
+    img.addEventListener("click",()=>openLB(PHOTOS.indexOf(byId[s.photo])));
+    const b=el("div",{class:"body"},card);
+    el("span",{class:"when"},b).textContent=s.when;
+    el("h3",{},b).textContent=s.name;
+    el("p",{},b).textContent=s.text;
+    el("a",{class:"go",href:"#"+s.go},b).textContent="Vai al giorno →";
+  }
+  select("val");
+})();
+
+/* ---------- days ---------- */
+(function(){
+  const root=document.getElementById("giorni");
+  DAYS.forEach((d,di)=>{
+    const sec=el("section",{class:"day",id:d.id},root);
+    const st=el("div",{class:"story"},sec);
+    el("div",{class:"num"},st).textContent=d.n;
+    el("span",{class:"date"},st).textContent=d.date;
+    el("h3",{},st).textContent=d.title;
+    d.text.forEach(t=>{el("p",{},st).textContent=t;});
+    const wh=el("div",{class:"where"},st);d.where.forEach(w=>{el("span",{},wh).textContent=w;});
+    const wall=el("div",{class:"wall"},sec);
+    const ph=PHOTOS.filter(p=>p.day===di+1);
+    ph.forEach((p,k)=>{
+      const big=k===0||(p.cap&&k%5===0);
+      const f=el("figure",{class:(p.w>=p.h?"l":"p")+(big?" big":""),tabindex:"0"},wall);
+      el("img",{src:"foto/"+p.id+"-t.webp",alt:p.cap||d.title,loading:"lazy",width:p.w,height:p.h},f);
+      if(p.cap)el("figcaption",{},f).textContent=p.cap;
+      const open=()=>openLB(PHOTOS.indexOf(p));
+      f.addEventListener("click",open);
+      f.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});
+    });
+  });
+})();
+
+/* ---------- lightbox ---------- */
+const lb=document.getElementById("lb"),lbimg=document.getElementById("lbimg"),lbcap=document.getElementById("lbcap");
+let cur=0,lastFocus=null;
+const DAYNAME=["","Venerdì 23","Sabato 24","Domenica 25"];
+function show(i){cur=(i+PHOTOS.length)%PHOTOS.length;const p=PHOTOS[cur];lbimg.src="foto/"+p.id+".webp";lbimg.alt=p.cap||"Foto";lbcap.innerHTML="";lbcap.append(document.createTextNode(p.cap||" "));const s=document.createElement("small");s.textContent=DAYNAME[p.day]+" ottobre · "+p.t+" · "+(cur+1)+" di "+PHOTOS.length;lbcap.append(s);}
+function openLB(i){lastFocus=document.activeElement;show(i);lb.hidden=false;document.getElementById("lbclose").focus();document.body.style.overflow="hidden";}
+function closeLB(){lb.hidden=true;document.body.style.overflow="";lastFocus&&lastFocus.focus();}
+document.getElementById("lbprev").onclick=()=>show(cur-1);
+document.getElementById("lbnext").onclick=()=>show(cur+1);
+document.getElementById("lbclose").onclick=closeLB;
+lb.addEventListener("click",e=>{if(e.target===lb||e.target.classList.contains("stage"))closeLB();});
+document.addEventListener("keydown",e=>{if(lb.hidden)return;if(e.key==="Escape")closeLB();if(e.key==="ArrowLeft")show(cur-1);if(e.key==="ArrowRight")show(cur+1);});
+let tx=null;lb.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;},{passive:true});
+lb.addEventListener("touchend",e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1));tx=null;});
+
+
+/* ---------- real map (salber.it); falls back to the drawn map if tiles can't load ---------- */
+(function(){
+  if(!window.L)return;
+  const box=document.getElementById("lmap"),svg=document.querySelector("svg.map"),legend=document.getElementById("legend"),mode=document.getElementById("mapmode");
+  box.hidden=false;
+  const map=L.map(box,{scrollWheelZoom:false,zoomControl:true,attributionControl:true});
+  const layers={
+    map:L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}),
+    sat:L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:18,attribution:"Esri, Maxar"})
+  };
+  let fails=0,loaded=0;
+  layers.map.on("tileload",()=>{loaded++;});
+  layers.map.on("tileerror",()=>{fails++; if(fails>3&&loaded===0)fallback();});
+  layers.map.addTo(map);
+  setTimeout(()=>{if(loaded===0)fallback();},6000);
+  function fallback(){try{map.remove();}catch(e){} box.hidden=true; mode.hidden=true; svg.style.display=""; legend.style.display="";}
+  svg.style.display="none"; legend.style.display="none"; mode.hidden=false;
+  mode.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.l;Object.values(layers).forEach(l=>map.removeLayer(l));layers[k].addTo(map);mode.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));}));
+  const pts=STOPS.map(s=>[s.lat,s.lon]);
+  const line=L.polyline([[41.794,12.254],[42.376,12.33],[42.385,12.264],[42.368,12.127]],{color:"#E0A43C",weight:5,opacity:.9}).addTo(map);
+  // road-following route from OSRM; keeps the straight line if the service is unreachable
+  fetch("https://router.project-osrm.org/route/v1/driving/12.254,41.794;12.33,42.376;12.264,42.385;12.127,42.368?overview=full&geometries=geojson")
+    .then(r=>r.json()).then(j=>{const c=j.routes&&j.routes[0]&&j.routes[0].geometry.coordinates;if(c){line.setLatLngs(c.map(([x,y])=>[y,x]));const km=Math.round(j.routes[0].distance/1000);const el=document.querySelector(".stats b");if(el)el.textContent=km;}}).catch(()=>{});
+  const markers={};
+  STOPS.forEach(s=>{
+    const m=L.marker([s.lat,s.lon],{icon:L.divIcon({className:"",html:'<div class="pin" data-id="'+s.id+'">'+s.n+'</div>',iconSize:[30,30],iconAnchor:[15,15]})}).addTo(map);
+    m.bindTooltip(s.name,{permanent:true,direction:"right",offset:[16,0],className:"plabel"});
+    m.on("click",()=>{document.querySelector('.map .stop[data-id="'+s.id+'"]')?.dispatchEvent(new Event("click"));document.querySelectorAll(".pin").forEach(p=>p.classList.toggle("on",p.dataset.id===s.id));});
+    markers[s.id]=m;
+  });
+
+  // a small pin for every photo at its exact position
+  const dots=L.layerGroup().addTo(map);
+  PHOTOS.forEach((p,i)=>{ if(p.lat==null)return;
+    const jit=(i%5-2)*0.00012;
+    L.circleMarker([p.lat+jit,p.lon-jit],{radius:6,color:"#fff",weight:2,fillColor:"#2B7F96",fillOpacity:.95})
+      .bindTooltip('<img src="foto/'+p.id+'-t.webp" style="width:140px;display:block;border-radius:3px">'+(p.cap?'<div style="max-width:140px;white-space:normal;margin-top:4px">'+p.cap+'</div>':''),{direction:"top",offset:[0,-6]})
+      .on("click",()=>openLB(i)).addTo(dots);
+  });
+  map.fitBounds(L.latLngBounds(pts).pad(0.15));
+  map.on("click",()=>map.scrollWheelZoom.enable());
+})();
+
+/* ---------- nav highlight ---------- */
+(function(){
+  const links=[...document.querySelectorAll("nav.days a")];
+  if(!("IntersectionObserver" in window))return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));});},{rootMargin:"-40% 0px -55% 0px"});
+  links.forEach(l=>{const s=document.querySelector(l.getAttribute("href"));s&&io.observe(s);});
+})();
+</script>
+
+</body>
+</html>
