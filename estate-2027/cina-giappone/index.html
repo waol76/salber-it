@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Cina e Giappone 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: night-savanna field journal. Full-bleed dusk hero, sticky chapter nav, geographic map with a stop panel, long-form chapters, instrument-style cost calculator, countdown + booking timeline, checklist. Dark-first. */
+:root{
+  --bg:#0E1411; --surface:#161E19; --surface2:#1E2823; --ink:#EEE7D8; --muted:#A3AC9F; --line:#2A3630;
+  --accent:#E0A43C; --ember:#D5673F; --river:#5EB0C2; --grass:#6F9B5A;
+  --land:#1B2520; --land2:#222E27; --water:#132A34; --park:#27402D;
+  --sky1:#0B1A24; --sky2:#B55A2E; --sky3:#F0B35A; --hill1:#1E2A22; --hill2:#15201A; --hill3:#0E1411;
+  --display:"Bricolage Grotesque","Arial Narrow",Impact,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#EEF0EA; --surface:#F7F8F4; --surface2:#E3E7DF; --ink:#182019; --muted:#5B675F; --line:#CDD5CB;
+  --accent:#B97A14; --ember:#B8512C; --river:#2B7F96; --grass:#4F7F3B;
+  --land:#DEE4D8; --land2:#D2DACB; --water:#C2D8E0; --park:#C6D8B8;
+  --sky1:#8FB5CC; --sky2:#F2C58C; --sky3:#FFF0C8; --hill1:#8FA089; --hill2:#5E7360; --hill3:#2F4034;
+  color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important; transition:none!important}}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:18px; line-height:1.55; font-weight:400}
+h1,h2,h3,h4{font-family:var(--display); margin:0; line-height:.98; text-wrap:balance; font-weight:800}
+h2{font-size:clamp(38px,6vw,68px); letter-spacing:-.02em}
+h3{font-size:clamp(26px,3.4vw,38px); letter-spacing:-.015em}
+h4{font-size:19px; font-weight:500; letter-spacing:0}
+p{margin:0; max-width:66ch}
+a{color:var(--river)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+button{font:inherit; color:inherit}
+.eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.mono{font-family:var(--mono); font-size:14px}
+.num{font-variant-numeric:tabular-nums}
+.acc{color:var(--accent)}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+section.block{padding-block:clamp(56px,9vw,120px); display:grid; gap:clamp(24px,4vw,44px)}
+.sechead{display:grid; gap:12px; max-width:760px}
+.sechead p{font-size:20px; color:var(--muted)}
+
+/* hero */
+.hero{position:relative; min-height:min(88vh,760px); display:grid; align-items:end; overflow:hidden; isolation:isolate}
+.hero canvas{position:absolute; inset:0; width:100%; height:100%; z-index:-1}
+.hero .inner{display:grid; gap:22px; padding-block:48px 36px}
+.hero h1{font-size:clamp(76px,16vw,220px); letter-spacing:-.04em; line-height:.86; color:var(--ink); text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .sub{font-size:clamp(20px,2.4vw,26px); max-width:30ch; line-height:1.3; font-weight:500}
+.facts{display:flex; flex-wrap:wrap; gap:14px 36px; border-top:1px solid color-mix(in oklab,var(--ink) 35%,transparent); padding-top:18px}
+.facts div{display:grid; gap:2px}
+.facts b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+
+/* plan toggle */
+.plan{display:inline-flex; border:1px solid color-mix(in oklab,var(--ink) 45%,transparent); border-radius:8px; overflow:hidden; background:color-mix(in oklab,var(--bg) 55%,transparent); backdrop-filter:blur(6px)}
+.plan input{position:absolute; opacity:0; pointer-events:none}
+.plan label{display:grid; gap:1px; padding:10px 18px; cursor:pointer; min-width:150px}
+.plan label b{font-family:var(--display); font-weight:800; font-size:20px; letter-spacing:-.01em}
+.plan label span{font-family:var(--mono); font-size:11.5px; color:var(--muted); letter-spacing:.04em}
+.plan input:checked+label{background:var(--accent); color:var(--bg)} .plan input:checked+label span{color:var(--bg); opacity:.8}
+.plan input:focus-visible+label{outline:2px solid var(--ink); outline-offset:-3px}
+.plan.small label{padding:6px 12px; min-width:0} .plan.small label b{font-size:15px} .plan.small label span{display:none}
+nav.chap .wrap{display:flex; align-items:center; gap:12px; justify-content:space-between}
+nav.chap ul{min-width:0}
+.compare{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+@media (max-width:980px){.compare{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.compare{grid-template-columns:1fr}}
+.cmp{display:grid; gap:10px; padding:20px 22px; border:1px solid var(--line); border-radius:8px; background:var(--surface); cursor:pointer; transition:border-color .15s}
+.cmp.on{border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent)}
+.cmp h4{font-family:var(--display); font-weight:800; font-size:26px; letter-spacing:-.01em}
+.cmp .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.cmp .rt b{color:var(--ink); font-weight:500}
+.cmp ul{margin:0; padding-left:1.1em; font-size:16px; color:var(--muted); display:grid; gap:3px}
+.cmp .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.off{opacity:.32}
+.skip{display:grid; gap:8px; padding:18px 22px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:16px}
+.skip b{color:var(--ink); font-weight:500}
+
+/* nav */
+nav.chap{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:color-mix(in oklab,var(--bg) 86%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+nav.chap ul{list-style:none; margin:0; padding:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none}
+nav.chap ul::-webkit-scrollbar{display:none}
+nav.chap a{display:block; padding:14px 12px; font-family:var(--mono); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px}
+nav.chap a:hover,nav.chap a.on{color:var(--ink); border-color:var(--accent)}
+
+/* map */
+.mapgrid{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); gap:28px; align-items:start}
+@media (max-width:860px){.mapgrid{grid-template-columns:1fr}}
+.mapbox{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px; min-width:0}
+svg.map{width:100%; height:auto; display:block}
+.map .country{fill:var(--land); stroke:var(--line); stroke-width:1.2; stroke-linejoin:round}
+.map .country.main{fill:var(--land2)}
+.map .sea{fill:var(--water)}
+.map .lake{fill:var(--water)}
+.map .park{fill:var(--park); stroke:none; opacity:.95}
+.map .parklbl{font-family:var(--mono); font-size:11px; fill:var(--muted); letter-spacing:.1em}
+.map .cn{font-family:var(--display); font-weight:800; font-size:30px; fill:var(--muted); opacity:.42; letter-spacing:.22em}
+.map .lbl{font-family:var(--mono); font-size:11.5px; fill:var(--muted); letter-spacing:.12em}
+.map .eq{stroke:var(--muted); stroke-width:1; stroke-dasharray:2 7; fill:none; opacity:.8}
+.map .peak{fill:var(--muted)}
+.map .fly,.map .drive{fill:none; stroke-linecap:round; stroke-dasharray:1200; stroke-dashoffset:1200; animation:draw 2.4s ease-out forwards}
+.map .fly{stroke:var(--river); stroke-width:2; stroke-dasharray:4 7}
+.map .drive{stroke:var(--accent); stroke-width:3.2}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map .fly{animation:none; stroke-dashoffset:0}
+.map .stop{cursor:pointer}
+.map .stop .halo{fill:var(--accent); opacity:0; transition:opacity .2s}
+.map .stop .dot{fill:var(--surface); stroke:var(--ink); stroke-width:2.5}
+.map .stop .n{font-family:var(--display); font-weight:800; font-size:14px; fill:var(--ink); text-anchor:middle; dominant-baseline:central; pointer-events:none}
+.map .stop .nm{font-family:var(--mono); font-size:13px; font-weight:500; fill:var(--ink); paint-order:stroke; stroke:var(--surface); stroke-width:4px; pointer-events:none}
+.map .stop.on .dot{fill:var(--accent); stroke:var(--accent)} .map .stop.on .n{fill:var(--bg)} .map .stop.on .halo{opacity:.25}
+.map .stop:focus{outline:none} .map .stop:focus-visible .dot{stroke:var(--accent); stroke-width:4}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; padding:8px 8px 4px; font-family:var(--mono); font-size:12.5px; color:var(--muted)}
+.legend span{display:inline-flex; align-items:center; gap:8px}
+.legend i{display:inline-block; width:26px; border-top:3px solid var(--accent)} .legend i.f{border-top:2px dashed var(--river)}
+.panel{display:grid; gap:14px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px)}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chips button{font-family:var(--mono); font-size:12.5px; padding:7px 11px; border-radius:999px; border:1px solid var(--line); background:transparent; cursor:pointer; color:var(--ink)}
+.chips button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--bg); font-weight:500}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:24px; display:grid; gap:12px; min-width:0}
+.card .days{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.card ul{margin:0; padding-left:1.1em; display:grid; gap:6px}
+.card .go{justify-self:start; font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--accent); padding-bottom:2px}
+.coords{font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* chapters */
+.chapter{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(24px,4vw,56px); padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line); align-items:start}
+@media (max-width:860px){.chapter{grid-template-columns:1fr}}
+.chapter .lead{display:grid; gap:16px; position:sticky; top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (max-width:860px){.chapter .lead{position:static}}
+.chapter .n{font-family:var(--display); font-weight:800; font-size:clamp(60px,9vw,120px); line-height:.8; color:var(--accent); letter-spacing:-.04em}
+.chapter .meta{display:flex; flex-wrap:wrap; gap:8px 22px}
+.chapter .meta div{display:grid; gap:1px}
+.chapter .meta b{font-family:var(--mono); font-weight:500; font-size:14px}
+.chapter .body{display:grid; gap:26px; min-width:0}
+.chapter .body p.big{font-size:21px; line-height:1.45}
+.sub{display:grid; gap:10px}
+.sub h4{color:var(--accent); font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:500}
+.fauna{display:flex; flex-wrap:wrap; gap:6px}
+.fauna span{font-family:var(--mono); font-size:12.5px; padding:5px 10px; border:1px solid var(--line); border-radius:4px; color:var(--muted)}
+.camps{display:grid; gap:0; border-top:1px solid var(--line)}
+.camp{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 16px; padding:12px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.camp b{font-weight:500}
+.camp small{grid-column:1; color:var(--muted); font-size:15px}
+.camp .band{font-family:var(--mono); font-size:12.5px; color:var(--muted); white-space:nowrap; text-align:right}
+.camp .band em{font-style:normal; color:var(--ink); display:block; font-size:14px}
+.teen{display:grid; gap:8px; padding-left:0; margin:0; list-style:none}
+.teen li{display:grid; grid-template-columns:22px minmax(0,1fr); gap:10px; align-items:baseline}
+.teen li::before{content:"→"; color:var(--accent); font-family:var(--mono)}
+
+/* day log */
+.log{display:grid; border-top:1px solid var(--line)}
+.leg{display:grid; grid-template-columns:72px 150px minmax(0,1fr) auto; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); align-items:baseline}
+.leg .d{font-family:var(--display); font-weight:800; font-size:22px; color:var(--accent); letter-spacing:-.02em}
+.leg .w{font-family:var(--mono); font-size:13.5px; font-weight:500}
+.leg .t{min-width:0; color:var(--muted); font-size:16.5px}
+.leg .m{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; text-align:right}
+.leg.move{background:color-mix(in oklab,var(--surface) 60%,transparent)}
+@media (max-width:700px){.leg{grid-template-columns:52px minmax(0,1fr)} .leg .t{grid-column:2} .leg .m{grid-column:2; text-align:left}}
+
+/* costs */
+.calc{display:grid; grid-template-columns:minmax(280px,.9fr) minmax(0,1.3fr); gap:28px; align-items:start}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+.controls{display:grid; gap:20px; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:22px}
+.ctl{display:grid; gap:8px}
+.ctl label,.ctl .lab{font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.seg{display:flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; flex-wrap:wrap}
+.seg input{position:absolute; opacity:0; pointer-events:none}
+.seg label{flex:1; text-align:center; padding:10px 8px; font-family:var(--mono); font-size:13.5px; cursor:pointer; letter-spacing:0; text-transform:none; color:var(--ink)}
+.seg input:checked+label{background:var(--ink); color:var(--bg)}
+.seg input:focus-visible+label{outline:2px solid var(--accent); outline-offset:-3px}
+.stepper{display:grid; grid-template-columns:40px 1fr 40px; border:1px solid var(--line); border-radius:6px; overflow:hidden}
+.stepper button{background:transparent; border:0; cursor:pointer; font-family:var(--mono); font-size:18px}
+.stepper button:hover{background:var(--surface2)}
+.stepper output{text-align:center; padding:9px; font-family:var(--mono); font-size:16px; border-inline:1px solid var(--line)}
+.switch{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:6px}
+.switch span{font-size:16px}
+.switch input{width:38px; height:22px; accent-color:var(--accent); margin:0}
+.result{display:grid; gap:22px; min-width:0}
+.hero-num{display:grid; gap:4px; border-left:4px solid var(--accent); padding-left:18px}
+.hero-num .big{font-family:var(--display); font-weight:800; font-size:clamp(46px,7vw,84px); line-height:.95; letter-spacing:-.03em}
+.hero-num .pp{font-family:var(--mono); font-size:15px; color:var(--muted)}
+.bars{display:grid; gap:8px}
+.bar{display:grid; grid-template-columns:minmax(120px,190px) minmax(0,1fr) 92px; gap:12px; align-items:center; font-size:15.5px}
+.bar .tr{height:14px; background:var(--surface2); border-radius:3px; overflow:hidden}
+.bar .fl{height:100%; background:var(--accent); border-radius:0 3px 3px 0; transition:width .3s}
+.bar .v{font-family:var(--mono); font-size:13.5px; text-align:right}
+@media (max-width:480px){.bar{grid-template-columns:minmax(0,1fr) 80px} .bar .tr{grid-column:1/-1; order:3}}
+.tablewrap{overflow-x:auto}
+table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
+th,td{padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:baseline; font-size:16px}
+th{font-family:var(--mono); font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+td.r,th.r{text-align:right; font-family:var(--mono); font-size:14px; white-space:nowrap}
+td small{color:var(--muted); display:block; font-size:14px}
+tfoot td{border-bottom:0; border-top:2px solid var(--ink); font-weight:500}
+.note{font-size:15.5px; color:var(--muted); max-width:72ch}
+details{border-top:1px solid var(--line); padding:12px 0}
+summary{cursor:pointer; font-family:var(--mono); font-size:13.5px; letter-spacing:.04em}
+details p{padding-top:8px; color:var(--muted); font-size:16px}
+
+/* timing */
+.timegrid{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:32px; align-items:start}
+@media (max-width:860px){.timegrid{grid-template-columns:1fr}}
+.count{display:grid; grid-template-columns:repeat(3,auto); gap:18px; justify-content:start}
+.count div{display:grid; gap:2px}
+.count b{font-family:var(--display); font-weight:800; font-size:clamp(44px,6vw,72px); line-height:.95; letter-spacing:-.03em}
+.miles{display:grid; border-left:2px solid var(--line); margin-left:6px}
+.mile{display:grid; grid-template-columns:110px minmax(0,1fr); gap:12px; padding:0 0 22px 20px; position:relative}
+.mile::before{content:""; position:absolute; left:-7px; top:8px; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--muted)}
+.mile.now::before{background:var(--accent); border-color:var(--accent)}
+.mile .when{font-family:var(--mono); font-size:13px; color:var(--muted); padding-top:3px}
+.mile.now .when{color:var(--accent)}
+.mile b{font-weight:500; display:block}
+.mile span{color:var(--muted); font-size:16px}
+@media (max-width:480px){.mile{grid-template-columns:1fr; gap:2px}}
+.migr{display:grid; gap:10px}
+.migr .months{display:grid; grid-template-columns:repeat(12,1fr); gap:3px}
+.migr .m{display:grid; gap:4px; text-align:center}
+.migr .m i{display:block; height:38px; border-radius:3px; background:var(--surface2)}
+.migr .m.s1 i{background:color-mix(in oklab,var(--accent) 28%,var(--surface2))}
+.migr .m.s2 i{background:color-mix(in oklab,var(--accent) 55%,var(--surface2))}
+.migr .m.s3 i{background:var(--accent)}
+.migr .m.you i{outline:2px solid var(--ink); outline-offset:1px}
+.migr .m span{font-family:var(--mono); font-size:11px; color:var(--muted)}
+.migr .key{display:flex; flex-wrap:wrap; gap:4px 16px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+
+/* practical */
+.prac{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:26px}
+.prac article{display:grid; gap:8px; align-content:start; border-top:2px solid var(--ink); padding-top:14px}
+.prac h4{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.prac p,.prac li{font-size:16.5px; color:var(--muted)}
+.prac ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+.climate{display:grid; gap:0}
+.climate div{display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); font-size:15px}
+.climate div span:not(:first-child){font-family:var(--mono); font-size:13px}
+.sw{display:grid; gap:4px}
+.sw div{display:grid; grid-template-columns:120px 1fr; gap:10px; font-size:16px}
+.sw b{font-family:var(--mono); font-weight:500; font-size:14px; color:var(--accent)}
+
+/* checklist */
+.check{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px}
+.cg{display:grid; gap:6px; align-content:start}
+.cg h4{font-family:var(--mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:500; padding-bottom:6px; border-bottom:1px solid var(--line)}
+.cg label{display:grid; grid-template-columns:20px minmax(0,1fr); gap:10px; align-items:start; font-size:16.5px; padding:4px 0; cursor:pointer}
+.cg input{accent-color:var(--accent); width:18px; height:18px; margin-top:4px}
+.cg input:checked+span{color:var(--muted); text-decoration:line-through}
+.progress{display:grid; gap:6px; max-width:420px}
+.progress .tr{height:8px; background:var(--surface2); border-radius:4px; overflow:hidden}
+.progress .fl{height:100%; background:var(--grass); transition:width .3s}
+.progress .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+
+/* alternatives */
+.alts{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:20px}
+.alt{display:grid; gap:10px; padding:22px; border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+.alt h4{font-family:var(--display); font-weight:800; font-size:24px}
+.alt .row{display:flex; justify-content:space-between; gap:10px; font-family:var(--mono); font-size:13px; border-bottom:1px solid var(--line); padding:5px 0}
+.alt .row span:last-child{color:var(--muted); text-align:right}
+.alt p{font-size:16px; color:var(--muted)}
+
+footer{border-top:1px solid var(--line); padding-block:36px 56px; display:grid; gap:12px; font-size:15px; color:var(--muted)}
+footer ul{margin:0; padding-left:1.1em; display:grid; gap:4px}
+
+.map .train{fill:none; stroke:var(--grass); stroke-width:3.2; stroke-linecap:round; stroke-dasharray:10 6}
+.legend i.t{border-top:3px dashed var(--grass)}
+.budget{display:grid; gap:6px; max-width:560px}
+.budget .lab{display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.budget .tr{position:relative; height:10px; background:var(--surface2); border-radius:5px; overflow:visible}
+.budget .fl{height:100%; background:var(--grass); border-radius:5px; transition:width .3s}
+.budget .fl.over{background:var(--ember)}
+.budget .mark{position:absolute; top:-4px; width:2px; height:18px; background:var(--ink); transform:translateX(-1px)}
+.chapter[hidden]{display:none}
+.dest{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+@media (max-width:820px){.dest{grid-template-columns:1fr}}
+.dcard{display:grid; gap:14px; padding:28px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:inherit; text-decoration:none; align-content:start; transition:border-color .15s}
+.dcard:hover{border-color:var(--accent)}
+.dcard .tag{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.dcard h3{font-size:clamp(28px,3.6vw,40px)}
+.dcard .rt{font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1.6}
+.dcard p{color:var(--muted); font-size:17px}
+.dcard .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; border-top:1px solid var(--line); padding-top:14px}
+.dcard .kpis div{display:grid; gap:2px}
+.dcard .kpis b{font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-.01em}
+.dcard .kpis span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.dcard .go{font-family:var(--mono); font-size:13.5px; color:var(--ink); border-bottom:1px solid var(--accent); justify-self:start; padding-bottom:2px}
+@media (max-width:480px){.dcard .kpis{grid-template-columns:1fr}}
+table.cmpt td:first-child{font-family:var(--mono); font-size:13px; color:var(--muted); white-space:nowrap}
+table.cmpt td{vertical-align:top}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <canvas id="sky" aria-hidden="true" data-mode="fuji"></canvas>
+  <div class="wrap inner">
+    <p class="eyebrow" style="color:var(--ink);opacity:.8"><a href="../" style="color:inherit;text-decoration:none">← Estate 2027</a> · famiglia di sei · luglio – agosto 2027</p>
+    <h1 style="font-size:clamp(50px,9.5vw,128px)">Cina e Giappone <em>2027</em></h1>
+    <p class="sub" id="f-sub">Ventuno giorni in due paesi: Pechino e la Grande Muraglia, i guerrieri di Xi'an, i panda di Chengdu, Shanghai, poi Tokyo, l'alba in cima al Fuji, le Alpi giapponesi e Kyoto.</p>
+    <div class="facts">
+      <div><span class="eyebrow">Partenza</span><b>22 luglio 2027</b></div>
+      <div><span class="eyebrow">Rientro</span><b>12 agosto 2027</b></div>
+      <div><span class="eyebrow">Notti</span><b>20</b></div>
+      <div><span class="eyebrow">Budget</span><b>≤ €25.000 in sei</b></div>
+      <div><span class="eyebrow">Mancano</span><b id="dleft" class="num">—</b></div>
+    </div>
+  </div>
+</header>
+
+<nav class="chap" aria-label="Capitoli"><div class="wrap"><ul>
+  <li><a href="#percorso">Percorso</a></li>
+  <li><a href="#tappe">Tappe</a></li>
+  <li><a href="#giorni">Giorno per giorno</a></li>
+  <li><a href="#costi">Costi</a></li>
+  <li><a href="#tempi">Quando prenotare</a></li>
+  <li><a href="#pratico">Pratico</a></li>
+  <li><a href="#checklist">Checklist</a></li>
+  <li><a href="../safari/">↔ Safari</a></li>
+  <li><a href="../peru/">↔ Perù</a></li>
+</ul></div></nav>
+
+<main>
+<section class="block wrap" id="percorso">
+  <div class="sechead">
+    <p class="eyebrow">01 · Percorso</p>
+    <h2>Da Pechino a Kyoto, verso est</h2>
+    <p>Si entra da Pechino e si esce da Osaka, senza mai tornare indietro. In Cina ci si muove con i treni veloci, tra i due paesi con un volo di tre ore, in Giappone con treni e bus. Tocca una tappa per i dettagli.</p>
+  </div>
+  <div class="mapgrid">
+    <div class="mapbox">
+      <svg class="map" viewBox="0 0 840 560" role="img" aria-labelledby="mt">
+        <title id="mt">Mappa di Cina orientale e Giappone con le tappe del viaggio</title>
+        <rect class="sea" x="0" y="0" width="840" height="560"/>
+        <g id="countries"></g>
+        <text class="cn" x="150" y="390">CINA</text>
+        <text class="cn" x="590" y="96" style="font-size:20px">GIAPPONE</text>
+        <text class="cn" x="150" y="34" style="font-size:20px">MONGOLIA</text>
+        <text class="lbl" x="440" y="330">MAR CINESE</text>
+        <text class="lbl" x="440" y="348">ORIENTALE</text>
+        <text class="lbl" x="660" y="300">OCEANO</text>
+        <text class="lbl" x="660" y="318">PACIFICO</text>
+        <g id="routes"></g>
+        <g id="stops"></g>
+      </svg>
+      <div class="legend"><span><i class="t"></i>treno e bus</span><span><i class="f"></i>volo</span><span>Confini Natural Earth</span></div>
+    </div>
+    <div class="panel">
+      <div class="chips" id="chips" role="group" aria-label="Tappe"></div>
+      <article class="card" id="card" aria-live="polite"></article>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap" id="tappe" style="padding-bottom:0">
+  <div class="sechead">
+    <p class="eyebrow">02 · Tappe</p>
+    <h2>Sei capitoli, due paesi</h2>
+    <p>Dieci giorni di Cina e dieci di Giappone. Il percorso è pensato per agosto: le città al mattino presto e la sera, e a metà viaggio quattro giorni in quota, dove fa fresco. Le fasce di prezzo sono per camera doppia a notte; la fascia Essenziale è quella che sta nel budget.</p>
+  </div>
+  <div id="chapters"></div>
+</section>
+
+<section class="block wrap" id="giorni">
+  <div class="sechead">
+    <p class="eyebrow">03 · Giorno per giorno</p>
+    <h2>Ventuno giorni</h2>
+    <p>Le righe evidenziate sono giorni di spostamento. La regola di agosto in Asia: fuori alle sette, al chiuso dalle dodici alle quattro, di nuovo fuori la sera.</p>
+  </div>
+  <div class="log" id="log"></div>
+</section>
+
+<section class="block wrap" id="costi">
+  <div class="sechead">
+    <p class="eyebrow">04 · Costi</p>
+    <h2>Come si sta nei 25.000</h2>
+    <p>Regola i parametri e il totale si aggiorna. La Cina costa poco a terra, il Giappone il doppio; le voci che muovono il totale sono i voli in alta stagione e gli alberghi giapponesi.</p>
+  </div>
+  <div class="calc">
+    <form class="controls" id="form" onsubmit="return false">
+      <div class="ctl"><span class="lab">Livello</span>
+        <div class="seg" role="radiogroup" aria-label="Livello">
+          <input type="radio" name="tier" id="t0" value="essenziale" checked><label for="t0">Essenziale</label>
+          <input type="radio" name="tier" id="t1" value="comfort"><label for="t1">Comfort</label>
+          <input type="radio" name="tier" id="t2" value="premium"><label for="t2">Premium</label>
+        </div></div>
+      <div class="ctl"><label for="adults">Adulti (18+)</label>
+        <div class="stepper"><button type="button" data-step="adults" data-d="-1" aria-label="Meno adulti">−</button><output id="adults">4</output><button type="button" data-step="adults" data-d="1" aria-label="Più adulti">+</button></div></div>
+      <div class="ctl"><label for="kids">Under 18</label>
+        <div class="stepper"><button type="button" data-step="kids" data-d="-1" aria-label="Meno ragazzi">−</button><output id="kids">2</output><button type="button" data-step="kids" data-d="1" aria-label="Più ragazzi">+</button></div></div>
+      <label class="switch"><span>Chengdu e i panda, 2 notti</span><input type="checkbox" id="chengdu" checked></label>
+      <label class="switch"><span>Salita al Fuji con notte in rifugio</span><input type="checkbox" id="fuji" checked></label>
+    </form>
+    <div class="result">
+      <div class="hero-num">
+        <span class="eyebrow">Totale stimato per il gruppo</span>
+        <span class="big num" id="total">—</span>
+        <span class="pp num" id="pp">—</span>
+      </div>
+      <div class="budget">
+        <div class="lab"><span id="b-lab">Budget €25.000</span><span id="b-left"></span></div>
+        <div class="tr"><div class="fl" id="b-fl"></div><i class="mark" style="left:100%"></i></div>
+      </div>
+      <div class="bars" id="bars" role="img" aria-label="Ripartizione dei costi per voce"></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Voce</th><th class="r">Adulto</th><th class="r">Under 18</th><th class="r">Gruppo</th></tr></thead>
+        <tbody id="rows"></tbody>
+        <tfoot><tr><td>Totale</td><td class="r" id="ta"></td><td class="r" id="tk"></td><td class="r" id="tg"></td></tr></tfoot>
+      </table></div>
+      <details><summary>Come sono calcolate le stime</summary>
+        <p>Sono stime, non preventivi. Voli: andata Málaga – Madrid – Pechino, ritorno Osaka – Málaga con uno scalo, in alta stagione e prenotati con 8 mesi di anticipo. Voli in Asia: Shanghai–Tokyo €180 e Chengdu–Shanghai €120. Treni veloci cinesi in seconda classe: Pechino–Xi'an €70, Xi'an–Chengdu €35; senza Chengdu, Xi'an–Shanghai €90. Alberghi in tre camere: in Cina €65 a camera in Essenziale, in Giappone €120 (business hotel e un ryokan semplice). Fuji: rifugio con cena e colazione, tassa di accesso e bus, €130 a persona. Trasporti in Giappone senza Japan Rail Pass, che su questo percorso non conviene. Pasti: €20 al giorno a persona in Cina, €35 in Giappone. Assicurazione, eSIM e varie €120 a persona.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap" id="tempi">
+  <div class="sechead">
+    <p class="eyebrow">05 · Quando prenotare</p>
+    <h2>Le scadenze che contano</h2>
+    <p>Va detto chiaro: fine luglio e inizio agosto sono il periodo più caldo e umido dell'anno in entrambi i paesi, ed è stagione di tifoni. Si fa, con il ritmo giusto, ma primavera e autunno sono un'altra cosa. In cambio: stagione del Fuji, feste d'estate, e si riparte prima dell'Obon, la settimana in cui tutto il Giappone viaggia.</p>
+  </div>
+  <div class="timegrid">
+    <div style="display:grid;gap:28px">
+      <div class="count" id="count"></div>
+      <div class="migr">
+        <span class="eyebrow">Clima tra Pechino e Kyoto, mese per mese</span>
+        <div class="months" id="months"></div>
+        <div class="key"><span>Mite, il periodo migliore</span><span>Mezza stagione o freddo secco</span><span>Caldo umido, piogge, tifoni</span><span>Riquadro: le vostre date</span></div>
+      </div>
+    </div>
+    <div class="miles" id="miles"></div>
+  </div>
+</section>
+
+<section class="block wrap" id="pratico">
+  <div class="sechead">
+    <p class="eyebrow">06 · Pratico</p>
+    <h2>Da sapere prima di partire</h2>
+  </div>
+  <div class="prac">
+    <article><h4>Documenti</h4><ul><li>Cina: i passaporti italiani entrano senza visto per 30 giorni, ma l'esenzione è confermata solo fino al 31 dicembre 2026. Per il 2027 va verificata; altrimenti serve il visto turistico</li><li>Giappone: nessun visto, 90 giorni con il passaporto</li><li>Passaporto valido almeno 6 mesi; serve anche per comprare i treni cinesi</li></ul></article>
+    <article><h4>Caldo e tifoni</h4><ul><li>32–36 °C con umidità alta in tutte le città: visite all'alba, musei e pranzo lungo nelle ore centrali</li><li>Un tifone può fermare treni e voli per un giorno: tenere un giorno elastico a Tokyo e a Kyoto</li><li>Assicurazione che copra ritardi e cancellazioni per maltempo</li><li>In cima al Fuji all'alba ci sono 3–5 °C: serve il piumino</li></ul></article>
+    <article><h4>Clima a fine luglio</h4><div class="climate">
+      <div><span>Pechino</span><span>23–32 °C</span><span>afa, temporali</span></div>
+      <div><span>Xi'an</span><span>24–34 °C</span><span>caldo secco</span></div>
+      <div><span>Shanghai</span><span>27–35 °C</span><span>molto umido</span></div>
+      <div><span>Tokyo</span><span>25–33 °C</span><span>umido</span></div>
+      <div><span>Kamikochi</span><span>12–23 °C</span><span>fresco, 1.500 m</span></div>
+      <div><span>Kyoto</span><span>26–35 °C</span><span>la più calda</span></div>
+    </div></article>
+    <article><h4>Telefono e pagamenti</h4><ul><li>In Cina Google, WhatsApp e Instagram sono bloccati: una eSIM internazionale in roaming li fa funzionare</li><li>In Cina si paga tutto con Alipay o WeChat Pay, collegati a una carta europea prima di partire</li><li>In Giappone carte quasi ovunque, contanti per templi e piccoli ristoranti; carta Suica sul telefono per metro e treni</li></ul></article>
+    <article><h4>Treni e bagagli</h4><ul><li>Treni cinesi: vendita 15 giorni prima su 12306 o Trip.com; ad agosto si esauriscono in poche ore</li><li>Giappone: niente Japan Rail Pass, biglietti singoli costano meno su questo percorso</li><li>Una valigia media a testa: stazioni enormi e molti cambi</li><li>In Giappone il takkyubin spedisce le valigie all'albergo successivo per circa €15</li></ul></article>
+    <article><h4>Sei parole</h4><div class="sw">
+      <div><b>Nǐ hǎo</b><span>ciao, in cinese</span></div>
+      <div><b>Xièxie</b><span>grazie</span></div>
+      <div><b>Bú là</b><span>non piccante</span></div>
+      <div><b>Konnichiwa</b><span>buongiorno, in giapponese</span></div>
+      <div><b>Arigatō</b><span>grazie</span></div>
+      <div><b>Sumimasen</b><span>scusi, permesso</span></div>
+    </div></article>
+  </div>
+</section>
+
+<section class="block wrap" id="checklist">
+  <div class="sechead">
+    <p class="eyebrow">07 · Checklist</p>
+    <h2>Cosa mettere in valigia</h2>
+    <p>Le spunte restano salvate su questo dispositivo.</p>
+  </div>
+  <div class="progress"><div class="lab"><span id="plab">0 di 0</span><span id="ppct">0%</span></div><div class="tr"><div class="fl" id="pfl" style="width:0"></div></div></div>
+  <div class="check" id="check"></div>
+</section>
+</main>
+
+<footer class="wrap">
+  <p>Cifre indicative in euro, da confermare con preventivi reali per il 2027. Confini da Natural Earth 1:110m.</p>
+  <ul>
+    <li><a href="https://www.fujisan-climb.jp/en/">Sito ufficiale per la salita al Fuji</a></li>
+    <li><a href="https://www.12306.cn/en/index.html">12306, ferrovie cinesi</a></li>
+    <li><a href="https://www.japan.travel/en/">Ente del turismo giapponese</a></li>
+  </ul>
+</footer>
+
+<script>
+const COUNTRIES = {"Russia":"M-1057.1 -36.1 L-1076.5 -32.8 L-1096.4 -12.2 L-1078.2 6.8 L-1080.1 20.3 L-1058.3 43.8 L-1058.3 43.8 L-1070.3 51.9 L-1073.7 57.0 L-1082.5 55.6 L-1096.3 43.5 L-1101.9 42.8 L-1114.5 38.2 L-1120.6 29.9 L-1139.2 25.8 L-1151.4 28.9 L-1154.9 25.2 L-1182.1 15.6 L-1211.6 12.4 L-1228.5 8.9 L-1230.9 11.3 L-1256.4 -5.6 L-1279.2 -13.1 L-1296.5 -24.9 L-1281.9 -28.1 L-1265.3 -44.8 L-1276.5 -52.7 L-1247.0 -60.9 L-1247.6 -65.3 L-1265.5 -62.0 L-1264.9 -70.9 L-1254.6 -76.5 L-1235.2 -78.0 L-1232.1 -84.6 L-1236.5 -95.7 L-1228.4 -106.1 L-1228.6 -112.0 L-1258.1 -118.5 L-1269.8 -118.3 L-1282.1 -127.7 L-1297.5 -124.5 L-1322.9 -131.5 L-1322.4 -135.5 L-1329.6 -144.2 L-1345.5 -145.1 L-1347.2 -151.3 L-1342.2 -155.4 L-1354.9 -166.7 L-1375.7 -164.8 L-1381.8 -165.8 L-1386.8 -161.2 L-1394.3 -162.0 L-1394.3 -162.0 L-1399.2 -174.8 L-1403.9 -181.5 L-1400.0 -183.3 L-1383.9 -182.7 L-1376.1 -187.0 L-1381.9 -192.4 L-1395.4 -195.9 L-1394.2 -199.5 L-1402.3 -203.1 L-1414.8 -216.2 L-1410.6 -221.6 L-1412.5 -231.0 L-1432.1 -235.8 L-1442.6 -233.4 L-1445.4 -238.4 L-1466.5 -243.4 L-1472.9 -255.2 L-1474.6 -264.9 L-1484.2 -269.5 L-1475.7 -275.8 L-1481.6 -294.5 L-1467.4 -306.0 L-1470.4 -309.5 L-1470.4 -309.5 L-1447.6 -320.6 L-1468.6 -330.1 L-1468.6 -330.1 L-1425.8 -355.6 L-1407.2 -367.2 L-1399.7 -377.4 L-1429.3 -391.1 L-1421.1 -404.1 L-1439.1 -419.0 L-1425.6 -436.1 L-1448.9 -458.9 L-1430.5 -474.0 L-1461.1 -487.3 L-1458.2 -501.3 L-1442.0 -503.1 L-1408.0 -511.2 L-1408.0 -511.2 L-1387.3 -518.1 L-1354.5 -506.0 L-1299.7 -501.3 L-1224.2 -478.6 L-1208.8 -469.1 L-1207.5 -455.8 L-1229.7 -445.3 L-1262.3 -440.0 L-1351.6 -455.2 L-1366.3 -452.7 L-1333.7 -438.0 L-1332.4 -428.7 L-1331.1 -408.3 L-1305.4 -402.2 L-1289.7 -397.0 L-1287.2 -406.7 L-1299.2 -415.3 L-1286.5 -422.9 L-1238.1 -410.4 L-1221.3 -415.3 L-1234.7 -429.9 L-1188.1 -449.5 L-1169.7 -448.4 L-1151.0 -441.4 L-1139.4 -455.1 L-1156.0 -467.0 L-1146.2 -479.0 L-1160.9 -491.4 L-1105.0 -485.0 L-1093.6 -473.8 L-1118.9 -471.3 L-1118.8 -460.2 L-1103.0 -453.4 L-1072.1 -457.7 L-1067.2 -470.4 L-1025.4 -480.0 L-955.7 -497.1 L-940.6 -496.2 L-960.3 -484.0 L-935.5 -481.9 L-921.1 -488.8 L-883.7 -489.3 L-854.0 -497.6 L-831.2 -485.6 L-808.4 -498.8 L-829.4 -510.4 L-819.0 -517.0 L-759.9 -510.9 L-732.2 -504.7 L-659.8 -481.8 L-646.4 -492.3 L-666.7 -502.9 L-667.3 -507.1 L-691.4 -509.1 L-684.8 -518.6 L-695.5 -534.2 L-696.1 -540.6 L-659.2 -558.7 L-646.1 -576.9 L-631.2 -580.8 L-578.2 -575.5 L-574.1 -564.4 L-593.0 -548.2 L-580.6 -541.8 L-574.2 -527.8 L-578.7 -500.4 L-556.6 -488.2 L-565.2 -474.8 L-604.4 -446.4 L-581.5 -443.5 L-573.6 -450.7 L-551.6 -455.8 L-546.3 -465.7 L-529.0 -475.2 L-540.6 -486.6 L-531.3 -499.8 L-553.2 -501.4 L-558.0 -512.6 L-542.0 -532.6 L-568.0 -548.9 L-532.2 -562.4 L-536.8 -576.6 L-526.8 -577.1 L-516.3 -566.0 L-524.2 -546.7 L-502.8 -543.1 L-511.9 -557.5 L-478.5 -565.3 L-437.0 -566.4 L-400.0 -555.0 L-417.8 -571.7 L-419.8 -593.0 L-385.0 -597.0 L-336.9 -596.1 L-293.6 -598.7 L-309.8 -609.2 L-286.7 -622.3 L-263.7 -622.9 L-224.8 -632.8 L-172.0 -635.5 L-165.3 -640.9 L-112.8 -642.8 L-96.4 -638.3 L-51.5 -648.9 L-14.8 -648.6 L-9.3 -657.2 L9.8 -665.8 L57.0 -674.0 L91.3 -667.5 L64.1 -662.5 L109.4 -659.5 L114.8 -649.6 L133.1 -654.5 L191.5 -654.2 L236.6 -644.4 L252.7 -637.0 L247.7 -626.6 L225.6 -620.6 L173.0 -609.5 L158.0 -603.6 L182.8 -600.8 L212.4 -595.8 L230.4 -599.5 L240.6 -586.7 L249.4 -591.9 L281.4 -595.1 L345.5 -591.8 L350.4 -582.4 L434.0 -579.4 L435.2 -594.7 L477.6 -591.2 L509.5 -591.3 L541.8 -580.8 L551.0 -568.0 L539.2 -559.6 L564.3 -543.9 L595.8 -535.7 L615.1 -556.7 L647.2 -547.7 L681.2 -553.1 L720.0 -547.0 L734.7 -552.6 L767.4 -549.8 L753.0 -568.3 L779.4 -577.0 L960.0 -564.0 L977.0 -552.1 L1029.4 -536.8 L1110.1 -540.6 L1150.0 -537.3 L1166.6 -529.1 L1164.2 -514.4 L1188.8 -508.7 L1215.6 -512.8 L1251.0 -513.4 L1288.8 -509.4 L1326.7 -511.7 L1361.6 -493.9 L1386.3 -500.3 L1370.2 -513.1 L1379.1 -521.9 L1442.9 -516.3 L1484.5 -517.5 L1542.0 -508.0 L1570.0 -499.3 L1570.0 -419.6 L1569.9 -419.5 L1544.1 -410.7 L1518.2 -412.2 L1536.3 -401.5 L1548.2 -385.0 L1557.4 -379.7 L1559.7 -371.4 L1554.6 -366.1 L1517.3 -370.4 L1461.4 -355.4 L1443.6 -353.1 L1413.0 -339.0 L1384.0 -326.7 L1376.6 -317.6 L1348.0 -331.5 L1295.9 -315.8 L1286.8 -323.2 L1267.5 -314.6 L1240.8 -317.4 L1234.3 -304.2 L1210.3 -284.9 L1211.1 -276.8 L1233.8 -272.3 L1231.2 -243.2 L1212.6 -242.4 L1204.0 -225.7 L1212.3 -217.1 L1177.4 -206.9 L1170.4 -184.1 L1140.6 -179.2 L1134.6 -158.9 L1105.8 -140.2 L1098.4 -154.0 L1089.8 -183.2 L1078.7 -227.6 L1088.3 -255.4 L1105.2 -267.3 L1106.2 -276.6 L1137.3 -281.1 L1173.0 -306.3 L1207.4 -326.9 L1243.4 -342.8 L1259.5 -371.0 L1235.2 -369.3 L1223.2 -352.9 L1172.4 -330.9 L1156.0 -355.5 L1104.4 -348.7 L1054.4 -315.2 L1070.9 -302.9 L1026.2 -297.7 L995.3 -295.6 L996.8 -310.1 L965.7 -313.1 L940.9 -303.3 L879.7 -306.7 L814.0 -300.8 L749.2 -261.8 L672.5 -214.6 L704.0 -212.1 L713.9 -199.5 L733.3 -195.1 L746.1 -205.1 L768.0 -203.8 L796.9 -181.8 L797.6 -164.8 L781.9 -144.8 L780.3 -120.9 L771.2 -88.9 L741.1 -60.0 L734.4 -46.2 L707.2 -22.9 L680.3 0.2 L667.4 12.0 L640.7 23.8 L628.1 24.0 L615.6 14.3 L588.7 28.9 L585.6 35.6 L585.6 35.6 L585.6 35.6 L585.6 35.6 L582.8 32.1 L582.8 32.1 L582.7 21.9 L592.9 21.4 L595.8 -2.2 L590.5 -19.4 L607.7 -26.4 L631.9 -22.9 L645.4 -42.3 L652.2 -64.2 L660.0 -71.6 L670.5 -89.6 L637.5 -83.7 L620.1 -75.8 L589.7 -75.8 L581.6 -94.6 L558.0 -108.8 L523.1 -115.2 L515.7 -134.8 L508.8 -147.1 L501.3 -155.7 L488.9 -175.9 L471.4 -183.2 L441.4 -189.2 L414.9 -188.6 L390.1 -185.0 L373.5 -175.1 L384.5 -170.3 L384.8 -159.3 L373.6 -152.9 L355.6 -131.7 L355.8 -122.9 L327.6 -110.2 L303.6 -117.8 L279.7 -116.1 L269.2 -122.8 L257.2 -125.0 L228.0 -110.9 L201.6 -107.6 L183.2 -102.6 L158.0 -105.9 L139.5 -105.7 L127.4 -115.9 L107.8 -125.5 L87.7 -128.1 L62.4 -125.5 L43.5 -121.8 L15.1 -130.2 L11.3 -145.2 L-12.2 -150.3 L-30.4 -152.7 L-52.8 -160.9 L-73.5 -140.2 L-65.4 -128.4 L-84.8 -114.5 L-113.7 -119.5 L-133.7 -120.3 L-147.0 -129.6 L-167.9 -129.9 L-185.3 -136.0 L-215.7 -126.6 L-253.9 -109.4 L-275.0 -105.9 L-282.8 -104.3 L-293.4 -116.5 L-319.2 -113.9 L-327.7 -122.3 L-341.7 -126.2 L-351.3 -137.8 L-362.3 -141.4 L-391.1 -136.2 L-418.6 -147.8 L-429.3 -137.3 L-474.0 -188.1 L-499.5 -203.5 L-492.2 -209.8 L-542.3 -190.9 L-561.5 -189.8 L-559.8 -200.7 L-585.5 -207.5 L-606.4 -202.7 L-612.7 -223.4 L-648.6 -227.7 L-666.6 -219.4 L-716.7 -212.0 L-726.4 -207.1 L-801.3 -200.1 L-810.4 -193.3 L-796.0 -179.6 L-815.2 -174.4 L-811.5 -169.0 L-830.6 -159.2 L-798.2 -145.5 L-803.3 -136.0 L-831.3 -136.8 L-837.2 -130.9 L-862.7 -141.3 L-894.4 -140.9 L-915.7 -132.4 L-939.3 -140.5 L-983.4 -154.4 L-1014.7 -153.9 L-1056.0 -132.1 L-1058.4 -117.5 L-1079.0 -129.1 L-1095.0 -107.1 L-1089.1 -103.0 L-1100.7 -87.9 L-1083.7 -74.3 L-1068.9 -74.9 L-1056.1 -61.5 L-1058.1 -51.2 L-1048.0 -48.0 L-1057.1 -36.1 ZM-111.2 -745.0 L-72.3 -734.9 L-26.3 -715.6 L-31.2 -697.6 L-74.8 -695.1 L-130.5 -700.9 L-163.7 -708.5 L-179.1 -722.9 L-206.4 -726.8 L-154.4 -740.5 L-111.2 -745.0 ZM77.4 -694.3 L71.5 -686.1 L-41.2 -678.4 L-4.7 -704.7 L11.7 -706.9 L26.8 -705.6 L77.4 -694.3 ZM799.4 -641.9 L871.7 -631.3 L856.0 -616.4 L782.3 -617.0 L749.1 -612.2 L709.5 -625.2 L720.2 -639.0 L746.6 -642.7 L799.4 -641.9 ZM984.6 -621.7 L961.5 -613.8 L929.5 -615.6 L892.4 -623.5 L897.2 -629.9 L934.4 -626.9 L984.6 -621.7 ZM786.2 -595.3 L811.2 -597.2 L839.7 -589.5 L842.1 -584.2 L811.8 -584.1 L770.8 -586.3 L767.3 -587.4 L786.2 -595.3 ZM835.2 -174.8 L834.7 -155.1 L843.0 -135.0 L863.1 -99.5 L833.5 -106.1 L821.2 -77.2 L840.7 -56.7 L840.1 -42.8 L825.0 -54.8 L811.8 -39.3 L808.1 -56.1 L810.4 -75.6 L808.1 -97.2 L812.7 -112.3 L813.6 -139.0 L801.9 -158.7 L803.7 -186.0 L822.1 -195.2 L814.2 -204.5 L823.1 -207.3 L828.3 -194.1 L835.2 -174.8 Z","Cambodia":"M21.7 636.3 L17.0 612.1 L29.8 595.5 L55.6 591.7 L74.4 594.5 L90.9 602.4 L99.9 588.6 L117.7 596.0 L122.3 609.3 L119.8 633.3 L86.2 648.6 L95.0 660.8 L74.0 662.2 L56.7 670.3 L39.9 667.3 L31.8 656.9 L21.7 636.3 Z","Thailand":"M74.4 594.5 L55.6 591.7 L29.8 595.5 L17.0 612.1 L21.7 636.3 L3.7 627.1 L-13.4 627.5 L-10.4 611.7 L-28.0 611.9 L-29.6 633.9 L-40.4 663.1 L-46.9 680.7 L-45.6 695.2 L-32.5 695.8 L-24.4 714.1 L-20.8 731.4 L-9.7 742.9 L2.5 745.2 L12.8 755.6 L6.3 763.8 L-6.9 766.2 L-8.5 755.9 L-24.8 747.1 L-28.3 750.7 L-36.2 743.0 L-39.6 733.1 L-50.2 721.8 L-59.9 712.4 L-63.2 724.1 L-67.0 713.0 L-64.8 700.5 L-58.9 681.3 L-49.2 660.8 L-38.3 642.1 L-46.1 623.9 L-45.8 614.6 L-48.0 603.4 L-61.4 587.6 L-66.2 577.5 L-59.3 573.8 L-51.9 556.4 L-60.1 543.2 L-72.8 528.6 L-82.5 511.1 L-74.0 507.5 L-64.9 485.8 L-50.8 484.9 L-39.1 476.3 L-27.7 471.6 L-19.0 477.8 L-17.9 489.8 L-4.4 490.7 L-9.3 511.8 L-8.8 529.8 L12.3 517.8 L18.3 521.3 L30.0 520.8 L34.0 513.8 L49.1 515.2 L64.3 531.4 L65.6 551.2 L81.8 568.6 L80.9 585.5 L74.4 594.5 Z","Laos":"M117.7 596.0 L99.9 588.6 L90.9 602.4 L74.4 594.5 L80.9 585.5 L81.8 568.6 L65.6 551.2 L64.3 531.4 L49.1 515.2 L34.0 513.8 L30.0 520.8 L18.3 521.3 L12.3 517.8 L-8.8 529.8 L-9.3 511.8 L-4.4 490.7 L-17.9 489.8 L-19.0 477.8 L-27.7 471.6 L-23.4 464.3 L-6.4 451.3 L-4.6 456.0 L6.1 456.5 L3.0 433.6 L13.4 430.7 L25.1 446.5 L34.1 464.7 L58.7 464.8 L66.5 482.3 L53.7 487.5 L47.9 494.7 L71.9 506.7 L88.5 530.3 L101.1 547.9 L116.3 561.8 L121.3 576.0 L117.7 596.0 Z","Myanmar":"M-27.7 471.6 L-39.1 476.3 L-50.8 484.9 L-64.9 485.8 L-74.0 507.5 L-82.5 511.1 L-72.8 528.6 L-60.1 543.2 L-51.9 556.4 L-59.3 573.8 L-66.2 577.5 L-61.4 587.6 L-48.0 603.4 L-45.8 614.6 L-46.1 623.9 L-38.3 642.1 L-49.2 660.8 L-58.9 681.3 L-60.9 666.5 L-54.7 651.2 L-61.4 639.3 L-59.8 617.6 L-67.9 607.2 L-74.4 583.3 L-78.1 558.0 L-86.7 541.4 L-99.9 551.5 L-122.6 565.7 L-133.8 563.9 L-146.2 559.2 L-139.3 534.5 L-143.5 515.7 L-159.2 492.7 L-156.7 485.5 L-168.4 482.9 L-182.6 466.6 L-183.9 450.5 L-177.0 453.5 L-176.5 439.2 L-166.7 434.4 L-168.8 425.9 L-164.3 419.1 L-163.5 398.4 L-147.9 403.0 L-138.9 386.5 L-137.9 376.8 L-126.9 360.0 L-127.5 348.5 L-101.6 334.7 L-87.3 338.3 L-89.0 326.0 L-81.9 322.3 L-83.5 314.8 L-71.8 313.3 L-65.1 325.1 L-56.3 329.8 L-55.8 345.1 L-56.6 361.6 L-75.5 378.3 L-77.9 402.1 L-56.8 398.7 L-52.0 417.1 L-39.4 421.0 L-45.2 437.6 L-30.3 445.1 L-21.7 448.8 L-7.0 443.0 L-6.4 451.3 L-23.4 464.3 L-27.7 471.6 Z","Vietnam":"M56.7 670.3 L74.0 662.2 L95.0 660.8 L86.2 648.6 L119.8 633.3 L122.3 609.3 L117.7 596.0 L121.3 576.0 L116.3 561.8 L101.1 547.9 L88.5 530.3 L71.9 506.7 L47.9 494.7 L53.7 487.5 L66.5 482.3 L58.7 464.8 L34.1 464.7 L25.1 446.5 L13.4 430.7 L24.1 425.8 L40.1 425.9 L59.5 423.6 L76.6 413.0 L86.2 420.5 L104.5 424.1 L101.3 435.6 L110.9 443.8 L131.0 449.0 L104.3 466.1 L87.6 485.0 L83.2 498.8 L98.5 519.9 L117.2 546.1 L135.4 558.4 L147.5 574.5 L156.7 611.5 L154.0 646.7 L137.3 659.8 L114.4 672.7 L98.1 689.4 L73.2 708.0 L65.9 695.2 L71.5 681.6 L56.7 670.3 Z","North Korea":"M585.6 35.6 L585.6 35.6 L585.6 35.6 L585.6 35.6 ZM582.8 32.1 L582.8 32.1 L585.6 35.6 L578.0 34.4 L569.3 41.2 L563.3 48.0 L564.1 62.3 L553.8 66.8 L550.2 70.3 L542.7 76.2 L529.3 79.5 L520.7 84.9 L520.0 93.5 L517.7 95.7 L525.7 99.0 L537.0 107.8 L534.1 112.6 L525.6 113.9 L511.5 114.9 L503.7 123.9 L494.7 123.2 L493.5 125.0 L483.8 121.2 L481.4 125.0 L475.5 126.6 L474.8 122.9 L469.6 121.0 L464.2 117.8 L469.7 109.0 L474.4 106.7 L472.7 103.0 L477.7 92.2 L476.4 89.0 L464.7 86.8 L455.3 81.4 L471.6 68.6 L493.6 57.9 L507.4 43.7 L516.9 49.9 L534.2 50.7 L531.0 40.1 L561.9 31.5 L569.9 20.3 L582.8 32.1 Z","South Korea":"M493.5 125.0 L494.7 123.2 L503.7 123.9 L511.5 114.9 L525.6 113.9 L534.1 112.6 L537.0 107.8 L554.3 131.4 L559.2 144.3 L559.4 167.4 L551.8 178.4 L533.7 182.2 L517.7 190.5 L499.7 192.2 L497.5 181.3 L501.2 166.3 L492.3 145.5 L507.2 142.1 L493.5 125.0 Z","Mongolia":"M-275.0 -105.9 L-253.9 -109.4 L-215.7 -126.6 L-185.3 -136.0 L-167.9 -129.9 L-147.0 -129.6 L-133.7 -120.3 L-113.7 -119.5 L-84.8 -114.5 L-65.4 -128.4 L-73.5 -140.2 L-52.8 -160.9 L-30.4 -152.7 L-12.2 -150.3 L11.3 -145.2 L15.1 -130.2 L43.5 -121.8 L62.4 -125.5 L87.7 -128.1 L107.8 -125.5 L127.4 -115.9 L139.5 -105.7 L158.0 -105.9 L183.2 -102.6 L201.6 -107.6 L228.0 -110.9 L257.2 -125.0 L269.2 -122.8 L279.7 -116.1 L303.6 -117.8 L293.8 -102.7 L279.7 -82.7 L284.9 -74.5 L296.2 -77.1 L315.9 -74.0 L331.3 -81.3 L347.3 -74.9 L365.5 -61.0 L363.3 -53.9 L347.5 -56.1 L318.4 -53.5 L304.4 -47.8 L289.7 -34.5 L259.2 -26.8 L239.3 -16.2 L218.7 -20.2 L207.5 -22.0 L197.0 -9.1 L203.4 -1.5 L206.6 5.1 L192.6 11.9 L178.2 22.6 L154.9 29.6 L124.9 30.4 L92.6 37.3 L69.3 48.1 L60.4 41.8 L36.2 41.9 L6.7 29.7 L-13.1 26.7 L-39.7 29.5 L-81.0 25.0 L-103.0 25.5 L-114.8 13.6 L-123.9 -4.8 L-136.2 -7.0 L-160.4 -19.5 L-187.3 -22.3 L-211.1 -25.7 L-218.3 -34.4 L-210.6 -57.8 L-224.4 -73.9 L-252.9 -81.4 L-269.7 -92.0 L-275.0 -105.9 Z","India":"M-83.5 314.8 L-81.9 322.3 L-89.0 326.0 L-87.3 338.3 L-101.6 334.7 L-127.5 348.5 L-126.9 360.0 L-137.9 376.8 L-138.9 386.5 L-147.9 403.0 L-163.5 398.4 L-164.3 419.1 L-168.8 425.9 L-166.7 434.4 L-176.5 439.2 L-187.1 407.5 L-192.6 407.5 L-195.9 420.3 L-206.8 409.9 L-200.6 398.5 L-191.7 397.4 L-182.5 380.5 L-194.0 377.1 L-212.6 377.3 L-231.6 374.6 L-233.4 360.7 L-242.9 359.7 L-258.7 351.1 L-265.8 364.6 L-251.4 375.2 L-263.9 382.7 L-268.3 390.0 L-256.0 395.3 L-259.4 407.4 L-252.5 422.4 L-249.4 438.9 L-252.2 446.2 L-265.8 445.9 L-290.5 450.1 L-289.3 465.1 L-300.0 477.0 L-328.8 490.4 L-351.2 514.0 L-366.2 526.6 L-386.1 539.7 L-386.2 548.9 L-396.1 553.8 L-414.2 561.0 L-423.5 562.0 L-429.5 577.3 L-425.3 603.3 L-424.3 619.9 L-432.7 638.9 L-432.8 672.9 L-443.2 673.8 L-452.3 689.1 L-446.2 695.7 L-464.4 701.3 L-471.2 714.9 L-479.2 720.7 L-498.1 702.0 L-507.4 674.0 L-515.1 653.8 L-522.1 644.4 L-532.7 625.2 L-537.7 600.1 L-541.1 587.7 L-559.3 560.2 L-567.6 521.4 L-573.6 495.8 L-573.5 471.6 L-577.4 452.9 L-606.5 464.9 L-620.6 462.5 L-646.7 438.2 L-637.1 431.0 L-643.0 423.1 L-666.5 406.2 L-653.1 392.8 L-609.1 392.9 L-613.1 375.7 L-624.3 365.6 L-626.6 350.2 L-639.7 341.2 L-617.7 320.2 L-594.4 321.7 L-573.5 300.8 L-561.0 280.5 L-541.6 260.4 L-541.9 246.1 L-524.8 234.6 L-541.0 224.7 L-547.9 211.2 L-555.0 193.6 L-545.2 185.0 L-514.9 189.9 L-492.6 186.9 L-473.3 170.1 L-451.8 193.6 L-453.8 209.9 L-445.8 220.1 L-446.5 230.3 L-460.8 227.6 L-455.2 249.7 L-435.6 262.3 L-407.8 276.3 L-420.5 285.4 L-428.2 304.1 L-408.9 311.7 L-390.0 321.5 L-363.9 332.7 L-336.5 335.3 L-325.0 345.5 L-309.5 347.4 L-285.5 352.0 L-268.8 351.7 L-266.5 343.8 L-269.1 331.1 L-267.6 322.5 L-255.4 318.3 L-253.7 334.0 L-253.3 338.0 L-235.1 345.6 L-222.5 342.5 L-205.6 343.8 L-189.3 343.2 L-187.9 330.9 L-196.1 324.6 L-179.9 322.1 L-161.7 307.2 L-138.7 294.5 L-121.9 299.4 L-107.6 290.9 L-98.3 303.4 L-105.0 311.8 L-83.5 314.8 Z","Bangladesh":"M-176.5 439.2 L-177.0 453.5 L-183.9 450.5 L-182.6 466.6 L-188.3 456.2 L-189.5 446.0 L-193.3 436.3 L-201.7 424.7 L-220.1 423.9 L-218.3 432.1 L-224.5 443.3 L-233.1 439.2 L-236.0 442.9 L-241.6 440.7 L-249.4 438.9 L-252.5 422.4 L-259.4 407.4 L-256.0 395.3 L-268.3 390.0 L-263.9 382.7 L-251.4 375.2 L-265.8 364.6 L-258.7 351.1 L-242.9 359.7 L-233.4 360.7 L-231.6 374.6 L-212.6 377.3 L-194.0 377.1 L-182.5 380.5 L-191.7 397.4 L-200.6 398.5 L-206.8 409.9 L-195.9 420.3 L-192.6 407.5 L-187.1 407.5 L-176.5 439.2 Z","Bhutan":"M-196.1 324.6 L-187.9 330.9 L-189.3 343.2 L-205.6 343.8 L-222.5 342.5 L-235.1 345.6 L-253.3 338.0 L-253.7 334.0 L-240.5 319.1 L-229.7 314.1 L-215.4 318.7 L-204.8 319.2 L-196.1 324.6 Z","China":"M159.5 516.0 L143.1 509.8 L142.5 492.6 L152.4 483.6 L174.2 478.0 L185.7 478.4 L190.2 486.1 L181.4 494.9 L176.8 506.4 L159.5 516.0 ZM-424.8 33.0 L-426.4 21.6 L-412.7 16.4 L-430.7 -18.4 L-391.1 -26.3 L-380.8 -30.8 L-366.4 -66.6 L-326.7 -60.0 L-315.6 -69.1 L-314.6 -89.1 L-298.0 -91.0 L-282.8 -104.3 L-275.0 -105.9 L-269.7 -92.0 L-252.9 -81.4 L-224.4 -73.9 L-210.6 -57.8 L-218.3 -34.4 L-211.1 -25.7 L-187.3 -22.3 L-160.4 -19.5 L-136.2 -7.0 L-123.9 -4.8 L-114.8 13.6 L-103.0 25.5 L-81.0 25.0 L-39.7 29.5 L-13.1 26.7 L6.7 29.7 L36.2 41.9 L60.4 41.8 L69.3 48.1 L92.6 37.3 L124.9 30.4 L154.9 29.6 L178.2 22.6 L192.6 11.9 L206.6 5.1 L203.4 -1.5 L197.0 -9.1 L207.5 -22.0 L218.7 -20.2 L239.3 -16.2 L259.2 -26.8 L289.7 -34.5 L304.4 -47.8 L318.4 -53.5 L347.5 -56.1 L363.3 -53.9 L365.5 -61.0 L347.3 -74.9 L331.3 -81.3 L315.9 -74.0 L296.2 -77.1 L284.9 -74.5 L279.7 -82.7 L293.8 -102.7 L303.6 -117.8 L327.6 -110.2 L355.8 -122.9 L355.6 -131.7 L373.6 -152.9 L384.8 -159.3 L384.5 -170.3 L373.5 -175.1 L390.1 -185.0 L414.9 -188.6 L441.4 -189.2 L471.4 -183.2 L488.9 -175.9 L501.3 -155.7 L508.8 -147.1 L515.7 -134.8 L523.1 -115.2 L558.0 -108.8 L581.6 -94.6 L589.7 -75.8 L620.1 -75.8 L637.5 -83.7 L670.5 -89.6 L660.0 -71.6 L652.2 -64.2 L645.4 -42.3 L631.9 -22.9 L607.7 -26.4 L590.5 -19.4 L595.8 -2.2 L592.9 21.4 L582.7 21.9 L582.8 32.1 L569.9 20.3 L561.9 31.5 L531.0 40.1 L534.2 50.7 L516.9 49.9 L507.4 43.7 L493.6 57.9 L471.6 68.6 L455.3 81.4 L427.4 87.2 L412.6 96.6 L391.1 102.1 L401.7 92.8 L397.5 85.0 L413.4 71.6 L402.8 61.1 L385.4 68.1 L362.8 82.0 L350.5 95.0 L330.9 95.9 L320.7 105.2 L331.2 118.8 L347.6 122.1 L348.2 131.0 L364.1 136.9 L386.5 122.6 L404.2 130.4 L417.2 130.9 L420.4 141.4 L392.1 147.0 L382.7 157.8 L363.3 167.8 L353.0 181.8 L374.6 192.8 L382.4 212.5 L394.6 230.8 L408.2 246.2 L407.8 261.0 L395.3 266.5 L400.1 277.1 L411.8 283.3 L408.8 299.6 L403.7 315.5 L392.5 317.3 L377.9 338.9 L361.7 365.2 L343.1 389.1 L315.6 407.5 L287.8 424.3 L265.3 426.6 L253.1 435.5 L246.1 429.0 L234.8 439.0 L206.9 449.0 L185.7 452.1 L178.9 473.2 L167.8 474.4 L162.6 459.8 L167.3 452.1 L140.5 445.7 L131.0 449.0 L110.9 443.8 L101.3 435.6 L104.5 424.1 L86.2 420.5 L76.6 413.0 L59.5 423.6 L40.1 425.9 L24.1 425.8 L13.4 430.7 L3.0 433.6 L6.1 456.5 L-4.6 456.0 L-6.4 451.3 L-7.0 443.0 L-21.7 448.8 L-30.3 445.1 L-45.2 437.6 L-39.4 421.0 L-52.0 417.1 L-56.8 398.7 L-77.9 402.1 L-75.5 378.3 L-56.6 361.6 L-55.8 345.1 L-56.3 329.8 L-65.1 325.1 L-71.8 313.3 L-83.5 314.8 L-105.0 311.8 L-98.3 303.4 L-107.6 290.9 L-121.9 299.4 L-138.7 294.5 L-161.7 307.2 L-179.9 322.1 L-196.1 324.6 L-204.8 319.2 L-215.4 318.7 L-229.7 314.1 L-240.5 319.1 L-253.7 334.0 L-255.4 318.3 L-267.6 322.5 L-290.9 320.5 L-313.5 315.9 L-329.8 307.1 L-345.3 303.2 L-352.0 293.6 L-363.3 290.7 L-383.4 277.7 L-399.5 271.5 L-407.8 276.3 L-435.6 262.3 L-455.2 249.7 L-460.8 227.6 L-446.5 230.3 L-445.8 220.1 L-453.8 209.9 L-451.8 193.6 L-473.3 170.1 L-506.1 162.0 L-512.1 146.7 L-526.8 137.3 L-530.4 131.6 L-533.4 120.2 L-532.7 112.4 L-544.8 107.9 L-551.4 109.9 L-556.5 91.4 L-550.8 86.8 L-553.6 82.1 L-534.5 72.7 L-520.6 68.8 L-499.5 71.4 L-491.9 58.7 L-466.3 56.3 L-459.1 48.4 L-427.6 37.5 L-424.8 33.0 Z","Taiwan":"M405.6 392.1 L393.5 424.2 L384.9 440.6 L374.4 423.7 L372.1 408.9 L383.9 389.2 L399.9 374.1 L409.0 380.0 L405.6 392.1 Z","Philippines":"M386.7 625.9 L376.5 610.7 L393.6 611.4 L400.5 618.6 L395.2 635.9 L386.7 625.9 ZM421.7 680.4 L426.7 674.8 L428.9 662.4 L440.0 661.2 L436.8 674.7 L451.6 655.3 L449.6 674.4 L442.5 681.0 L436.2 693.6 L429.9 699.6 L417.6 685.7 L421.7 680.4 ZM497.5 711.7 L499.6 725.0 L500.7 736.2 L493.9 754.5 L486.6 734.1 L477.3 744.3 L483.7 759.0 L477.9 768.4 L454.4 756.8 L448.8 742.3 L454.9 732.8 L442.2 723.3 L435.9 731.6 L426.5 730.9 L411.7 742.0 L408.4 736.2 L416.2 719.3 L428.8 713.7 L439.8 706.1 L446.8 715.2 L462.0 709.7 L465.3 700.8 L479.4 700.3 L478.2 684.8 L494.5 694.3 L496.1 704.4 L497.5 711.7 ZM340.1 693.7 L313.5 712.7 L323.3 698.7 L337.7 686.3 L349.7 672.5 L360.2 652.6 L363.8 668.9 L350.6 679.9 L340.1 693.7 ZM416.7 515.5 L413.5 523.8 L420.3 538.1 L415.0 554.8 L403.3 561.4 L400.1 577.5 L404.6 593.4 L415.2 595.6 L424.0 593.3 L449.0 604.4 L447.1 615.2 L453.6 620.0 L451.5 629.3 L436.0 619.4 L428.6 608.9 L423.4 616.3 L410.7 604.3 L392.5 607.3 L382.6 602.8 L383.6 594.6 L389.8 589.5 L383.9 584.9 L381.3 592.1 L371.4 580.6 L368.4 571.9 L367.7 552.7 L375.7 559.3 L377.8 528.0 L384.3 509.9 L396.4 509.9 L408.8 515.6 L414.9 510.4 L416.7 515.5 ZM410.8 651.7 L407.7 642.2 L419.7 648.4 L432.4 648.3 L432.0 656.7 L422.8 665.2 L410.1 671.2 L409.3 661.9 L410.8 651.7 ZM480.1 636.7 L485.7 659.1 L470.2 653.8 L470.7 660.5 L475.5 672.8 L466.0 677.3 L465.2 663.2 L459.2 662.2 L456.1 650.1 L467.8 651.7 L467.6 644.1 L455.3 628.8 L474.5 629.3 L480.1 636.7 Z","Japan":"M807.7 96.4 L789.2 116.5 L789.5 137.2 L782.0 153.1 L785.5 163.1 L775.1 177.2 L749.5 186.6 L714.4 187.9 L685.9 210.7 L672.4 203.0 L671.6 188.1 L636.8 192.5 L613.1 201.9 L589.7 202.3 L610.0 217.0 L596.7 251.0 L583.7 259.4 L574.0 251.6 L579.0 233.6 L566.3 227.8 L558.2 214.1 L577.1 207.9 L587.6 195.3 L607.7 185.0 L622.4 171.3 L662.2 165.4 L683.6 169.5 L704.5 133.9 L717.8 143.5 L747.2 123.5 L758.5 115.7 L771.1 91.2 L767.7 68.7 L776.1 56.1 L797.4 52.4 L808.3 80.2 L807.7 96.4 ZM862.3 0.8 L876.4 -7.7 L880.9 14.8 L851.2 20.2 L833.7 40.1 L802.2 26.4 L791.3 48.3 L769.1 48.6 L766.4 28.7 L776.2 13.3 L797.6 12.2 L803.4 -15.4 L809.4 -31.0 L832.9 -10.2 L848.2 -3.5 L862.3 0.8 ZM617.4 210.7 L628.5 198.8 L639.9 201.1 L648.1 192.7 L662.8 197.0 L665.3 203.9 L654.1 216.0 L645.9 209.6 L635.6 214.2 L630.3 225.9 L617.3 220.2 L617.4 210.7 Z"};
+const LON0=101.5, LAT0=44, S=20;
+const P=(lon,lat)=>[(lon-LON0)*S,(LAT0-lat)*S];
+
+const STOPS=[
+ {id:"bei",n:1,name:"Pechino",lat:39.90,lon:116.40,lx:18,ly:-12,days:"Giorni 2–4 · 3 notti",chap:"c-bei",
+  text:"La capitale imperiale e la Grande Muraglia. Tre notti negli hutong, i vicoli della città vecchia.",
+  items:["Città Proibita all'apertura","Grande Muraglia a Mutianyu, con discesa in slittino","Anatra laccata e hutong in bici la sera"]},
+ {id:"xia",n:2,name:"Xi'an",lat:34.27,lon:108.95,lx:18,ly:-12,days:"Giorni 5–6 · 2 notti",chap:"c-xia",
+  text:"L'antica capitale all'inizio della Via della Seta. L'Esercito di terracotta e le mura da percorrere in bici.",
+  items:["Esercito di terracotta al mattino presto","Giro delle mura in bici al tramonto, 14 km","Quartiere musulmano: spiedini e noodles tirati a mano"]},
+ {id:"che",n:3,name:"Chengdu",lat:30.66,lon:104.07,lx:18,ly:20,days:"Giorni 7–8 · 2 notti",chap:"c-xia",
+  text:"La capitale del Sichuan: i panda giganti all'alba e la cucina più piccante della Cina.",
+  items:["Centro di ricerca dei panda alle 7:30","Hotpot del Sichuan","Case da tè al Parco del Popolo"]},
+ {id:"sha",n:4,name:"Shanghai",lat:31.23,lon:121.47,lx:-84,ly:-14,days:"Giorni 9–10 · 2 notti",chap:"c-sha",
+  text:"Il futuro e gli anni Trenta sullo stesso fiume. Il Bund di sera, i grattacieli di Pudong, la Concessione francese.",
+  items:["Il Bund al tramonto","Shanghai Tower, 118° piano","Xiaolongbao e Concessione francese"]},
+ {id:"tok",n:5,name:"Tokyo",lat:35.68,lon:139.76,lx:16,ly:22,days:"Giorni 11–13 · 3 notti",chap:"c-tok",
+  text:"Tre notti nella città più grande del mondo, che per teenager e ventenni è un parco giochi.",
+  items:["Shibuya, Harajuku e Akihabara","teamLab e Asakusa","Sushi al mercato esterno di Tsukiji"]},
+ {id:"alp",n:6,name:"Fuji e Alpi",lat:36.0,lon:138.0,lx:-40,ly:-24,days:"Giorni 14–17 · 4 notti",chap:"c-alp",
+  text:"Quattro giorni in quota e al fresco: l'alba dalla cima del Fuji, poi Takayama e le valli alpine.",
+  items:["Alba a 3.776 m dopo la notte in rifugio","Onsen a Kawaguchiko dopo la discesa","Kamikochi e Shirakawa-go da Takayama"]},
+ {id:"kyo",n:7,name:"Kyoto",lat:35.01,lon:135.77,lx:-52,ly:32,days:"Giorni 18–20 · 3 notti",chap:"c-kyo",
+  text:"La vecchia capitale: templi, giardini e vicoli di legno. Con Nara e una sera a Osaka.",
+  items:["Fushimi Inari alle 6, prima della folla e del caldo","Cervi di Nara","Street food a Dotonbori, Osaka"]}
+];
+const ROUTES=[["bei","xia","train"],["xia","che","train"],["che","sha","fly"],["sha","tok","fly"],["tok","alp","train"],["alp","kyo","train"]];
+
+const CHAPTERS=[
+ {id:"c-bei",n:"01",title:"Pechino",sub:"Imperatori, vicoli e la Muraglia",nights:"3 notti",days:"G 2–4",alt:"23–32 °C",
+  lead:"Si atterra a Pechino e si dorme negli hutong, i vicoli a un piano attorno alla Città Proibita. Tre giorni: uno per smaltire il fuso tra il Tempio del Cielo e i laghi di Houhai, uno per la Città Proibita, uno intero per la Grande Muraglia.",
+  why:"La Muraglia a luglio si fa a Mutianyu, a un'ora e mezza dalla città: restaurata, nel verde, con la seggiovia per salire e lo slittino per scendere. Con un pulmino privato si arriva alle otto, prima dei pullman. La Città Proibita vende i biglietti online sette giorni prima ed è chiusa il lunedì: d'estate vanno presi appena aprono.",
+  fauna:["Città Proibita","Grande Muraglia","Tempio del Cielo","Hutong","Anatra laccata"],
+  camps:[["Courtyard hotel negli hutong","Casa a corte tradizionale, camere famiglia, colazione","Essenziale","€60–80"],["Hotel 4 stelle a Wangfujing","A piedi dalla Città Proibita","Comfort","€110–150"],["Aman Summer Palace o Rosewood","Il lusso imperiale o quello contemporaneo","Premium","€350+"]],
+  teen:["Slittino estivo giù dalla Muraglia a Mutianyu","Hutong in bici la sera, con sosta per gli spiedini","Tratto selvaggio di Jinshanling per chi vuole camminare davvero: 3 ore su mura non restaurate"]},
+ {id:"c-xia",n:"02",title:"Xi'an e Chengdu",sub:"Guerrieri di terracotta e panda",nights:"2 + 2 notti",days:"G 5–8",alt:"23–34 °C",
+  lead:"Quattro ore e mezza di treno veloce a 300 all'ora e si è a Xi'an, capitale di tredici dinastie. L'Esercito di terracotta sta a un'ora dal centro: ottomila soldati a grandezza naturale, ognuno con un volto diverso. Poi altre tre ore e mezza di treno fino a Chengdu, per i panda e per l'hotpot.",
+  why:"Xi'an si visita in un giorno e mezzo, ma è la tappa che dà profondità al viaggio: le mura intatte da percorrere in bici, il quartiere musulmano di sera. Chengdu è facoltativa: aggiunge i panda, che si vedono attivi solo tra le 7:30 e le 10, e la cucina del Sichuan. Chi preferisce un ritmo più lento la toglie e guadagna un giorno a Pechino e uno a Shanghai.",
+  fauna:["Esercito di terracotta","Mura di Xi'an","Quartiere musulmano","Panda giganti","Hotpot"],
+  camps:[["Hotel dentro le mura di Xi'an","Vicino alla Torre della Campana, camere triple","Essenziale","€50–70"],["Hotel in centro a Chengdu","Zona Chunxi Road, metro per la stazione","Essenziale","€55–75"],["Sofitel Legend People's Grand, Xi'an","Palazzo anni Cinquanta restaurato","Comfort","€140–180"],["The Temple House, Chengdu","Design attorno a un cortile storico","Premium","€250+"]],
+  teen:["Le mura di Xi'an in tandem al tramonto","Biang biang noodles: guardare come li tirano, poi provarci","Opera del Sichuan con il cambio di maschere: un'ora, e nessuno capisce il trucco"]},
+ {id:"c-sha",n:"03",title:"Shanghai",sub:"Il futuro, visto dal Bund",nights:"2 notti",days:"G 9–10",alt:"27–35 °C",
+  lead:"Shanghai è la Cina di oggi: ventisei milioni di abitanti, la seconda torre più alta del mondo, e sull'altra riva del fiume le facciate degli anni Trenta. Due notti bastano per il Bund di sera, Pudong dall'alto e una mattina tra i platani della Concessione francese.",
+  why:"È la tappa più umida del viaggio, e la più facile: grandi centri al chiuso, metro ovunque, e da qui parte il volo di tre ore per Tokyo. Il Maglev, il treno a levitazione magnetica, porta all'aeroporto a 300 all'ora in otto minuti.",
+  fauna:["Il Bund","Pudong","Concessione francese","Giardino Yu","Xiaolongbao"],
+  camps:[["Hotel vicino a People's Square","Sulla metro, a 15 minuti a piedi dal Bund","Essenziale","€70–90"],["Hotel boutique nella Concessione francese","Villa d'epoca, giardino","Comfort","€130–170"],["Peace Hotel o The Peninsula","Sul Bund, vista sul fiume","Premium","€350+"]],
+  teen:["Shanghai Tower: l'ascensore sale a 18 metri al secondo","Maglev per l'aeroporto","Shanghai Disneyland per chi rinuncia a un giorno di città"]},
+ {id:"c-tok",n:"04",title:"Tokyo",sub:"Tutto, tutto insieme",nights:"3 notti",days:"G 11–13",alt:"25–33 °C",
+  lead:"Tre notti nella città che ai ragazzi piace di più. Shibuya e il suo incrocio, Harajuku, i sette piani di videogiochi di Akihabara, il tempio di Asakusa, teamLab. E si mangia benissimo a ogni prezzo: ramen a €8, sushi su nastro a €15.",
+  why:"Tokyo regge bene il caldo: tutto è climatizzato, la metro arriva ovunque, e la città vive di sera. D'estate ci sono matsuri di quartiere e fuochi d'artificio quasi ogni fine settimana. Dormire a Shinjuku o a Ueno, sulla linea Yamanote, risolve tutti gli spostamenti. Con ventenni nel gruppo, ci si può dividere di giorno e ritrovarsi a cena.",
+  fauna:["Shibuya","Akihabara","Asakusa","teamLab","Ramen e sushi"],
+  camps:[["Business hotel a Ueno o Shinjuku","Camere piccole e perfette, tre doppie","Essenziale","€110–140"],["Appartamento per sei ad Asakusa","Due bagni, lavatrice: spesso conviene","Essenziale","€300–380 intero"],["Hotel 4 stelle a Shinjuku","Camere più grandi, vista","Comfort","€200–260"],["Park Hyatt o Aman Tokyo","In cima a un grattacielo","Premium","€700+"]],
+  teen:["Karaoke in sala privata a Shibuya","Sale giochi di Akihabara e go-kart per strada per i maggiorenni con patente internazionale","Partita di baseball al Tokyo Dome o al Jingu, se in calendario"]},
+ {id:"c-alp",n:"05",title:"Fuji e Alpi giapponesi",sub:"Quattro giorni al fresco",nights:"1 rifugio + 1 + 2 notti",days:"G 14–17",alt:"da 3 °C in vetta a 28 °C",
+  lead:"Il Fuji si sale solo da inizio luglio a inizio settembre, e le vostre date cadono in piena stagione. Bus da Tokyo alla quinta stazione a 2.300 m, sei ore di salita fino al rifugio all'ottava, sveglia alle due e l'alba dalla cima a 3.776 m. Poi onsen a Kawaguchiko, e due notti a Takayama tra le Alpi giapponesi.",
+  why:"Non è una scalata tecnica: è un sentiero ripido di lava, lungo e in quota, fattibile per chiunque sia in forma. Il sentiero Yoshida ha un tetto di 4.000 persone al giorno e una tassa di 4.000 yen, e senza prenotazione in rifugio non si può salire di notte. Chi non sale resta al lago con vista sul vulcano. Takayama poi è il Giappone di legno: case di mercanti, sake, e da lì in bus Kamikochi, una valle a 1.500 m, e i tetti di paglia di Shirakawa-go.",
+  fauna:["Alba dal Fuji","Onsen","Takayama","Kamikochi","Shirakawa-go","Manzo di Hida"],
+  camps:[["Rifugio all'ottava stazione del Fuji","Dormitorio con sacco a pelo, cena e colazione","Essenziale","€90 pp"],["Ryokan semplice a Kawaguchiko","Tatami, futon, bagno termale","Essenziale","€110–150"],["Minshuku o hotel a Takayama","Pensione familiare nel centro storico","Essenziale","€100–130"],["Ryokan con onsen privato e cena kaiseki","A Kawaguchiko o a Okuhida","Premium","€450+"]],
+  teen:["La salita notturna al Fuji con la frontale: la cosa che racconteranno","Kamikochi: sentiero piano lungo il fiume, scimmie e acqua gelida","Bici elettriche tra le risaie di Hida"]},
+ {id:"c-kyo",n:"06",title:"Kyoto",sub:"Mille templi, e Nara e Osaka accanto",nights:"3 notti",days:"G 18–20",alt:"26–35 °C",
+  lead:"Kyoto è stata capitale per mille anni e ha ancora 1.600 templi. Tre notti per i diecimila portali rossi di Fushimi Inari, il Padiglione d'oro, la foresta di bambù di Arashiyama e Gion al crepuscolo. Nara e i suoi cervi sono a 45 minuti di treno, Osaka a mezz'ora.",
+  why:"È la tappa più calda del viaggio, quindi si rovescia la giornata: templi alle sei del mattino, quando sono vuoti e freschi, pomeriggio al chiuso o lungo il fiume Kamo, sera a Pontocho, dove d'estate i ristoranti montano le terrazze sull'acqua. Si riparte dall'aeroporto di Osaka l'11 agosto, appena prima dell'esodo dell'Obon.",
+  fauna:["Fushimi Inari","Kinkaku-ji","Arashiyama","Gion","Nara","Osaka"],
+  camps:[["Machiya in affitto per sei","Casa di legno tradizionale, intera","Essenziale","€280–360 intera"],["Business hotel vicino alla stazione","Comodo per Nara, Osaka e l'aeroporto","Essenziale","€100–130"],["Hotel boutique a Gion","A piedi dai templi di Higashiyama","Comfort","€200–260"],["Ryokan storico, Tawaraya o Hiiragiya","Tre secoli di ospitalità","Premium","€900+"]],
+  teen:["Fushimi Inari fino in cima: 4 km di portali, un'ora e mezza","Sera a Dotonbori, Osaka: takoyaki, okonomiyaki, neon","Universal Studios Japan e Super Nintendo World in giornata da Kyoto"]}
+];
+
+const LOG=[
+ [1,"Málaga → Pechino","Volo per Madrid, poi diretto notturno per Pechino. Si arriva il mattino dopo.","volo",1],
+ [2,"Pechino","Arrivo, hutong, Tempio del Cielo nel tardo pomeriggio. Giornata corta per il fuso.","città",0],
+ [3,"Pechino","Città Proibita all'apertura, collina di Jingshan, laghi di Houhai in bici la sera.","città",0],
+ [4,"Grande Muraglia","Mutianyu in pulmino privato, partenza alle 6:30. Anatra laccata a cena.","attivo",0],
+ [5,"Pechino → Xi'an","Treno veloce, 4 ore e mezza. Mura in bici al tramonto, quartiere musulmano.","treno",1],
+ [6,"Xi'an","Esercito di terracotta al mattino. Pomeriggio al fresco, Pagoda dell'Oca la sera.","città",0],
+ [7,"Xi'an → Chengdu","Treno veloce, 3 ore e mezza. Case da tè e hotpot.","treno",1],
+ [8,"Chengdu","Panda alle 7:30. Pomeriggio libero, opera del Sichuan la sera.","natura",0],
+ [9,"Chengdu → Shanghai","Volo di 3 ore. Il Bund al tramonto.","volo",1],
+ [10,"Shanghai","Concessione francese al mattino, Shanghai Tower, giardino Yu.","città",0],
+ [11,"Shanghai → Tokyo","Maglev, volo di 3 ore. Prima sera a Shinjuku.","volo",1],
+ [12,"Tokyo","Asakusa presto, Akihabara, Shibuya di sera.","città",0],
+ [13,"Tokyo","Harajuku, teamLab. Giorno elastico in caso di tifone.","città",0],
+ [14,"Tokyo → Fuji","Bus per la quinta stazione, salita di 6 ore fino al rifugio. Cena alle 17, a letto alle 19.","trek",1],
+ [15,"Fuji → Kawaguchiko","Vetta all'alba, 4 ore di discesa. Ryokan con onsen sul lago, e basta.","trek",0],
+ [16,"Kawaguchiko → Takayama","Treno via Matsumoto, 5 ore tra le montagne. Sera nel quartiere vecchio.","treno",1],
+ [17,"Takayama","Kamikochi a piedi oppure Shirakawa-go. Manzo di Hida a cena.","natura",0],
+ [18,"Takayama → Kyoto","Treno via Nagoya, 3 ore e mezza. Gion e Pontocho la sera.","treno",1],
+ [19,"Kyoto","Fushimi Inari alle 6, Kinkaku-ji, Arashiyama nel tardo pomeriggio.","città",0],
+ [20,"Nara e Osaka","Cervi e Grande Buddha al mattino, sera a Dotonbori. Cena d'addio.","città",0],
+ [21,"Osaka → Málaga","Volo dal Kansai con uno scalo. Arrivo il 12 agosto.","volo",1]
+];
+
+const TIERS={
+ essenziale:{lab:"Essenziale",intl:1100,cnRoom:65,jpRoom:120,mcn:20,mjp:35},
+ comfort:{lab:"Comfort",intl:1250,cnRoom:120,jpRoom:200,mcn:35,mjp:55},
+ premium:{lab:"Premium",intl:1700,cnRoom:250,jpRoom:420,mcn:60,mjp:100}
+};
+const BUDGET=25000;
+
+const MILES=[
+ ["Nov 2026","Scegliere tra le tre opzioni","Africa, Ande o Oriente. Questa sostituirebbe il viaggio dei ciliegi in primavera.",true],
+ ["Dic 2026","Voli intercontinentali","Andata su Pechino e ritorno da Osaka nello stesso biglietto. Sei posti in agosto vanno presi presto."],
+ ["Gen 2027","Verificare il visto cinese","L'esenzione per i passaporti italiani è confermata fino a fine 2026: controllare se è stata prorogata."],
+ ["Feb 2027","Alberghi in Giappone","Tokyo, Takayama e Kyoto in agosto: le camere per sei e le machiya finiscono per prime."],
+ ["Apr–Mag 2027","Rifugio e accesso al Fuji","Le prenotazioni dei rifugi e del sentiero Yoshida aprono in primavera e i fine settimana si esauriscono subito."],
+ ["Giu 2027","Alberghi in Cina, volo Shanghai–Tokyo","Assicurazione con copertura per ritardi da maltempo."],
+ ["Lug 2027","Treni cinesi, Città Proibita, Alipay","Treni 15 giorni prima, Città Proibita 7 giorni prima. Alipay e eSIM configurati a casa."],
+];
+const MONTHS=[["Gen","s2"],["Feb","s2"],["Mar","s1"],["Apr","s1"],["Mag","s1"],["Giu","s3"],["Lug","s3 you"],["Ago","s3 you"],["Set","s2"],["Ott","s1"],["Nov","s1"],["Dic","s2"]];
+
+const CHECK={
+ "Documenti":["Passaporti validi 6 mesi","Visto cinese o conferma dell'esenzione","Assicurazione con ritardi per maltempo","Prenotazione del rifugio e dell'accesso al Fuji","Biglietti dei treni cinesi sul telefono"],
+ "Telefono":["eSIM per Cina e Giappone","Alipay collegato alla carta","Suica nel wallet","Mappe offline e traduttore con fotocamera","Powerbank"],
+ "Caldo":["Magliette tecniche, non cotone","Cappello e crema solare 50","Ventilatore a mano e asciugamano piccolo","Borraccia","Ombrello pieghevole: sole e temporali"],
+ "Fuji":["Scarponi o scarpe da trail rodate","Piumino leggero e guscio antivento","Lampada frontale","Guanti e berretto","Monete da 100 yen per i bagni","Sacco lenzuolo"],
+ "Ragazzi":["Zaino da giorno a testa","Costume per gli onsen misti e le piscine","Calze senza buchi: nei templi e nei ryokan ci si toglie le scarpe","Giochi di carte per i treni","Quaderno per il diario"]
+};
+
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,ns){const e=ns?document.createElementNS(NS,tag):document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+const fmt=n=>"€"+Math.round(n).toLocaleString("it-IT");
+const fmtK=n=>"€"+(Math.round(n/100)/10).toLocaleString("it-IT",{maximumFractionDigits:1})+"k";
+
+/* hero: Fuji */
+(function(){
+  const c=document.getElementById("sky"); const ctx=c.getContext("2d");
+  function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function rnd(seed){let s=seed;return()=>{s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+  function draw(){
+    const w=c.clientWidth,h=c.clientHeight,dpr=Math.min(window.devicePixelRatio||1,2);
+    c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,tok("--sky1"));g.addColorStop(.55,tok("--sky2"));g.addColorStop(.8,tok("--sky3"));
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    const sx=w*.9, sy=h*.2, sr=Math.min(w,h)*.09;
+    const sg=ctx.createRadialGradient(sx,sy,0,sx,sy,sr*3.4);
+    sg.addColorStop(0,"rgba(255,225,180,.75)");sg.addColorStop(.3,"rgba(255,205,150,.35)");sg.addColorStop(1,"rgba(255,200,120,0)");
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,sr*3.4,0,7);ctx.fill();
+    ctx.fillStyle="rgba(214,72,52,.9)";ctx.beginPath();ctx.arc(sx,sy,sr,0,7);ctx.fill();
+    // the cone
+    const cx=w*.7, top=h*.3, base=h*.84, half=Math.max(w*.34,h*.8), cap=half*.07;
+    ctx.fillStyle=tok("--hill1");ctx.beginPath();ctx.moveTo(cx-half,base);
+    ctx.quadraticCurveTo(cx-half*.3,base-(base-top)*.55,cx-cap,top);ctx.lineTo(cx+cap,top);
+    ctx.quadraticCurveTo(cx+half*.3,base-(base-top)*.55,cx+half,base);ctx.closePath();ctx.fill();
+    // snow cap
+    const sh=(base-top)*.2;
+    ctx.fillStyle=tok("--sky3");ctx.beginPath();ctx.moveTo(cx-cap,top);ctx.lineTo(cx+cap,top);
+    const rx=cx+cap+half*.11, lx=cx-cap-half*.11;
+    ctx.lineTo(rx,top+sh);ctx.lineTo(cx+cap*1.2,top+sh*.7);ctx.lineTo(cx+cap*.3,top+sh*1.15);ctx.lineTo(cx-cap*.6,top+sh*.75);ctx.lineTo(cx-cap*1.4,top+sh*1.1);ctx.lineTo(lx,top+sh);
+    ctx.closePath();ctx.fill();
+    [["--hill2",.80,.04,17,18],["--hill3",.88,.03,23,22]].forEach(([t,b,amp,seed,n])=>{
+      const r=rnd(seed*97+13);ctx.fillStyle=tok(t);ctx.beginPath();ctx.moveTo(0,h);
+      for(let i=0;i<=n;i++){ctx.lineTo(w*i/n,h*(b+(r()-.5)*amp*2));}
+      ctx.lineTo(w,h);ctx.closePath();ctx.fill();
+    });
+    const fg=ctx.createLinearGradient(0,h*.82,0,h);fg.addColorStop(0,"rgba(0,0,0,0)");fg.addColorStop(1,tok("--bg"));
+    ctx.fillStyle=fg;ctx.fillRect(0,h*.82,w,h*.18);
+  }
+  let t;window.addEventListener("resize",()=>{clearTimeout(t);t=setTimeout(draw,120);});
+  if(window.matchMedia){window.matchMedia("(prefers-color-scheme: light)").addEventListener("change",draw);}
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);} draw();
+})();
+
+
+(function(){
+  const dep=new Date(2027,6,22,0,0,0); const days=Math.max(0,Math.floor((dep-new Date())/864e5));
+  document.getElementById("dleft").textContent=days+" giorni";
+  const months=Math.floor(days/30.44), weeks=Math.floor((days%30.44)/7), d=Math.floor(days-months*30.44-weeks*7);
+  const c=document.getElementById("count");
+  [[months,"mesi"],[weeks,"settimane"],[d,"giorni"]].forEach(([v,l])=>{const div=el("div",{},c);el("b",{class:"num"},div).textContent=v;el("span",{class:"eyebrow"},div).textContent=l;});
+})();
+
+/* map */
+(function(){
+  const g=document.getElementById("countries");
+  for(const name in COUNTRIES){el("path",{d:COUNTRIES[name],class:"country"+((name==="China"||name==="Japan")?" main":"")},g,true);}
+  const by=Object.fromEntries(STOPS.map(s=>[s.id,s]));
+  const rg=document.getElementById("routes"),sg=document.getElementById("stops"),chips=document.getElementById("chips"),card=document.getElementById("card");
+  ROUTES.forEach(([a,b,k],i)=>{const [x0,y0]=P(by[a].lon,by[a].lat),[x1,y1]=P(by[b].lon,by[b].lat);const mx=(x0+x1)/2,my=(y0+y1)/2;const dx=x1-x0,dy=y1-y0;const bend=k==="fly"?0.18:0.07;const p=el("path",{class:k,d:`M${x0} ${y0} Q${mx-dy*bend} ${my+dx*bend} ${x1} ${y1}`},rg,true);p.style.animationDelay=(i*.22)+"s";});
+  STOPS.forEach(s=>{
+    const [x,y]=P(s.lon,s.lat);
+    const g=el("g",{class:"stop",tabindex:"0",role:"button","aria-label":s.name+", "+s.days,"data-id":s.id},sg,true);
+    el("circle",{class:"halo",cx:x,cy:y,r:24},g,true);el("circle",{class:"dot",cx:x,cy:y,r:13},g,true);
+    el("text",{class:"n",x:x,y:y+.5},g,true).textContent=s.n;el("text",{class:"nm",x:x+s.lx,y:y+s.ly},g,true).textContent=s.name;
+    g.addEventListener("click",()=>select(s.id));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(s.id);}});
+    const b=el("button",{type:"button","aria-pressed":"false","data-id":s.id},chips);b.textContent=s.n+" · "+s.name;b.addEventListener("click",()=>select(s.id));
+  });
+  function select(id){
+    const s=by[id];
+    sg.querySelectorAll(".stop").forEach(g=>g.classList.toggle("on",g.dataset.id===id));
+    chips.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id?"true":"false"));
+    card.innerHTML="";el("span",{class:"days"},card).textContent=s.days;el("h3",{},card).textContent=s.name;el("p",{},card).textContent=s.text;
+    const ul=el("ul",{},card);s.items.forEach(t=>{el("li",{},ul).textContent=t;});
+    if(s.chap)el("a",{class:"go",href:"#"+s.chap},card).textContent="Leggi il capitolo →";
+    el("span",{class:"coords"},card).textContent=s.lat.toFixed(2)+"°N  "+s.lon.toFixed(2)+"°E";
+    try{localStorage.setItem("asia27-stop",id);}catch(e){}
+  }
+  let start="bei";try{const v=localStorage.getItem("asia27-stop");if(v&&by[v])start=v;}catch(e){}
+  select(start);
+})();
+
+
+(function(){
+  const root=document.getElementById("chapters");
+  CHAPTERS.forEach(c=>{
+    const a=el("article",{class:"chapter",id:c.id},root);
+    const lead=el("div",{class:"lead"},a);
+    el("div",{class:"n"},lead).textContent=c.n;el("h3",{},lead).textContent=c.title;
+    el("p",{style:"font-size:21px;font-style:italic;color:var(--muted)"},lead).textContent=c.sub;
+    const meta=el("div",{class:"meta"},lead);
+    [["Giorni",c.days],["Notti",c.nights],["Fine luglio",c.alt]].forEach(([k,v])=>{const d=el("div",{},meta);el("span",{class:"eyebrow"},d).textContent=k;el("b",{},d).textContent=v;});
+    const fa=el("div",{class:"fauna"},lead);c.fauna.forEach(f=>{el("span",{},fa).textContent=f;});
+    const body=el("div",{class:"body"},a);
+    el("p",{class:"big"},body).textContent=c.lead;el("p",{},body).textContent=c.why;
+    const s1=el("div",{class:"sub"},body);el("h4",{},s1).textContent="Dove dormire e con chi";
+    const camps=el("div",{class:"camps"},s1);
+    c.camps.forEach(([n,dd,band,pr])=>{const r=el("div",{class:"camp"},camps);el("b",{},r).textContent=n;const b=el("span",{class:"band"},r);b.textContent=band;el("em",{},b).textContent=pr.includes("pp")?pr:pr+" / notte";el("small",{},r).textContent=dd;});
+    const s2=el("div",{class:"sub"},body);el("h4",{},s2).textContent="Per teenager e ventenni";
+    const ul=el("ul",{class:"teen"},s2);c.teen.forEach(t=>{el("li",{},ul).textContent=t;});
+  });
+})();
+
+(function(){
+  const log=document.getElementById("log");
+  LOG.forEach(([d,w,t,m,move])=>{const r=el("div",{class:"leg"+(move?" move":"")},log);el("span",{class:"d num"},r).textContent=d;el("span",{class:"w"},r).textContent=w;el("span",{class:"t"},r).textContent=t;el("span",{class:"m"},r).textContent=m;});
+})();
+
+/* costs */
+(function(){
+  const st={tier:"essenziale",adults:4,kids:2,chengdu:true,fuji:true};
+  const out={adults:document.getElementById("adults"),kids:document.getElementById("kids")};
+  document.querySelectorAll("[data-step]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.step,d=+b.dataset.d;st[k]=Math.min(10,Math.max(0,st[k]+d));if(st.adults+st.kids<1)st.adults=1;render();}));
+  document.querySelectorAll('input[name="tier"]').forEach(r=>r.addEventListener("change",()=>{st.tier=r.value;render();}));
+  document.getElementById("chengdu").addEventListener("change",e=>{st.chengdu=e.target.checked;render();});
+  document.getElementById("fuji").addEventListener("change",e=>{st.fuji=e.target.checked;render();});
+  function render(){
+    for(const k in out)out[k].textContent=st[k];
+    const T=TIERS[st.tier],A=st.adults,Kd=st.kids,n=A+Kd;
+    const rooms=Math.ceil(n/2);
+    const jpN=st.fuji?8:9;
+    const asiaFl=180+(st.chengdu?120:0), cnTrain=st.chengdu?105:160;
+    const meals=T.mcn*9+T.mjp*10;
+    const rows=[
+      ["Voli Málaga → Pechino, Osaka → Málaga","Andata via Madrid, ritorno con uno scalo, alta stagione",T.intl,T.intl],
+      ["Voli in Asia",st.chengdu?"Chengdu–Shanghai e Shanghai–Tokyo":"Shanghai–Tokyo",asiaFl,asiaFl],
+      ["Treni veloci in Cina",st.chengdu?"Pechino–Xi'an, Xi'an–Chengdu, seconda classe":"Pechino–Xi'an, Xi'an–Shanghai, seconda classe",cnTrain,cnTrain],
+      ["Alberghi in Cina, 9 notti",(st.chengdu?"Pechino 3, Xi'an 2, Chengdu 2, Shanghai 2":"Pechino 4, Xi'an 2, Shanghai 3")+" · "+rooms+" camere",null,null,T.cnRoom*9*rooms],
+      ["Alberghi in Giappone, "+jpN+" notti","Tokyo 3, Kawaguchiko "+(st.fuji?1:2)+", Takayama 2, Kyoto 3 · "+rooms+" camere",null,null,T.jpRoom*jpN*rooms],
+      st.fuji?["Fuji","Rifugio con cena e colazione, tassa di accesso, bus",130,130]:null,
+      ["Trasporti in Giappone","Treni e bus da Tokyo a Kyoto, metro, aeroporto",200,170],
+      ["Pasti","9 giorni in Cina a €"+T.mcn+", 10 in Giappone a €"+T.mjp,meals,Math.round(meals*.85)],
+      ["Ingressi e attività","Città Proibita, Muraglia in pulmino privato, terracotta, panda, teamLab, templi",240,200,150],
+      ["Assicurazione, eSIM e varie","Polizza con ritardi per maltempo",120,110]
+    ].filter(Boolean);
+    const tb=document.getElementById("rows");tb.innerHTML="";let ta=0,tk=0,tg=0;const cats=[];
+    rows.forEach(([lab,sub,a,k,grp])=>{const ga=(a||0)*A+(k||0)*Kd+(grp||0);if(ga===0)return;ta+=a||0;tk+=k||0;tg+=ga;cats.push([lab,ga]);
+      const tr=el("tr",{},tb);const td=el("td",{},tr);td.textContent=lab;el("small",{},td).textContent=sub;
+      el("td",{class:"r"},tr).textContent=a?fmt(a):"—";el("td",{class:"r"},tr).textContent=k?fmt(k):"—";el("td",{class:"r"},tr).textContent=fmt(ga);});
+    document.getElementById("ta").textContent=fmt(ta);document.getElementById("tk").textContent=fmt(tk);document.getElementById("tg").textContent=fmt(tg);
+    document.getElementById("total").textContent=fmt(tg);
+    document.getElementById("pp").textContent=fmtK(tg/n)+" a persona · "+n+" viaggiatori · "+T.lab;
+    const pct=Math.min(100,tg/BUDGET*100);const fl=document.getElementById("b-fl");fl.style.width=pct+"%";fl.classList.toggle("over",tg>BUDGET);
+    document.getElementById("b-left").textContent=tg<=BUDGET?"Margine "+fmt(BUDGET-tg):"Oltre di "+fmt(tg-BUDGET);
+    const bars=document.getElementById("bars");bars.innerHTML="";const mx=Math.max(...cats.map(c=>c[1]));
+    cats.sort((a,b)=>b[1]-a[1]).forEach(([lab,v])=>{const r=el("div",{class:"bar"},bars);el("span",{},r).textContent=lab;const tr=el("div",{class:"tr"},r);el("div",{class:"fl",style:"width:"+(v/mx*100).toFixed(1)+"%"},tr);el("span",{class:"v num"},r).textContent=fmt(v);});
+  }
+  render();
+})();
+
+(function(){
+  const m=document.getElementById("miles");
+  MILES.forEach(([w,t,d,now])=>{const r=el("div",{class:"mile"+(now?" now":"")},m);el("span",{class:"when"},r).textContent=w;const b=el("div",{},r);el("b",{},b).textContent=t;el("span",{},b).textContent=d;});
+  const mo=document.getElementById("months");
+  MONTHS.forEach(([n,cls])=>{const d=el("div",{class:"m "+cls},mo);el("i",{},d);el("span",{},d).textContent=n;});
+})();
+
+(function(){
+  const root=document.getElementById("check");let saved={};try{saved=JSON.parse(localStorage.getItem("asia27-check")||"{}");}catch(e){}
+  const boxes=[];
+  Object.entries(CHECK).forEach(([cat,items])=>{const g=el("div",{class:"cg"},root);el("h4",{},g).textContent=cat;
+    items.forEach((it,i)=>{const id="ck-"+cat.replace(/\W/g,"")+"-"+i;const l=el("label",{for:id},g);const inp=el("input",{type:"checkbox",id:id},l);inp.checked=!!saved[id];el("span",{},l).textContent=it;boxes.push(inp);inp.addEventListener("change",()=>{saved[id]=inp.checked;try{localStorage.setItem("asia27-check",JSON.stringify(saved));}catch(e){}prog();});});});
+  function prog(){const n=boxes.length,k=boxes.filter(b=>b.checked).length;document.getElementById("plab").textContent=k+" di "+n;document.getElementById("ppct").textContent=Math.round(k/n*100)+"%";document.getElementById("pfl").style.width=(k/n*100)+"%";}
+  prog();
+})();
+
+(function(){
+  const links=[...document.querySelectorAll("nav.chap a[href^='#']")];const secs=links.map(a=>document.querySelector(a.getAttribute("href")));
+  if(!("IntersectionObserver" in window))return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+e.target.id));}});},{rootMargin:"-40% 0px -55% 0px"});
+  secs.forEach(s=>s&&io.observe(s));
+})();
+</script>
+
+</body>
+</html>
